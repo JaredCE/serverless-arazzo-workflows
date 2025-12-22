@@ -4,7 +4,8 @@
   "description": "Document your Serverless Framework API workflows with the OpenAPI Arazzo Workflow Spec",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --config './test/.mocharc.js'"
+    "test": "mocha --config './test/.mocharc.js'",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
