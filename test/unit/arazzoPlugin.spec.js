@@ -23,6 +23,9 @@ describe(`Arazzo Plugin`, function () {
                     format: "json",
                 },
             },
+            configSchemaHandler: {
+                defineCustomProperties: () => {},
+            },
         }
     });
 
