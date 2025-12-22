@@ -10,7 +10,7 @@ const sls = require('../mocks/sls.js')
 describe(`Arazzo Generator`, function () {
     const options = {
         arazzo: '1.0.1',
-        sourceFile: 'openapi.json',
+        sourceFile: './openapi.json',
         sls
     }
 
@@ -33,7 +33,9 @@ describe(`Arazzo Generator`, function () {
                     console.error(err);
                 });
 
-            expect(azarroGenerator.arazzo.info).to.have.property('title');
+            expect(azarroGenerator.arazzo.info).to.have.property('title', 'Arazzo Pet Store');
+            expect(azarroGenerator.arazzo.sourceDescriptions).to.be.an('array');
+            expect(azarroGenerator.arazzo.sourceDescriptions).to.have.lengthOf(1);
         });
 
 
@@ -112,4 +114,67 @@ describe(`Arazzo Generator`, function () {
     });
 
 
+    describe(`generateSourceDescriptions`, function () {
+        it(`generates a default sourceDescription`, async function() {
+            const azarroGenerator = new ArazzoGenerator(mockArazzo, options);
+
+            await azarroGenerator.parse()
+                .catch(err => {
+                    console.error(err);
+                });
+
+            expect(azarroGenerator.arazzo).to.have.property('sourceDescriptions');
+        });
+
+        it(`generates a default sourceDescription with user provided ones when documented`, async function() {
+            const sourceDescriptionTestingMock = structuredClone(mockArazzo)
+            sourceDescriptionTestingMock.sourceDescriptions = [
+                {
+                    name: 'LoginOpenAPI',
+                    url: './login-openapi.json',
+                    type: 'openapi'
+                }
+            ]
+            const azarroGenerator = new ArazzoGenerator(sourceDescriptionTestingMock, options);
+
+            await azarroGenerator.parse()
+                .catch(err => {
+                    console.error(err);
+                });
+
+            expect(azarroGenerator.arazzo).to.have.property('sourceDescriptions');
+            expect(azarroGenerator.arazzo.sourceDescriptions).to.have.lengthOf(2);
+        });
+
+        it(`generates a default sourceDescription with user provided ones when documented with extended fields`, async function() {
+            const sourceDescriptionTestingMock = structuredClone(mockArazzo)
+            sourceDescriptionTestingMock.sourceDescriptions = [
+                {
+                    name: 'LoginOpenAPI',
+                    url: './login-openapi.json',
+                    type: 'openapi',
+                    'x-extended-field': 'extended test'
+                }
+            ]
+            const azarroGenerator = new ArazzoGenerator(sourceDescriptionTestingMock, options);
+
+            await azarroGenerator.parse()
+                .catch(err => {
+                    console.error(err);
+                });
+
+            expect(azarroGenerator.arazzo).to.have.property('sourceDescriptions');
+            expect(azarroGenerator.arazzo.sourceDescriptions).to.have.lengthOf(2);
+
+            let hasExtendedField = false;
+            for (const sourceDescription of azarroGenerator.arazzo.sourceDescriptions) {
+                if (sourceDescription.hasOwnProperty('x-extended-field')) {
+                    hasExtendedField = true
+                }
+            }
+
+            expect(hasExtendedField).to.be.true;
+
+        });
+    });
 });
