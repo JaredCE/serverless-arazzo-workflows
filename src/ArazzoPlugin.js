@@ -11,10 +11,15 @@ class ArazzoPlugin {
                         lifecycleEvents: ['serverless'],
                         usage: 'Generate Arazzo Documents',
                         options: {
+                            output: {
+                                usage: 'Arazzo file output location [default: arazzo.json]',
+                                shortcut: 'o',
+                                type: 'string',
+                            },
                             format: {
-                                usage: 'Arazzo file format (yml|json) [default: json]',
+                                usage: 'Arazzo file format (yaml|json) [default: json]',
                                 shortcut: 'f',
-                                type: 'string'
+                                type: 'string',
                             }
                         }
                     }
@@ -34,22 +39,26 @@ class ArazzoPlugin {
     processCLIInput() {
         const config = {
             format: "json",
-            file: "arazzo.json",
+            file: "arazzo",
             arazzoVersion: "1.0.1",
             validationWarn: false,
         };
 
-        config.format = this.serverless.processedInput.options.format || "json";
+        if (this.serverless.processedInput?.options?.format?.toLowerCase() === 'yaml') {this.serverless.processedInput.options.format = 'yml';}
 
-        if (["yaml", "json"].indexOf(config.format.toLowerCase()) < 0) {
+        config.format = this.serverless.processedInput.options.format.toLowerCase() || "json";
+
+        if (["yml", "json"].indexOf(config.format.toLowerCase()) < 0) {
             throw new this.serverless.classes.Error(
                 'Invalid Output Format Specified - must be one of "yaml" or "json"'
             );
         }
 
-        config.file =
-            this.serverless.processedInput.options.output ||
-            (config.format === "yaml" ? "arazzo.yml" : "arazzo.json");
+        if (this.serverless.processedInput.options.output) {
+            config.file = `${this.serverless.processedInput.options.output}.${config.format}`;
+        } else {
+            config.file = `arazzo.${config.format}`;
+        }
 
         this.config = config;
     }
