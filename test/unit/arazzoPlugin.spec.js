@@ -34,6 +34,30 @@ describe(`Arazzo Plugin`, function () {
     });
 
     describe(`process CLI Input`, function () {
+        it(`should default the file output to arazzo.json`, function() {
+            const arazzoPlugin = new ArazzoPlugin(sls, {});
+            arazzoPlugin.processCLIInput();
+
+            expect(arazzoPlugin.config.file).to.be.eql('arazzo.json');
+        });
+
+        it(`should set the user file output when set`, function() {
+            sls.processedInput.options.output = 'jared'
+            const arazzoPlugin = new ArazzoPlugin(sls, {});
+            arazzoPlugin.processCLIInput();
+
+            expect(arazzoPlugin.config.file).to.be.eql('jared.json');
+        });
+
+        it(`should set the user file output when set and using yaml`, function() {
+            sls.processedInput.options.output = 'jared'
+            sls.processedInput.options.format = 'yaml'
+            const arazzoPlugin = new ArazzoPlugin(sls, {});
+            arazzoPlugin.processCLIInput();
+
+            expect(arazzoPlugin.config.file).to.be.eql('jared.yml');
+        });
+
         it(`should correctly set the file output for json`, function() {
             const arazzoPlugin = new ArazzoPlugin(sls, {});
             arazzoPlugin.processCLIInput();
@@ -47,7 +71,7 @@ describe(`Arazzo Plugin`, function () {
             arazzoPlugin.processCLIInput();
 
 
-            expect(arazzoPlugin.config.format).to.be.eql('yaml');
+            expect(arazzoPlugin.config.format).to.be.eql('yml');
         });
 
         it(`should throw an error if a file format other than yaml or json is tried`, function() {
