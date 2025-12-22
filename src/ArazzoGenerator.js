@@ -9,10 +9,12 @@ class ArazzoGenerator {
         }
 
         this.sls = options?.sls
+        this.sourceFile = options?.sourceFile;
     }
 
     async parse() {
-        this.generateInfo()
+        this.generateInfo();
+        this.generateSourceDescriptions();
     }
 
     generateInfo() {
@@ -30,6 +32,31 @@ class ArazzoGenerator {
         Object.assign(info, extended);
 
         this.arazzo.info = info
+    }
+
+    generateSourceDescriptions() {
+        const sourceDescriptions = []
+
+        const sourceDescription = {
+            name: `${this.arazzo.info.title}-openAPI`,
+            url: this.sourceFile,
+            type: 'openapi'
+        }
+
+        sourceDescriptions.push(sourceDescription);
+
+        if (this.arazzoDocumentation?.sourceDescriptions){
+            for (const sourceDescription of this.arazzoDocumentation?.sourceDescriptions) {
+                const extended = this.extendSpecification(sourceDescription)
+                sourceDescription.type = sourceDescription.type.toLowerCase()
+
+                Object.assign(sourceDescription, extended)
+
+                sourceDescriptions.push(sourceDescription);
+            }
+        }
+
+        this.arazzo.sourceDescriptions = sourceDescriptions;
     }
 
     extendSpecification(spec) {
