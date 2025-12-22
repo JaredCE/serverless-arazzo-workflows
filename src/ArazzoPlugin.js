@@ -1,5 +1,9 @@
 'use strict';
 
+const fs = require('fs/promises')
+
+const serverlessSchema = require('../schema/serverlessSchema.json')
+
 class ArazzoPlugin {
     constructor(serverless) {
         this.serverless = serverless;
@@ -30,10 +34,20 @@ class ArazzoPlugin {
         this.hooks = {
             "arazzo:generate:serverless": this.generate.bind(this),
         };
+
+        this.serverless.configSchemaHandler.defineCustomProperties(serverlessSchema);
     }
 
-    generate() {
+    async generate() {
         this.processCLIInput();
+    }
+
+    async arazzoGeneration() {
+        await this.writeArazzoFile();
+    }
+
+    async writeArazzoFile() {
+        await fs.writeFile(this.config.file, '');
     }
 
     processCLIInput() {
