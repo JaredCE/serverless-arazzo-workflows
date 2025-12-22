@@ -1,6 +1,7 @@
 'use strict';
 
 const expect = require("chai").expect;
+const sinon = require('sinon');
 
 const ArazzoPlugin = require('../../src/ArazzoPlugin.js');
 
@@ -30,6 +31,24 @@ describe(`Arazzo Plugin`, function () {
             const expected = new ArazzoPlugin(sls);
 
             expect(expected).to.be.instanceOf(ArazzoPlugin);
+        });
+    });
+
+    describe(`Arazzo Generation`, function () {
+        it(`should generate an Arazzo Specification`, async function() {
+            const arazzoPlugin = new ArazzoPlugin(sls, {});
+
+            const writeFileStub = sinon.stub(arazzoPlugin, 'writeArazzoFile').resolves();
+
+            arazzoPlugin.processCLIInput();
+
+            await arazzoPlugin.arazzoGeneration().catch(err => {
+                console.error(err);
+            });
+
+            expect(writeFileStub.called).to.be.true;
+
+            writeFileStub.restore();
         });
     });
 
