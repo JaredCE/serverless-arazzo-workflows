@@ -24,6 +24,11 @@ class ArazzoPlugin {
                                 usage: 'Arazzo file format (yaml|json) [default: json]',
                                 shortcut: 'f',
                                 type: 'string',
+                            },
+                            source: {
+                                usage: 'The default OpenAPI Source file to use [default: openapi.json]',
+                                shortcut: 's',
+                                type: 'string',
                             }
                         }
                     }
@@ -56,6 +61,7 @@ class ArazzoPlugin {
             file: "arazzo",
             arazzoVersion: "1.0.1",
             validationWarn: false,
+            source: 'openapi.json'
         };
 
         if (this.serverless.processedInput?.options?.format?.toLowerCase() === 'yaml') {this.serverless.processedInput.options.format = 'yml';}
@@ -72,6 +78,10 @@ class ArazzoPlugin {
             config.file = `${this.serverless.processedInput.options.output}.${config.format}`;
         } else {
             config.file = `arazzo.${config.format}`;
+        }
+
+        if (this.serverless.processedInput.options.source) {
+            config.source = this.serverless.processedInput.options.source;
         }
 
         this.config = config;
