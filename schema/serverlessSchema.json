@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "properties": {
+    "arazzo": {
+      "type": "object",
+      "properties": {
+        "info": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            }
+          }
+        },
+        "workflows": {}
+      }
+    }
+  },
+  "required": ["arazzo"]
+}
