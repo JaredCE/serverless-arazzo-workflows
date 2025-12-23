@@ -80,6 +80,22 @@ class ArazzoGenerator {
 
             if (workflow.summary) obj.summary = workflow.summary;
             if (workflow.description) obj.description = workflow.description;
+            if (workflow.inputs) obj.inputs = workflow.inputs;
+            if (workflow.dependsOns) obj.dependsOns = workflow.dependsOns;
+
+            if (workflow.successActions) {
+                obj.successActions = this.generateOnSuccess(workflow.successActions);
+            }
+
+            if (workflow.failureActions) {
+                obj.failureActions = this.generateOnFailure(workflow.failureActions);
+            }
+
+            if (workflow.outputs) obj.outputs = workflow.outputs;
+
+            if (workflow.parameters) {
+                obj.parameters = this.generateParameters(workflow.parameters);
+            }
 
             obj.steps = this.generateSteps()
 
@@ -109,7 +125,7 @@ class ArazzoGenerator {
             }
 
             if (step.parameters) {
-                obj.parameters = this.generateParameters();
+                obj.parameters = this.generateParameters(step.parameters);
             }
 
             if (step.requestBody) {
@@ -140,9 +156,9 @@ class ArazzoGenerator {
         return steps;
     }
 
-    generateParameters() {
+    generateParameters(parametersArr) {
         const params = []
-        for (const param of this.currentStep.parameters) {
+        for (const param of parametersArr) {
             const extended = this.extendSpecification(param);
 
             Object.assign(param, extended);
