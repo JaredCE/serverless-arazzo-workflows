@@ -1,0 +1,20 @@
+{
+  "name": "arazzo-serverless-tests",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate-openapi": "npx serverless openapi generate -o openapi.json -f json -a 3.0.3",
+    "generate-arazzo": "npx serverless arazzo generate -o arazzo.json -f json -s openapi.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "serverless": "^3.40.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "serverless-openapi-documenter": "^0.0.121"
+  }
+}
