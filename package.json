@@ -1,0 +1,41 @@
+{
+  "name": "serverless-arazzo-workflows",
+  "version": "0.0.1",
+  "description": "Document your Serverless Framework API workflows with the OpenAPI Arazzo Workflow Spec",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --config './test/.mocharc.js'",
+    "watch-tests": "mocha --config './test/.mocharc.js' --watch",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JaredCE/serverless-arazzo-workflows.git"
+  },
+  "keywords": [
+    "serverless",
+    "arazzo",
+    "openapi"
+  ],
+  "author": "Jared Evans",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JaredCE/serverless-arazzo-workflows/issues"
+  },
+  "homepage": "https://github.com/JaredCE/serverless-arazzo-workflows#readme",
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "chai": "^4.5.0",
+    "husky": "^9.1.7",
+    "mocha": "^11.7.5",
+    "sinon": "^21.0.1"
+  },
+  "dependencies": {
+    "@redocly/cli": "^2.14.0",
+    "ajv": "^8.17.1",
+    "chalk": "^4.1.2",
+    "js-yaml": "^4.1.1"
+  }
+}

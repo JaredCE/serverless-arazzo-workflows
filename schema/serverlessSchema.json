@@ -1,0 +1,51 @@
+{
+  "type": "object",
+  "properties": {
+    "arazzo": {
+      "type": "object",
+      "properties": {
+        "info": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            }
+          }
+        },
+        "workflows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "workflowId": {
+                "type": "string"
+              },
+              "summary": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "inputs": {
+                "type": "object"
+              },
+              "steps": {
+                "type": ["object", "array"]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": ["arazzo"]
+}

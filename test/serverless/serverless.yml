@@ -1,0 +1,141 @@
+service: serverless-arazzo-doc-demo
+frameworkVersion: "3.40.0"
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+plugins:
+  - serverless-openapi-documenter
+  - ../../index.js
+
+functions:
+  createUser:
+    handler: handler.create
+    events:
+      - http:
+          path: create/{username}
+          method: post
+          documentation:
+            summary: Create User
+            description: Creates a user and then sends a generated password email
+            tags:
+              - jesus
+            requestBody:
+              description: A user information object
+            requestModels:
+              application/json: PutDocumentRequest
+            pathParams:
+              - name: username
+                description: The username for a user to create
+                schema:
+                  type: string
+                  pattern: "^[-a-z0-9_]+$"
+            queryParams:
+              - name: membershipType
+                description: The user's Membership Type
+                schema:
+                  type: string
+                  enum:
+                    - premium
+                    - standard
+            cookieParams:
+              - name: SessionId
+                description: A Session ID variable
+                schema:
+                  type: string
+            methodResponses:
+              - statusCode: 201
+                responseBody:
+                  description: A user object along with generated API Keys
+                responseModels:
+                  application/json: PutDocumentResponse
+              - statusCode: 400
+                responseBody:
+                  description: An error message when creating a new user
+                responseModels:
+                  application/json: ErrorResponse
+              - statusCode: 500
+                responseBody:
+                  description: An error message when creating a new user
+                responseModels:
+                  application/json: ErrorResponse
+
+custom:
+  arazzo:
+    info:
+      description: This is an example of an Arazzo Specification
+      summary: Example Arazzo Specification
+      version: 1.0.0
+    workflows:
+      - workflowId: loginUserAndRetrievePet
+        summary: Login User and then retrieve pets
+        description: This workflow lays out the steps to login a user and then retrieve pets
+        inputs:
+          type: object
+          properties:
+            username:
+              type: string
+            password:
+              type: string
+        steps:
+          - stepId: loginStep
+            description: This step demonstrates the user login step
+            operationId: createUser
+            parameters:
+              # parameters to inject into the loginUser operation (parameter name must be resolvable at the referenced operation and the value is determined using {expression} syntax)
+              - name: username
+                in: query
+                value: $inputs.username
+              - name: password
+                in: query
+                value: $inputs.password
+            successCriteria:
+              # assertions to determine step was successful
+              - condition: $statusCode == 200
+            outputs:
+              # outputs from this step
+              tokenExpires: $response.header.X-Expires-After
+              rateLimit: $response.header.X-Rate-Limit
+              sessionToken: $response.body
+  documentation:
+    description: This is a description of an OpenAPI Document
+    version: 1.0.0
+    models:
+      - name: ErrorResponse
+        description: This is an error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+
+      - name: PutDocumentResponse
+        description: PUT Document response model (external reference example)
+        content:
+          application/json:
+            schema:
+              type: string
+
+      - name: PutDocumentRequest
+        description: PUT Document request model (inline example)
+        content:
+          application/json:
+            schema:
+              $schema: http://json-schema.org/draft-04/schema#
+              properties:
+                SomeObject:
+                  type: object
+                  properties:
+                    SomeAttribute:
+                      type: string
+            examples:
+              - name: someObjectInlineExample
+                summary: an example of a request
+                description: a longer string than the summary
+                value: {SomeObject: {SomeAttribute: 'attribute'}}
+              - name: someObjectExternalExample
+                summary: an example of a request external
+                description: a longer string than the summary
+                externalValue: https://example.com/external.json
