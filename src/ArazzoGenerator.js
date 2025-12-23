@@ -1,6 +1,12 @@
 'use strict';
 
-const Ajv = require('ajv')
+const Ajv = require('ajv');
+const {
+  Config,
+  lintFromString,
+  stringifyYaml,
+  createConfig,
+} = require("@redocly/openapi-core");
 
 class ArazzoGenerator {
     constructor(arazzoDocumentation, options) {
@@ -223,7 +229,23 @@ class ArazzoGenerator {
         }
 
         return obj;
-  }
+    }
+
+    async validate() {
+        const config = await createConfig({
+            apis: {},
+            rules: {},
+        });
+
+        const apiDesc = stringifyYaml(this.arazzo);
+
+        return await lintFromString({
+            source: apiDesc,
+            config: config,
+        }).catch((err) => {
+            throw err;
+        });
+    }
 }
 
 module.exports = ArazzoGenerator;
