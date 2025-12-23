@@ -75,6 +75,16 @@ class ArazzoPlugin {
         this.logger.notice(`Generating Arazzo Specification`);
         generator.parse();
 
+        this.logger.notice(`Validating generated Arazzo Specification`);
+
+        await generator.validate().catch(err => {
+            this.logger.error(
+                `ERROR: An error was thrown validating the Arazzo Specification`
+            );
+
+            throw new this.serverless.classes.Error(err);
+        })
+
         this.logger.success("Arazzo Specification Successfully Generated");
 
         this.arazzoSpecification = generator.arazzo;
