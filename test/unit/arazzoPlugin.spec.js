@@ -5,12 +5,30 @@ const sinon = require('sinon');
 
 const ArazzoPlugin = require('../../src/ArazzoPlugin.js');
 
+const arazzoMock = require('../mocks/arazzoMock.json')
+
 describe(`Arazzo Plugin`, function () {
-    let sls;
+    let sls, logOutput;
 
     beforeEach(function() {
         sls = {
             version: '3.4.0',
+            service: {
+                service: "test-service",
+                provider: {
+                    stage: "test",
+                },
+                getAllFunctions: () => {},
+                getFunction: () => {},
+                custom: {
+                    arazzo: arazzoMock
+                }
+            },
+            variables: {
+                service: {
+                    custom: {}
+                },
+            },
             classes: {
                 Error: class ServerlessError {
                     constructor(err) {
@@ -27,11 +45,20 @@ describe(`Arazzo Plugin`, function () {
                 defineCustomProperties: () => {},
             },
         }
+
+        logOutput = {
+            log: {
+                notice: (str) => {},
+                error: (str) => {},
+                success: (str) => {},
+                verbose: (str) => {},
+            },
+        };
     });
 
     describe(`constructor`, function () {
         it(`generate an instance of ArazzoPlugin`, function() {
-            const expected = new ArazzoPlugin(sls);
+            const expected = new ArazzoPlugin(sls, {}, logOutput);
 
             expect(expected).to.be.instanceOf(ArazzoPlugin);
         });
@@ -39,7 +66,7 @@ describe(`Arazzo Plugin`, function () {
 
     describe(`Arazzo Generation`, function () {
         it(`should generate an Arazzo Specification`, async function() {
-            const arazzoPlugin = new ArazzoPlugin(sls, {});
+            const arazzoPlugin = new ArazzoPlugin(sls, {}, logOutput);
 
             const writeFileStub = sinon.stub(arazzoPlugin, 'writeArazzoFile').resolves();
 
@@ -57,31 +84,31 @@ describe(`Arazzo Plugin`, function () {
 
     describe(`process CLI Input`, function () {
         it(`should default the file output to arazzo.json`, function() {
-            const arazzoPlugin = new ArazzoPlugin(sls, {});
+            const arazzoPlugin = new ArazzoPlugin(sls, {}, logOutput);
             arazzoPlugin.processCLIInput();
 
             expect(arazzoPlugin.config.file).to.be.eql('arazzo.json');
         });
 
         it(`should set the user file output when set`, function() {
-            sls.processedInput.options.output = 'jared'
-            const arazzoPlugin = new ArazzoPlugin(sls, {});
+            sls.processedInput.options.output = 'jared.json'
+            const arazzoPlugin = new ArazzoPlugin(sls, {}, logOutput);
             arazzoPlugin.processCLIInput();
 
             expect(arazzoPlugin.config.file).to.be.eql('jared.json');
         });
 
         it(`should set the user file output when set and using yaml`, function() {
-            sls.processedInput.options.output = 'jared'
+            sls.processedInput.options.output = 'jared.yml'
             sls.processedInput.options.format = 'yaml'
-            const arazzoPlugin = new ArazzoPlugin(sls, {});
+            const arazzoPlugin = new ArazzoPlugin(sls, {}, logOutput);
             arazzoPlugin.processCLIInput();
 
             expect(arazzoPlugin.config.file).to.be.eql('jared.yml');
         });
 
         it(`should correctly set the file output for json`, function() {
-            const arazzoPlugin = new ArazzoPlugin(sls, {});
+            const arazzoPlugin = new ArazzoPlugin(sls, {}, logOutput);
             arazzoPlugin.processCLIInput();
 
             expect(arazzoPlugin.config.format).to.be.eql('json');
@@ -89,7 +116,7 @@ describe(`Arazzo Plugin`, function () {
 
         it(`should correctly set the file output for yaml`, function() {
             sls.processedInput.options.format = 'yaml'
-            const arazzoPlugin = new ArazzoPlugin(sls, {});
+            const arazzoPlugin = new ArazzoPlugin(sls, {}, logOutput);
             arazzoPlugin.processCLIInput();
 
 
@@ -98,7 +125,7 @@ describe(`Arazzo Plugin`, function () {
 
         it(`should correctly set the openAPI source file`, function() {
             sls.processedInput.options.source = 'openAPI2.json'
-            const arazzoPlugin = new ArazzoPlugin(sls, {});
+            const arazzoPlugin = new ArazzoPlugin(sls, {}, logOutput);
             arazzoPlugin.processCLIInput();
 
 
@@ -108,7 +135,7 @@ describe(`Arazzo Plugin`, function () {
         it(`should throw an error if a file format other than yaml or json is tried`, function() {
             expect(function () {
                 sls.processedInput.options.format = 'docx'
-                const arazzoPlugin = new ArazzoPlugin(sls, {});
+                const arazzoPlugin = new ArazzoPlugin(sls, {}, logOutput);
                 arazzoPlugin.processCLIInput();
             }).to.throw(`Invalid Output Format Specified - must be one of "yaml" or "json"`);
         });
