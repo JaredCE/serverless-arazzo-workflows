@@ -117,7 +117,7 @@ class ArazzoPlugin {
 
         if (this.serverless.processedInput?.options?.format?.toLowerCase() === 'yaml') {this.serverless.processedInput.options.format = 'yml';}
 
-        config.format = this.serverless.processedInput.options.format.toLowerCase() || "json";
+        config.format = this.serverless.processedInput?.options?.format?.toLowerCase() || "json";
 
         if (["yml", "json"].indexOf(config.format.toLowerCase()) < 0) {
             throw new this.serverless.classes.Error(
