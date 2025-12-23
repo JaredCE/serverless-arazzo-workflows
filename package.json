@@ -1,6 +1,6 @@
 {
   "name": "serverless-arazzo-workflows",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Document your Serverless Framework API workflows with the OpenAPI Arazzo Workflow Spec",
   "main": "index.js",
   "scripts": {
