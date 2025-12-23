@@ -21,7 +21,29 @@
             }
           }
         },
-        "workflows": {}
+        "workflows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "workflowId": {
+                "type": "string"
+              },
+              "summary": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "inputs": {
+                "type": "object"
+              },
+              "steps": {
+                "type": ["object", "array"]
+              }
+            }
+          }
+        }
       }
     }
   },
