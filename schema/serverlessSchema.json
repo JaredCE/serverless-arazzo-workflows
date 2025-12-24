@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "arazzo": {
@@ -21,13 +22,33 @@
             }
           }
         },
-        "workflows": {
+        "sourceDescriptions": {
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
-              "workflowId": {
+              "name": {
                 "type": "string"
+              },
+              "url": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["openapi", "arazzo"]
+              }
+            }
+          }
+        },
+        "workflows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["steps", "workflowId"],
+            "properties": {
+              "workflowId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_\\-]+$"
               },
               "summary": {
                 "type": "string"
@@ -38,13 +59,105 @@
               "inputs": {
                 "type": "object"
               },
+              "dependsOn": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "successActions": {
+                "type": "object"
+              },
+              "failureActions": {
+                "type": "object"
+              },
+              "outputs": {
+                "type": "object"
+              },
+              "parameters": {
+                "type": "object"
+              },
               "steps": {
-                "type": ["object", "array"]
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["stepId"],
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "stepId": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9_\\-]+$"
+                    },
+                    "operationId": {
+                      "type": "string"
+                    },
+                    "operationPath": {
+                      "type": "string"
+                    },
+                    "workflowId": {
+                      "type": "string"
+                    },
+                    "parameters": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["name", "value"],
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "in": {
+                            "type": "string",
+                            "enum": ["path", "query", "cookie", "header"]
+                          },
+                          "value": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "requestBody": {
+                      "type": "object",
+                      "properties": {
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "payload": {
+                          "type": [
+                            "array",
+                            "boolean",
+                            "integer",
+                            "number",
+                            "object",
+                            "string"
+                          ]
+                        }
+                      }
+                    },
+                    "successCriteria": {
+                      "type": "array"
+                    },
+                    "onSuccess": {
+                      "type": "object"
+                    },
+                    "onFailure": {
+                      "type": "object"
+                    },
+                    "outputs": {
+                      "type": "object"
+                    }
+                  }
+                },
+                "minItems": 1
               }
             }
-          }
+          },
+          "minItems": 1
         }
-      }
+      },
+      "required": ["workflows"]
     }
   },
   "required": ["arazzo"]

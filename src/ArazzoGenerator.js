@@ -72,7 +72,7 @@ class ArazzoGenerator {
 
     generateWorkflows() {
         const workflows = []
-        for (const workflow of this.arazzoDocumentation.workflows) {
+        for (const workflow of this.arazzoDocumentation?.workflows || []) {
             const obj = {};
             this.currentWorkflow = workflow;
 
@@ -97,7 +97,9 @@ class ArazzoGenerator {
                 obj.parameters = this.generateParameters(workflow.parameters);
             }
 
-            obj.steps = this.generateSteps()
+            if (workflow.steps) {
+                obj.steps = this.generateSteps()
+            }
 
             workflows.push(obj)
         }
@@ -237,14 +239,16 @@ class ArazzoGenerator {
     }
 
     extendSpecification(spec) {
-        const obj = {};
-        for (const key of Object.keys(spec)) {
-            if (/^[x\-]/i.test(key)) {
-                Object.assign(obj, { [key]: spec[key] });
+        if (spec) {
+            const obj = {};
+            for (const key of Object.keys(spec)) {
+                if (/^[x\-]/i.test(key)) {
+                    Object.assign(obj, { [key]: spec[key] });
+                }
             }
-        }
 
-        return obj;
+            return obj;
+        }
     }
 
     async validate() {

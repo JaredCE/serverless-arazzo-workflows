@@ -49,7 +49,7 @@ class ArazzoPlugin {
             "arazzo:generate:serverless": this.generate.bind(this),
         };
 
-        // this.serverless.configSchemaHandler.defineCustomProperties(serverlessSchema);
+        this.serverless.configSchemaHandler.defineCustomProperties(serverlessSchema);
     }
 
     async generate() {
