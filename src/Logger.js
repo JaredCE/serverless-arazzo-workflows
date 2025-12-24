@@ -1,8 +1,8 @@
 "use strict";
 
 class Logger {
-  constructor(serverless, log) {
-    this.serverless = serverless;
+  constructor(serverlessVersion, log) {
+    this.serverlessVersion = serverlessVersion;
     this.logOutput = log;
 
     this.logTypes = {
@@ -19,18 +19,7 @@ class Logger {
   }
 
   log(str, type = this.defaultLog) {
-    switch (this.serverless.version[0]) {
-      case "2":
-        let colouredString = str;
-        if (type === "error") {
-          colouredString = chalk.bold.red(`✖ ${str}`);
-        } else if (type === "success") {
-          colouredString = chalk.bold.green(`✓ ${str}`);
-        }
-
-        this.serverless.cli.log(colouredString);
-        break;
-
+    switch (this.serverlessVersion) {
       case "4":
       case "3":
         this.logOutput[type](str);
