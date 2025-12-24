@@ -37,7 +37,10 @@ Note: `serverless-openapi-documenter` is required for this to work.
 
 ## Generating the Arazzo Specification file
 
-To Run: `serverless arazzo generate -f json`
+To generate an Arazzo Specification, you can call the plugin from the CLI like:
+```bash
+serverless arazzo generate -f json
+```
 
 Options:
 
@@ -219,3 +222,17 @@ custom:
 ```
 
 `other-field` here will not make it to the generated Arazzo document.
+
+## Running the Arazzo Specification
+
+To run the generated Arazzo Specification, you can call the plugin from the CLI like:
+
+```bash
+serverless arazzo run
+```
+
+Options:
+
+```
+--source -s  The default Arazzo Specification source file. Default: arazzo.json
+```
