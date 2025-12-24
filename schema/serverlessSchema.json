@@ -47,7 +47,8 @@
             "required": ["steps", "workflowId"],
             "properties": {
               "workflowId": {
-                "type": "string"
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_\\-]+$"
               },
               "summary": {
                 "type": "string"
@@ -86,7 +87,8 @@
                       "type": "string"
                     },
                     "stepId": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9_\\-]+$"
                     },
                     "operationId": {
                       "type": "string"
