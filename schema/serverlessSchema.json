@@ -100,10 +100,41 @@
                       "type": "string"
                     },
                     "parameters": {
-                      "type": "array"
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["name", "value"],
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "in": {
+                            "type": "string",
+                            "enum": ["path", "query", "cookie", "header"]
+                          },
+                          "value": {
+                            "type": "string"
+                          }
+                        }
+                      }
                     },
                     "requestBody": {
-                      "type": "object"
+                      "type": "object",
+                      "properties": {
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "payload": {
+                          "type": [
+                            "array",
+                            "boolean",
+                            "integer",
+                            "number",
+                            "object",
+                            "string"
+                          ]
+                        }
+                      }
                     },
                     "successCriteria": {
                       "type": "array"
