@@ -1,0 +1,47 @@
+{
+  "arazzo": "1.0.1",
+  "info": {
+    "title": "serverless-arazzo-doc-demo",
+    "description": "This is an example of an Arazzo Specification",
+    "summary": "Example Arazzo Specification",
+    "version": "1.0.0"
+  },
+  "sourceDescriptions": [
+    {
+      "name": "serverless-arazzo-doc-demo-openAPI",
+      "url": "openapi.json",
+      "type": "openapi"
+    }
+  ],
+  "workflows": [
+    {
+      "workflowId": "loginUserAndRetrievePet",
+      "summary": "Login User and then retrieve pets",
+      "description": "This workflow lays out the steps to login a user and then retrieve pets",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "username": { "type": "string" },
+          "password": { "type": "string" }
+        }
+      },
+      "steps": [
+        {
+          "stepId": "loginStep",
+          "description": "This step demonstrates the user login step",
+          "operationId": "createUser",
+          "parameters": [
+            { "name": "username", "in": "query", "value": "$inputs.username" },
+            { "name": "password", "in": "query", "value": "$inputs.password" }
+          ],
+          "successCriteria": [{ "condition": "$statusCode == 200" }],
+          "outputs": {
+            "tokenExpires": "$response.header.X-Expires-After",
+            "rateLimit": "$response.header.X-Rate-Limit",
+            "sessionToken": "$response.body"
+          }
+        }
+      ]
+    }
+  ]
+}
