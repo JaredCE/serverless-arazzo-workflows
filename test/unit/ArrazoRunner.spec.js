@@ -15,16 +15,12 @@ const ArazzoRunner = require('../../src/ArazzoRunner.js');
 
 describe(`Arazzo Runner`, function () {
     const logger = new Logger(
-        3,
+        '3',
         {
-            logOutput:{
-                log: {
-                    notice: (str) => {},
-                    error: (str) => {},
-                    success: (str) => {},
-                    verbose: (str) => {},
-                },
-            }
+            notice: (str) => {},
+            error: (str) => {},
+            success: (str) => {},
+            verbose: (str) => {},
         }
     );
 
