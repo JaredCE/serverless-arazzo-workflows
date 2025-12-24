@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "arazzo": {
@@ -25,6 +26,7 @@
           "type": "array",
           "items": {
             "type": "object",
+            "required": ["steps", "workflowId"],
             "properties": {
               "workflowId": {
                 "type": "string"
@@ -38,13 +40,73 @@
               "inputs": {
                 "type": "object"
               },
+              "dependsOn": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "successActions": {
+                "type": "object"
+              },
+              "failureActions": {
+                "type": "object"
+              },
+              "outputs": {
+                "type": "object"
+              },
+              "parameters": {
+                "type": "object"
+              },
               "steps": {
-                "type": ["object", "array"]
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["stepId"],
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "stepId": {
+                      "type": "string"
+                    },
+                    "operationId": {
+                      "type": "string"
+                    },
+                    "operationPath": {
+                      "type": "string"
+                    },
+                    "workflowId": {
+                      "type": "string"
+                    },
+                    "parameters": {
+                      "type": "array"
+                    },
+                    "requestBody": {
+                      "type": "object"
+                    },
+                    "successCriteria": {
+                      "type": "array"
+                    },
+                    "onSuccess": {
+                      "type": "object"
+                    },
+                    "onFailure": {
+                      "type": "object"
+                    },
+                    "outputs": {
+                      "type": "object"
+                    }
+                  }
+                },
+                "minItems": 1
               }
             }
-          }
+          },
+          "minItems": 1
         }
-      }
+      },
+      "required": ["workflows"]
     }
   },
   "required": ["arazzo"]
