@@ -16,6 +16,7 @@ class ArazzoRunner {
 
     async runArazzoWorkflows() {
         await this.getSourceDescriptions();
+        await this.getWorkflows();
     }
 
     async getSourceDescriptions() {
@@ -27,6 +28,17 @@ class ArazzoRunner {
         }
 
         this.sourceDescriptions = sourceDescriptions;
+    }
+
+    async getWorkflows() {
+        const pipeline = this.JSONPicker('workflows', this.pathToArazzoSpecification);
+
+        let workflows = [];
+        for await (const { value } of pipeline) {
+            workflows = value.flat();
+        }
+
+        this.workflows = workflows;
     }
 
     JSONPicker(key, file) {
