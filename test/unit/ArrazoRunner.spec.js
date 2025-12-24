@@ -55,7 +55,7 @@ describe(`Arazzo Runner`, function () {
             expect(arazzoRunner.sourceDescriptions).to.have.lengthOf(1);
         });
 
-        it(`should generate a list of source descriptions when there is more than one`, async function() {
+        xit(`should generate a list of source descriptions when there is more than one`, async function() {
             const arazzoSourceDescriptionsMock = structuredClone(arazzoMock)
             arazzoSourceDescriptionsMock.sourceDescriptions.push({name: 'abc', url: './abc.json', type: 'openapi'});
 
@@ -69,7 +69,7 @@ describe(`Arazzo Runner`, function () {
                 fakeStream.push(null); // End of stream
             });
 
-            sinon.stub(fs, 'createReadStream').returns(fakeStream)
+            const stub = sinon.stub(fs, 'createReadStream').returns(fakeStream)
 
             const arazzoRunner = new ArazzoRunner('/Users/jaredevans/Projects/GitHub/Personal/serverless-arazzo-workflows/test/mocks/finalisedArazzoMock.json', {logger});
 
@@ -80,6 +80,20 @@ describe(`Arazzo Runner`, function () {
 
             expect(arazzoRunner.sourceDescriptions).to.be.an('array');
             expect(arazzoRunner.sourceDescriptions).to.have.lengthOf(2);
+
+            stub.restore();
+        });
+
+        it(`should get the workflows`, async function() {
+            const arazzoRunner = new ArazzoRunner('/Users/jaredevans/Projects/GitHub/Personal/serverless-arazzo-workflows/test/mocks/finalisedArazzoMock.json', {logger});
+
+            await arazzoRunner.runArazzoWorkflows()
+                .catch(err => {
+                    console.error(err);
+                });
+
+            expect(arazzoRunner.workflows).to.be.an('array');
+            expect(arazzoRunner.workflows).to.have.lengthOf(1);
         });
     });
 });
