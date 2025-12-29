@@ -37,6 +37,7 @@
     "ajv": "^8.17.1",
     "chalk": "^4.1.2",
     "js-yaml": "^4.1.1",
+    "peggy": "^5.0.6",
     "stream-chain": "^3.4.0",
     "stream-json": "^1.9.1"
   }
