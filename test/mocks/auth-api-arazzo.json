@@ -1,0 +1,47 @@
+{
+  "arazzo": "1.0.1",
+  "info": { "title": "Arazzo Workflow for AuthAPI", "version": "0.0.1" },
+  "sourceDescriptions": [
+    {
+      "name": "Arazzo Workflow for AuthAPI-openAPI",
+      "url": "https://docs.development.v2.aws.aat.org.uk/openapi-specs/auth-api-openAPI.json",
+      "type": "openapi"
+    }
+  ],
+  "workflows": [
+    {
+      "workflowId": "Login",
+      "summary": "Login as a user",
+      "description": "Login as a particular user",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "clientId": {
+            "type": "string"
+          }
+        }
+      },
+      "steps": [
+        {
+          "stepId": "loginUser",
+          "description": "This step logs a user in",
+          "requestBody": {
+            "contentType": "application/json",
+            "payload": {
+              "username": "{'$inputs.username'}",
+              "password": "{'$inputs.password'}",
+              "clientId": "{'$inputs.clientId'}"
+            }
+          },
+          "successCriteria": [{ "condition": "$statusCode == 200" }]
+        }
+      ]
+    }
+  ]
+}

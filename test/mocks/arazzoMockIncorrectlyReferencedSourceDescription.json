@@ -1,0 +1,49 @@
+{
+  "arazzo": "1.0.1",
+  "info": {
+    "title": "Arazzo Pet Store",
+    "summary": "An Arazzo Specification for a pet store",
+    "description": "An Arazzo Specification for a pet store",
+    "version": "1.0.0"
+  },
+  "sourceDescriptions": [
+    {
+      "name": "Arazzo-Workflow-for-Petstore-openAPI",
+      "url": "https://raw.githubusercontent.com/readmeio/oas-examples/refs/heads/main/3.1/json/petstore.json",
+      "type": "openapi"
+    },
+    {
+      "name": "Arazzo-Workflow-for-simple-petstore-openAPI",
+      "url": "https://raw.githubusercontent.com/readmeio/oas-examples/refs/heads/main/3.1/json/petstore-simple.json",
+      "type": "openapi"
+    }
+  ],
+  "workflows": [
+    {
+      "workflowId": "getById",
+      "summary": "Find a pet by Id",
+      "description": "This worflow finds a pet by Id",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        },
+        "required": ["id"]
+      },
+      "steps": [
+        {
+          "description": "The step to find a pet by Id",
+          "stepId": "getById",
+          "operationId": "$sourceDescriptions.Arazzo-Workflow-for-simple-petstore-openAP.getById",
+          "parameters": {
+            "name": "id",
+            "in": "path",
+            "value": "$inputs.id"
+          }
+        }
+      ]
+    }
+  ]
+}
