@@ -1,10 +1,16 @@
 'use strict';
 
+const peggy = require('peggy');
+const { chain } = require('stream-chain');
 const Pick = require('stream-json/filters/Pick');
-const {streamValues} = require('stream-json/streamers/StreamValues');
-const {chain} = require('stream-chain');
+const { streamValues } = require('stream-json/streamers/StreamValues');
 
 const fs = require('node:fs');
+const fsp = require('node:fs/promises');
+const path = require('node:path');
+
+const Arazzo = require('./Arazzo');
+const Input = require('./Input');
 
 class ArazzoRunner {
     constructor(pathToArazzoSpecification = './arazzo.json', options) {
@@ -12,34 +18,35 @@ class ArazzoRunner {
 
         this.logger = options.logger;
 
+        this.openAPISteps = false;
+
+        this.inputFile = new Input(options.inputFile, 'inputs');
     }
 
     async runArazzoWorkflows() {
-        await this.getSourceDescriptions();
-        await this.getWorkflows();
+        await this.loadPeggyRules();
+
+        this.arazzoDocument = new Arazzo(
+            this.pathToArazzoSpecification,
+            'mainArazzo',
+            {
+                parser: this.parser,
+                logger: this.logger
+            }
+        );
+
+        this.arazzoDocument.setMainArazzo()
+
+        await this.arazzoDocument.runWorkflows(this.inputFile);
     }
 
-    async getSourceDescriptions() {
-        const pipeline = this.JSONPicker('sourceDescriptions', this.pathToArazzoSpecification);
+    async loadPeggyRules() {
+        const peggyPath = path.join(__dirname, '..', 'resources', 'rules.peggy');
+        const peggyRuleSet = await fsp.readFile(peggyPath);
 
-        let sourceDescriptions = [];
-        for await (const { value } of pipeline) {
-            sourceDescriptions = value.flat();
-        }
-
-        this.sourceDescriptions = sourceDescriptions;
+        this.parser = peggy.generate(peggyRuleSet.toString());
     }
 
-    async getWorkflows() {
-        const pipeline = this.JSONPicker('workflows', this.pathToArazzoSpecification);
-
-        let workflows = [];
-        for await (const { value } of pipeline) {
-            workflows = value.flat();
-        }
-
-        this.workflows = workflows;
-    }
 
     JSONPicker(key, file) {
         const pipeline = chain([

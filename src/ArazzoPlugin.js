@@ -6,23 +6,24 @@ const yaml = require("js-yaml");
 const fs = require('fs/promises')
 
 const ArazzoGenerator = require('./ArazzoGenerator');
+const ArazzoRunner = require('./ArazzoRunner');
 const Logger = require("./Logger");
 
-const serverlessSchema = require('../schema/serverlessSchema.json')
+const serverlessSchema = require('../resources/serverlessSchema.json')
 
 class ArazzoPlugin {
     constructor(serverless, options, {log={}} = {}) {
         this.serverless = serverless;
         this.logOutput = log;
 
-        this.logger = new Logger(this.serverless, this.logOutput);
+        this.logger = new Logger(this.serverless.version[0], this.logOutput);
 
         this.commands = {
             arazzo: {
                 commands: {
                     generate: {
                         lifecycleEvents: ['serverless'],
-                        usage: 'Generate Arazzo Documents',
+                        usage: 'Generate Arazzo Specification',
                         options: {
                             output: {
                                 usage: 'Arazzo file output location [default: arazzo.json]',
@@ -40,16 +41,33 @@ class ArazzoPlugin {
                                 type: 'string',
                             }
                         }
-                    }
-                }
-            }
-        }
+                    },
+                    run: {
+                        lifecycleEvents: ['serverless'],
+                        usage: 'Run an Arazzo Specification',
+                        options: {
+                            source: {
+                                usage: 'The default Arazzo Specification Source file to use [default: arazzo.json]',
+                                shortcut: 's',
+                                type: 'string',
+                            },
+                            input: {
+                                usage: 'The input variables to fill in things like Query Strings and Path parameters [default: input.json]',
+                                shortcut: 'i',
+                                type: 'string',
+                            },
+                        },
+                    },
+                },
+            },
+        };
 
         this.hooks = {
             "arazzo:generate:serverless": this.generate.bind(this),
+            "arazzo:run:serverless": this.run.bind(this),
         };
 
-        this.serverless.configSchemaHandler.defineCustomProperties(serverlessSchema);
+        // this.serverless.configSchemaHandler.defineCustomProperties(serverlessSchema);
     }
 
     async generate() {
@@ -57,9 +75,37 @@ class ArazzoPlugin {
             chalk.bold.underline("Arazzo v1 Specification Generation")
         );
 
+        this.generateArazzo = true;
         this.processCLIInput();
 
-        await this.arazzoGeneration();
+        await this.arazzoGeneration()
+            .catch((err) => {
+                throw new this.serverless.classes.Error(err);
+            });
+    }
+
+    async run() {
+        this.logger.notice(
+            chalk.bold.underline("Arazzo v1 Specification Runner")
+        );
+
+        this.runArazzo = true;
+        this.processCLIInput();
+
+        const runner = new ArazzoRunner(
+            `./${this.config.source}`,
+            {
+                logger: this.logger,
+                inputFile: this.config.input
+            }
+        );
+
+        await runner.runArazzoWorkflows()
+            .catch((err) => {
+                throw new this.serverless.classes.Error(err);
+            });
+
+        this.logger.success("Arazzo Specification Successfully Run");
     }
 
     async arazzoGeneration() {
@@ -112,7 +158,8 @@ class ArazzoPlugin {
             file: "arazzo.json",
             arazzoVersion: "1.0.1",
             validationWarn: false,
-            source: 'openapi.json'
+            source: this.generateArazzo ? 'openapi.json' : 'arazzo.json',
+            input: 'input.json',
         };
 
         if (this.serverless.processedInput?.options?.format?.toLowerCase() === 'yaml') {this.serverless.processedInput.options.format = 'yml';}
@@ -133,17 +180,35 @@ class ArazzoPlugin {
             config.source = this.serverless.processedInput.options.source;
         }
 
+        if (this.serverless.processedInput.options.input) {
+            config.input = this.serverless.processedInput.options.input;
+        }
+
         this.config = config;
 
-        this.logger.notice(
-            `
+        this.outputOptions()
+    }
+
+    outputOptions() {
+        if (this.generateArazzo) {
+            this.logger.notice(
+                `
 ${chalk.bold.green("[OPTIONS]")}
     Arazzo Version: "${chalk.bold.green(String(this.config.arazzoVersion))}"
     Format: "${chalk.bold.green(this.config.format)}"
     Output File: "${chalk.bold.green(this.config.file)}"
     Source File: "${chalk.bold.green(this.config.source)}"
-            `
-        )
+                `
+            )
+        } else {
+            this.logger.notice(
+                `
+${chalk.bold.green("[OPTIONS]")}
+    Source File: "${chalk.bold.green(this.config.source)}"
+    Input File: "${chalk.bold.green(this.config.input)}"
+                `
+            )
+        }
     }
 }
 
