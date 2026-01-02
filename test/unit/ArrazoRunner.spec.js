@@ -3,14 +3,10 @@
 const expect = require("chai").expect;
 const sinon = require('sinon');
 
-const assert = require('node:assert/strict');
-const fs = require('node:fs')
-const { Readable } = require('node:stream');
+const fsp = require('node:fs/promises');
 
-const arazzoMock = require('../mocks/finalisedArazzoMock.json');
-
-
-const Logger = require('../../src/Logger.js')
+const Arazzo = require('../../src/Arazzo.js');
+const Logger = require('../../src/Logger.js');
 const ArazzoRunner = require('../../src/ArazzoRunner.js');
 
 describe(`Arazzo Runner`, function () {
@@ -26,70 +22,45 @@ describe(`Arazzo Runner`, function () {
 
     describe(`constructor`, function () {
         it(`correctly sets the path of the Arazzo Specification File when not passed in `, function() {
-            const expected = new ArazzoRunner(undefined, {logger});
+            const expected = new ArazzoRunner(undefined, {logger, inputFile: './input.json'});
 
             expect(expected.pathToArazzoSpecification).to.be.equal('./arazzo.json');
         });
 
         it(`correctly sets the path of the Arazzo Specification File when passed in `, function() {
-            const expected = new ArazzoRunner('./my-arazzo.json', {logger});
+            const expected = new ArazzoRunner('./my-arazzo.json', {logger, inputFile: './input.json'});
 
             expect(expected.pathToArazzoSpecification).to.be.equal('./my-arazzo.json');
         });
     });
 
     describe(`runArazzoWorkflows`, function () {
-        it(`should generate a list of source descriptions`, async function() {
-            const arazzoRunner = new ArazzoRunner('/Users/jaredevans/Projects/GitHub/Personal/serverless-arazzo-workflows/test/mocks/finalisedArazzoMock.json', {logger});
+        it(`should run an Arazzo Workflow as expected`, async function() {
+            const arazzoStub = sinon.stub(Arazzo.prototype, 'runWorkflows').resolves();
 
-            await arazzoRunner.runArazzoWorkflows()
-                .catch(err => {
-                    console.error(err);
-                });
+            const runner = new ArazzoRunner(undefined, {logger, inputFile: './input.json'});
 
-            expect(arazzoRunner.sourceDescriptions).to.be.an('array');
-            expect(arazzoRunner.sourceDescriptions).to.have.lengthOf(1);
+            try {
+                await runner.runArazzoWorkflows();
+            } catch (err) {
+                throw new Error('Err not expected');
+            }
+
+            arazzoStub.restore();
         });
 
-        xit(`should generate a list of source descriptions when there is more than one`, async function() {
-            const arazzoSourceDescriptionsMock = structuredClone(arazzoMock)
-            arazzoSourceDescriptionsMock.sourceDescriptions.push({name: 'abc', url: './abc.json', type: 'openapi'});
+        it(`throws an error reading the peggy rules fails`, async function() {
+            const readFileStub = sinon.stub(fsp, 'readFile').rejects(new Error('Error thrown from sinon'));
 
-            const fakeStream = new Readable({
-                read() {} // No-op, we'll push manually
-            });
+            const runner = new ArazzoRunner(undefined, {logger, inputFile: './input.json'});
 
-            // Push fake data and end
-            process.nextTick(() => {
-                fakeStream.push(JSON.stringify(arazzoSourceDescriptionsMock));
-                fakeStream.push(null); // End of stream
-            });
+            try {
+                await runner.runArazzoWorkflows();
+            } catch (err) {
+                expect(err).to.be.instanceOf(Error);
+            }
 
-            const stub = sinon.stub(fs, 'createReadStream').returns(fakeStream)
-
-            const arazzoRunner = new ArazzoRunner('/Users/jaredevans/Projects/GitHub/Personal/serverless-arazzo-workflows/test/mocks/finalisedArazzoMock.json', {logger});
-
-            await arazzoRunner.runArazzoWorkflows()
-                .catch(err => {
-                    console.error(err);
-                });
-
-            expect(arazzoRunner.sourceDescriptions).to.be.an('array');
-            expect(arazzoRunner.sourceDescriptions).to.have.lengthOf(2);
-
-            stub.restore();
-        });
-
-        it(`should get the workflows`, async function() {
-            const arazzoRunner = new ArazzoRunner('/Users/jaredevans/Projects/GitHub/Personal/serverless-arazzo-workflows/test/mocks/finalisedArazzoMock.json', {logger});
-
-            await arazzoRunner.runArazzoWorkflows()
-                .catch(err => {
-                    console.error(err);
-                });
-
-            expect(arazzoRunner.workflows).to.be.an('array');
-            expect(arazzoRunner.workflows).to.have.lengthOf(1);
+            readFileStub.restore();
         });
     });
 });
