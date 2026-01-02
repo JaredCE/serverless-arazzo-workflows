@@ -4,8 +4,9 @@ const expect = require("chai").expect;
 const sinon = require('sinon');
 
 const ArazzoPlugin = require('../../src/ArazzoPlugin.js');
+const ArazzoRunner = require('../../src/ArazzoRunner.js');
 
-const arazzoMock = require('../mocks/arazzoMock.json')
+const arazzoMock = require('../mocks/arazzoMock.json');
 
 describe(`Arazzo Plugin`, function () {
     let sls, logOutput;
@@ -79,6 +80,50 @@ describe(`Arazzo Plugin`, function () {
             expect(writeFileStub.called).to.be.true;
 
             writeFileStub.restore();
+        });
+
+        it(`should throw an error if writing the arazzo file rejects`, async function() {
+            const arazzoPlugin = new ArazzoPlugin(sls, {}, logOutput);
+
+            const writeFileStub = sinon.stub(arazzoPlugin, 'writeArazzoFile').rejects(new Error('Thrown from sinon'));
+
+            arazzoPlugin.processCLIInput();
+
+            try {
+                await arazzoPlugin.arazzoGeneration();
+            } catch (err) {
+                expect(err).to.be.instanceOf(Error);
+            }
+
+            writeFileStub.restore();
+        });
+    });
+
+    describe(`Arazzo Runner`, function () {
+        it(`should run an Arazzo Specification`, async function() {
+            const stub = sinon.stub(ArazzoRunner.prototype, 'runArazzoWorkflows').resolves()
+
+            const arazzoPlugin = new ArazzoPlugin(sls, {}, logOutput);
+
+            await arazzoPlugin.run().catch(err => {
+                console.error(err);
+            });
+
+            stub.restore();
+        });
+
+        it(`should throw an error if the ArazzoRunner rejects`, async function() {
+            const stub = sinon.stub(ArazzoRunner.prototype, 'runArazzoWorkflows').rejects(new Error('Thrown from sinon'))
+
+            const arazzoPlugin = new ArazzoPlugin(sls, {}, logOutput);
+
+            try {
+                await arazzoPlugin.run();
+            } catch (err) {
+                expect(err).to.be.instanceOf(Error);
+            }
+
+            stub.restore();
         });
     });
 
