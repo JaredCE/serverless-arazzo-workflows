@@ -35,6 +35,16 @@ plugins:
 
 Note: `serverless-openapi-documenter` is required for this to work.
 
+This plugin can be used to generate Arazzo Specifications and to Run a generated Arazzo Specification.
+
+To generate the specification, you should see:
+
+- [Generation](#generating-the-arazzo-specification-file)
+
+To run a specification, you should look at:
+
+- [Running](#running-the-arazzo-specification)
+
 ## Generating the Arazzo Specification file
 
 To generate an Arazzo Specification, you can call the plugin from the CLI like:
@@ -112,6 +122,8 @@ Workflows comprise of one or many workflow objects, one workflow might be for lo
 
 Each workflow object requires a `workflowId` and a set of `steps`.  `workflowId` should conform to the Regex `[A-Za-z0-9_\-]+` and should be unique across the Arazzo Specification.
 
+##### inputs
+
 `inputs` is a [JSON Schema](https://json-schema.org/) of the various inputs you will need for each step e.g.
 
 ```yml
@@ -127,7 +139,7 @@ Each workflow object requires a `workflowId` and a set of `steps`.  `workflowId`
         type: string
 ```
 
-The `inputs` here will be used in a login step and can be verified by this JSON Schema.
+The `inputs` here will be used in a login step and can be verified by this JSON Schema.  If you are to be usng the runner part of this plugin (see [Running](#running-the-arazzo-specification)), then the inputs should map to the input file (see [Input File](#input-file)).
 
 #### steps
 
@@ -235,4 +247,27 @@ Options:
 
 ```
 --source -s  The default Arazzo Specification source file. Default: arazzo.json
+--input  -i  The file containign input variables to run the Workflow steps. Default: input.json
 ```
+
+### Input file
+
+The input file is where you keep your variables that you wish to use within your workflow and should be a json file structured like:
+
+```json
+{
+  "worflowId1": {
+    "name": "Jared"
+  }
+}
+```
+
+The file should contain objects for each workflow, by workflowId, with the variables matching up to the inputs that you defined in your workflow [inputs](#inputs) schema.
+
+This file is likely to be comitted to your repository, so you should not store secrets in the file, instead you might use something like [jq](https://jqlang.org/) that can take repository variables and insert them into your input file:
+
+```bash
+jq --arg password "$secret_password" '.workflowId1.password = $password' input.json
+```
+
+Obviously, if you have a lot of secret variables that need adding as inputs, then you might need to write a script that can alter the `input.json` file for you within your CI/CD runner.
