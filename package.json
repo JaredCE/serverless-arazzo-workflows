@@ -30,15 +30,18 @@
     "chai": "^4.5.0",
     "husky": "^9.1.7",
     "mocha": "^11.7.5",
+    "nock": "^14.0.10",
     "sinon": "^21.0.1"
   },
   "dependencies": {
     "@redocly/cli": "^2.14.0",
+    "@swaggerexpert/arazzo-runtime-expression": "^1.0.1",
     "ajv": "^8.17.1",
     "chalk": "^4.1.2",
     "js-yaml": "^4.1.1",
     "peggy": "^5.0.6",
     "stream-chain": "^3.4.0",
-    "stream-json": "^1.9.1"
+    "stream-json": "^1.9.1",
+    "traverse": "^0.6.11"
   }
 }
