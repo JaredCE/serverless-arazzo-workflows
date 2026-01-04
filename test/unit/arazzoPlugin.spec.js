@@ -4,8 +4,9 @@ const expect = require("chai").expect;
 const sinon = require('sinon');
 
 const ArazzoPlugin = require('../../src/ArazzoPlugin.js');
+const ArazzoRunner = require('../../src/ArazzoRunner.js');
 
-const arazzoMock = require('../mocks/arazzoMock.json')
+const arazzoMock = require('../mocks/arazzoMock.json');
 
 describe(`Arazzo Plugin`, function () {
     let sls, logOutput;
@@ -80,6 +81,50 @@ describe(`Arazzo Plugin`, function () {
 
             writeFileStub.restore();
         });
+
+        it(`should throw an error if writing the arazzo file rejects`, async function() {
+            const arazzoPlugin = new ArazzoPlugin(sls, {}, logOutput);
+
+            const writeFileStub = sinon.stub(arazzoPlugin, 'writeArazzoFile').rejects(new Error('Thrown from sinon'));
+
+            arazzoPlugin.processCLIInput();
+
+            try {
+                await arazzoPlugin.arazzoGeneration();
+            } catch (err) {
+                expect(err).to.be.instanceOf(Error);
+            }
+
+            writeFileStub.restore();
+        });
+    });
+
+    describe(`Arazzo Runner`, function () {
+        it(`should run an Arazzo Specification`, async function() {
+            const stub = sinon.stub(ArazzoRunner.prototype, 'runArazzoWorkflows').resolves()
+
+            const arazzoPlugin = new ArazzoPlugin(sls, {}, logOutput);
+
+            await arazzoPlugin.run().catch(err => {
+                console.error(err);
+            });
+
+            stub.restore();
+        });
+
+        it(`should throw an error if the ArazzoRunner rejects`, async function() {
+            const stub = sinon.stub(ArazzoRunner.prototype, 'runArazzoWorkflows').rejects(new Error('Thrown from sinon'))
+
+            const arazzoPlugin = new ArazzoPlugin(sls, {}, logOutput);
+
+            try {
+                await arazzoPlugin.run();
+            } catch (err) {
+                expect(err).to.be.instanceOf(Error);
+            }
+
+            stub.restore();
+        });
     });
 
     describe(`process CLI Input`, function () {
@@ -130,6 +175,15 @@ describe(`Arazzo Plugin`, function () {
 
 
             expect(arazzoPlugin.config.source).to.be.eql('openAPI2.json');
+        });
+
+        it(`should correctly set the input file`, function() {
+            sls.processedInput.options.input = 'inputs.json'
+            const arazzoPlugin = new ArazzoPlugin(sls, {}, logOutput);
+            arazzoPlugin.processCLIInput();
+
+
+            expect(arazzoPlugin.config.input).to.be.eql('inputs.json');
         });
 
         it(`should throw an error if a file format other than yaml or json is tried`, function() {
