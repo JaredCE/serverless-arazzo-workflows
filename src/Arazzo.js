@@ -1,6 +1,7 @@
 'use strict';
 
 const { parse, test } = require('@swaggerexpert/arazzo-runtime-expression');
+const jp = require('jsonpath');
 const traverse = require('traverse');
 
 const path = require('node:path')
@@ -14,6 +15,7 @@ class Arazzo extends Document {
 
         this.type = 'arazzo';
         this.outputs = {};
+        this.loadedSourceDescriptions = {};
         // this.pathToArazzoSpecification = path.resolve(arazzoPath);
 
     }
@@ -179,16 +181,28 @@ class Arazzo extends Document {
                     parseResult.ast.translate(parts);
                     for (const result of parts) {
                         if (result.at(0) === 'source') {
-                            if (result.at(1) === 'body') {
-                                outputs[key] = json;
+                            // if (result.at(1) === 'body') {
+                            //     outputs[key] = json;
+                            //     // console.log(JSON.stringify(json))
+                            // }
+                            if (result.at(1).startsWith('body')) {
+                                console.log(result.at(1))
+                                let path;
+                                if (result.at(1) === 'body') {
+                                    path = '$'
+                                } else {
+                                    const splitArr = result.at(1).split('body#/')
+                                    path = `$..${splitArr[1]}`;
+                                }
+                                console.log(path)
+                                const value1 = jp.query(json, path);
+                                console.log(value1);
                             }
 
-                            // if (result.at(1).startsWith('header')) {
-                            //     const headerName = parts[3][1]
-                            //     console.log(response.headers)
-                            //     console.log(response.headers.'Content-Type');
-                            //     outputs[key] = response.headers[headerName];
-                            // }
+                            if (result.at(1).startsWith('header')) {
+                                const headerName = parts[3][1]
+                                outputs[key] = response.headers.get(headerName);
+                            }
                         }
                         // console.log(result)
                         // if (result.at(1).at(0) === 'body' && !result?.at(3)) {
@@ -347,7 +361,7 @@ class Arazzo extends Document {
             const parts = []
             const parseResult = parse(value);
             parseResult.ast.translate(parts);
-
+            console.log(parts);
             for (const part of parts) {
                 if (part[0] === 'name') {
                     value = this.inputs[part[1]];
@@ -360,13 +374,17 @@ class Arazzo extends Document {
 
     async loadOperationData() {
         this.sourceDescription = this.getOperationIdSourceDescription();
-        this.logger.notice(`Getting Source Description for: ${this.sourceDescription.name}`);
-        this.sourceDescriptionFile = await docFactory.buildDocument(
-            this.sourceDescription.type,
-            this.sourceDescription.url,
-            this.sourceDescription.name,
-            {parser: this.parser, logger: this.logger}
-        );
+
+        if (!this.loadedSourceDescriptions[this.sourceDescription.name]) {
+            this.logger.notice(`Getting Source Description for: ${this.sourceDescription.name}`);
+            this.sourceDescriptionFile = await docFactory.buildDocument(
+                this.sourceDescription.type,
+                this.sourceDescription.url,
+                this.sourceDescription.name,
+                {parser: this.parser, logger: this.logger}
+            );
+            Object.assign(this.loadedSourceDescriptions, {[this.sourceDescription.name]: true});
+        }
 
         if (this.isAnOperationId) {
             // this.logger.notice(`Getting OperationId: ${this.step.operationId}`);
