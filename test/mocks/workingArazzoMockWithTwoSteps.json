@@ -39,17 +39,21 @@
               "in": "query",
               "value": "$inputs.status"
             }
-          ]
+          ],
+          "outputs": {
+            "body": "$response.body",
+            "pet": "$response.body#/[0].id"
+          }
         },
         {
-          "description": "The step to find a pet by status",
-          "stepId": "findByStatus",
-          "operationId": "findPetsByStatus",
+          "description": "The step to find a pet by Id",
+          "stepId": "getPetById",
+          "operationId": "getPetById",
           "parameters": [
             {
-              "name": "status",
-              "in": "query",
-              "value": "$inputs.status"
+              "name": "petId",
+              "in": "path",
+              "value": "$steps.findByStatus.outputs.petId"
             }
           ]
         }
