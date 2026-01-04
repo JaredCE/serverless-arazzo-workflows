@@ -37,6 +37,8 @@ Note: `serverless-openapi-documenter` is required for this to work.
 
 This plugin can be used to generate Arazzo Specifications and to Run a generated Arazzo Specification.
 
+**Using the plugin:**
+
 To generate the specification, you should see:
 
 - [Generation](#generating-the-arazzo-specification-file)
@@ -236,6 +238,10 @@ custom:
 `other-field` here will not make it to the generated Arazzo document.
 
 ## Running the Arazzo Specification
+
+For now, I recommend using the [Redocly CLI](https://redocly.com/redocly-cli) to [run your Arazzo Workflows](https://redocly.com/learn/arazzo/testing-arazzo-workflows).
+
+### Here be Dragons
 
 To run the generated Arazzo Specification, you can call the plugin from the CLI like:
 
