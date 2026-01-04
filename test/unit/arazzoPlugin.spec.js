@@ -177,6 +177,15 @@ describe(`Arazzo Plugin`, function () {
             expect(arazzoPlugin.config.source).to.be.eql('openAPI2.json');
         });
 
+        it(`should correctly set the input file`, function() {
+            sls.processedInput.options.input = 'inputs.json'
+            const arazzoPlugin = new ArazzoPlugin(sls, {}, logOutput);
+            arazzoPlugin.processCLIInput();
+
+
+            expect(arazzoPlugin.config.input).to.be.eql('inputs.json');
+        });
+
         it(`should throw an error if a file format other than yaml or json is tried`, function() {
             expect(function () {
                 sls.processedInput.options.format = 'docx'
