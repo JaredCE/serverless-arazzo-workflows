@@ -19,7 +19,7 @@ describe(`Arazzo Plugin`, function () {
                 provider: {
                     stage: "test",
                 },
-                getAllFunctions: () => {},
+                getAllFunctions: () => {return []},
                 getFunction: () => {},
                 custom: {
                     arazzo: arazzoMock

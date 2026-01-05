@@ -16,6 +16,8 @@ class ArazzoGenerator {
             arazzo: options.arazzo
         }
 
+        this.viableArazzoKeys = ['http', 'httpApi'];
+
         this.sls = options?.sls
         this.sourceFile = options?.sourceFile;
 
@@ -97,8 +99,10 @@ class ArazzoGenerator {
                 obj.parameters = this.generateParameters(workflow.parameters);
             }
 
-            if (workflow.steps) {
-                obj.steps = this.generateSteps()
+            if (this.isStepConfigurationInCustom()) {
+                obj.steps = this.generateSteps();
+            } else {
+                obj.steps = this.generateStepsFromEvents();
             }
 
             workflows.push(obj)
@@ -107,10 +111,43 @@ class ArazzoGenerator {
         this.arazzo.workflows = workflows
     }
 
-    generateSteps() {
+    isStepConfigurationInCustom() {
+        return this.arazzoDocumentation.workflows.some(workflowObj => {
+            if (Object.hasOwn(workflowObj, 'steps')) return true;
+        });
+    }
+
+    generateStepsFromEvents() {
+        const steps = [];
+        const viableFunctions = this.getViableFunctions();
+        for (const viableFunction of viableFunctions) {
+            for (const event of viableFunction.event) {
+                const eventKey = Object.keys(event).at(0);
+                if (event[eventKey]?.arazzo) {
+                    for (const workflow of event[eventKey]?.arazzo.workflows) {
+                        if (workflow.workflowName === this.currentWorkflow.workflowName) {
+                            if (Object.keys(workflow).some(key => ['operationId', 'workflowId', 'operationPath'].includes(key)) === false) {
+                                workflow.operationId = viableFunction.operationName;
+                            }
+
+                            const step = this.generateSteps(workflow);
+                            steps.push(step.at(0));
+                        }
+                    }
+                }
+            }
+        }
+
+        return steps.sort((a, b) => a.stepNumber - b.stepNumber).map(({stepNumber, ...keepAttrs}) => keepAttrs)
+
+    }
+
+    generateSteps(stepObj) {
+        const stepsArr = stepObj ? [stepObj] : this.currentWorkflow.steps;
+
         const steps = [];
 
-        for (const step of this.currentWorkflow.steps) {
+        for (const step of stepsArr) {
             this.currentStep = step;
             const obj = {
                 stepId: step.stepId
@@ -118,12 +155,16 @@ class ArazzoGenerator {
 
             if (step.description) obj.description = step.description;
 
-            if (step.operationId && step.operationPath) {
+            if (step.operationId) {
                 obj.operationId = step.operationId;
-            } else if (step.operationPath) {
+            }
+
+            if (step.operationPath) {
                 obj.operationPath = step.operationPath;
-            } else {
-                obj.operationId = step.operationId;
+            }
+
+            if (step.workflowId) {
+                obj.workflowId = step.workflowId;
             }
 
             if (step.parameters) {
@@ -150,6 +191,10 @@ class ArazzoGenerator {
 
             if (step.outputs) {
                 obj.outputs = step.outputs;
+            }
+
+            if (step.stepNumber) {
+                obj.stepNumber = step.stepNumber;
             }
 
             steps.push(obj)
@@ -249,6 +294,35 @@ class ArazzoGenerator {
 
             return obj;
         }
+    }
+
+    getViableFunctions() {
+        const isViableFunction = (functionTypes) => {
+            return Object.keys(functionTypes).some(functionType => this.viableArazzoKeys.includes(functionType));
+        };
+
+        const functionNames = this.sls.service.getAllFunctions();
+
+        return functionNames
+            .map((functionName) => {
+                return this.sls.service.getFunction(functionName);
+            })
+            .filter((functionType) => {
+                if (functionType?.events.some(isViableFunction)) return functionType;
+            })
+            .map((functionType) => {
+                const event = functionType.events.filter(isViableFunction);
+                const operationName = functionType.name.split("-").at(-1);
+                console.log(operationName)
+
+                return {
+                    operationName: operationName,
+                    functionInfo: functionType,
+                    handler: functionType.handler,
+                    name: functionType.name,
+                    event,
+                };
+            });
     }
 
     async validate() {

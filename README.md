@@ -25,6 +25,8 @@ To add this plugin to your package.json:
 npm install --save-dev serverless-arazzo-workflows
 ```
 
+**Using the plugin:**
+
 Next you need to add the plugin to the `plugins` section of your `serverless.yml` file.
 
 ```yml
@@ -36,8 +38,6 @@ plugins:
 Note: `serverless-openapi-documenter` is required for this to work.
 
 This plugin can be used to generate Arazzo Specifications and to Run a generated Arazzo Specification.
-
-**Using the plugin:**
 
 To generate the specification, you should see:
 
@@ -63,6 +63,39 @@ Options:
 ```
 
 ### Configuration
+
+You can configue your serverless file in two ways:
+
+1. All under the custom property of your Serverless File
+2. A mixture of the custom property and the Event Handlers
+
+For the first one, this can allow you to seperate it out to a separate file like: `serverless-arazzo.yml` and then importing it like:
+
+```yml
+custom:
+  arazzo: ${file(serverless-arazzo.yml):arazzo}
+```
+
+See [Configuration via the custom property](#configuration-via-the-custom-property) on how to configure by this method.
+
+If you prefer, you might wish to add Configuration on each Handler.  You can also seperate the documentation out into a separate file:
+
+```yml
+custom:
+  arazzo: ${file(serverless-arazzo.yml):arazzo}
+
+functions:
+  myFunc:
+    events:
+      - http:
+          path: getStuff
+          method: get
+          documentation: ${file(serverless-arazzo.yml):endpoints.myFunc}
+```
+
+To configue this second way, see [Configuration via each handler](#configuration-via-each-handler).
+
+### Configuration via the custom property
 
 To configure this plugin to generate a valid OpenAPI Arazzo Specification, you'll need to modify the `custom` section of your `serverless.yml` file.
 
@@ -103,7 +136,7 @@ sourceDescriptions:
 
 That is, that it generates the `name` property from the `title` property of the `info` object (or the one that is generated for you if you omitted the `info` object).
 
-The `url` will be that of a local openapi.json file, this is what the [Serverless OpenAPI Documenter](https://github.com/JaredCE/serverless-openapi-documenter) generates by default.  This can be changed by the CLI by providing a source argument with the path to a different OpenAPI file.
+The `url` will be that of a local openapi.json file, this is what the [Serverless OpenAPI Documenter](https://github.com/JaredCE/serverless-openapi-documenter) generates by default.  This can be changed by the CLI by providing a source argument with the path to a different OpenAPI file.  To make this usable, this should really be an accessible URL, so you should switch the `--source` CLI input to be the final resting place of the specification (an S3 bucket perhaps), for running locally it will be fine to keep it as a local location.
 
 If you do provide this section, then any further additions will be added to that of the default `sourceDescription`.  This is useful if you need to incorporate a step or workflow that resides in a different API (perhaps a Login service).
 
@@ -117,6 +150,11 @@ workflows:
     summary:
     description:
     inputs:
+    dependsOn:
+    successActions:
+    failureActions:
+    outputs:
+    parameters:
     steps:
 ```
 
@@ -236,6 +274,108 @@ custom:
 ```
 
 `other-field` here will not make it to the generated Arazzo document.
+
+### Configuration via each handler
+
+Documenting via each handler does carry over some of the same way we document via the `custom` property:
+
+```yml
+custom:
+  arazzo:
+    info:
+      title:
+      summary:
+      description:
+      version:
+    sourceDescriptions:
+      - name:
+        url:
+        type:
+```
+
+This remains the same as what is discussed within [Configuration via the custom property](#configuration-via-the-custom-property).
+
+* See [info](#info) for how to document Info
+* See [sourceDescriptions](#sourcedescriptions)
+
+Workflows is where it starts to differ:
+
+#### Workflows using handlers to document steps
+
+Most of the workflow property remains the same, however we no longer document `steps` here.
+
+```yml
+custom:
+  arazzo:
+    ...
+    workflows:
+      - workflowName:
+        workflowId:
+        summary:
+        description:
+        inputs:
+        dependsOn:
+        successActions:
+        failureActions:
+        outputs:
+        parameters:
+```
+
+This still matches up to [workflows](#workflows) (without `steps`).  How we document steps, now moves to the handlers:
+
+```yml
+custom:
+  arazzo:
+    ...
+    workflows:
+      - workflowName: addPet
+        workflowId:
+        ...
+
+functions:
+  addPet:
+    handler: handler.addPet
+    events:
+      - http:
+          ...
+          arazzo:
+            ...
+```
+
+#### Steps using handlers
+
+To move documentation generation to a step, your configuration should now look like this
+
+```yml
+functions:
+  addPet:
+    handler: handler.addPet
+    events:
+      - http:
+          ...
+          arazzo:
+            workflows:
+              - workflowName: addPet
+                stepNumber: 1
+                stepId:
+                operationId:
+                operationPath:
+                workflowId:
+                parameters:
+                requestBody:
+                successCriteria:
+                onSuccess:
+                onFailure:
+                outputs:
+```
+
+Much of this is unchanged from [Steps](#steps), however, we are adding a `stepNumber` and `workflowName`.
+
+`workflowName` must match up to a workflow defined in your `custom` section for `workflows`.
+
+`stepNumber` is the order of which the step should be run, steps start from 1, so the above example would be the first step in the **addPet** workflow.
+
+If you don't provide either a `operationId`, `operationPath` or a `workflowId` for the step, the `operationId` will be set to the name of your function.  In the above example, the `operationId` would become **addPet**.
 
 ## Running the Arazzo Specification
 

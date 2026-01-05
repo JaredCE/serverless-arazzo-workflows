@@ -1,10 +1,13 @@
 'use strict';
 
 const expect = require("chai").expect;
+const sinon = require('sinon');
 
 const ArazzoGenerator = require('../../src/ArazzoGenerator.js');
 
 const mockArazzo = require('../mocks/arazzoMock.json');
+const mockArazzoEvents = require('../mocks/arazzoMockEvents.json');
+const mockEvents = require('../mocks/mockEvents.json')
 const sls = require('../mocks/sls.js')
 
 describe(`Arazzo Generator`, function () {
@@ -25,17 +28,34 @@ describe(`Arazzo Generator`, function () {
     });
 
     describe(`parse`, function () {
-        it(`generates an expected azarro specification`, function() {
+        it(`generates an expected azarro specification from configuration on the custom property`, function() {
             const azarroGenerator = new ArazzoGenerator(mockArazzo, options);
 
             azarroGenerator.parse()
-
 
             expect(azarroGenerator.arazzo.info).to.have.property('title', 'Arazzo Pet Store');
             expect(azarroGenerator.arazzo.sourceDescriptions).to.be.an('array');
             expect(azarroGenerator.arazzo.sourceDescriptions).to.have.lengthOf(1);
             expect(azarroGenerator.arazzo.workflows).to.be.an('array');
             expect(azarroGenerator.arazzo.workflows).to.have.lengthOf(1);
+            expect(azarroGenerator.arazzo.workflows[0]).to.have.property('steps');
+            expect(azarroGenerator.arazzo.workflows[0].steps).to.be.an('array');
+            expect(azarroGenerator.arazzo.workflows[0].steps).to.have.lengthOf(1);
+        });
+
+        it(`generates an expected azarro specification from configuration on the functions property`, function() {
+            const azarroGenerator = new ArazzoGenerator(mockArazzoEvents, options);
+
+            azarroGenerator.parse()
+
+            expect(azarroGenerator.arazzo.info).to.have.property('title', 'Arazzo Pet Store');
+            expect(azarroGenerator.arazzo.sourceDescriptions).to.be.an('array');
+            expect(azarroGenerator.arazzo.sourceDescriptions).to.have.lengthOf(1);
+            expect(azarroGenerator.arazzo.workflows).to.be.an('array');
+            expect(azarroGenerator.arazzo.workflows).to.have.lengthOf(1);
+            expect(azarroGenerator.arazzo.workflows[0]).to.have.property('steps');
+            expect(azarroGenerator.arazzo.workflows[0].steps).to.be.an('array');
+            expect(azarroGenerator.arazzo.workflows[0].steps).to.have.lengthOf(1);
         });
     });
 
@@ -101,7 +121,6 @@ describe(`Arazzo Generator`, function () {
         });
     });
 
-
     describe(`generateSourceDescriptions`, function () {
         it(`generates a default sourceDescription`, function() {
             const azarroGenerator = new ArazzoGenerator(mockArazzo, options);
@@ -166,7 +185,6 @@ describe(`Arazzo Generator`, function () {
 
             azarroGenerator.parse()
 
-
             expect(azarroGenerator.arazzo).to.have.property('workflows');
             expect(azarroGenerator.arazzo.workflows).to.be.an('array');
             expect(azarroGenerator.arazzo.workflows[0]).to.have.property('steps');
@@ -178,13 +196,57 @@ describe(`Arazzo Generator`, function () {
 
             azarroGenerator.parse()
 
-
             expect(azarroGenerator.arazzo.workflows[0].steps).to.be.an('array');
             expect(azarroGenerator.arazzo.workflows[0].steps).to.have.lengthOf(1);
             const expectedStep = azarroGenerator.arazzo.workflows[0].steps[0];
             expect(expectedStep).to.have.property('successCriteria')
             expect(expectedStep).to.have.property('outputs')
             expect(expectedStep.outputs).to.have.property('token')
+        });
+
+        it(`generates the expected steps in the correct order when using event configuration`, function() {
+            const getAllFunctionsStub = sinon.stub(sls.service, 'getAllFunctions').returns (['getPet', 'login']);
+            const getFunctionStub = sinon.stub(sls.service, 'getFunction').onFirstCall().returns(mockEvents[0]).onSecondCall().returns(mockEvents[1]);
+
+            const azarroGenerator = new ArazzoGenerator(mockArazzoEvents, options);
+
+            azarroGenerator.parse()
+
+            expect(azarroGenerator.arazzo.workflows[0].steps).to.be.an('array');
+            expect(azarroGenerator.arazzo.workflows[0].steps).to.have.lengthOf(2);
+            let expectedStep = azarroGenerator.arazzo.workflows[0].steps[0];
+            expect(expectedStep).to.have.property('requestBody');
+            expect(expectedStep).to.not.have.property('stepNumber');
+            expectedStep = azarroGenerator.arazzo.workflows[0].steps[1];
+            expect(expectedStep).to.have.property('parameters');
+            expect(expectedStep).to.not.have.property('stepNumber');
+
+
+            getAllFunctionsStub.restore();
+            getFunctionStub.restore();
+        });
+
+        it(`generates the expected steps in the correct order when using event configuration and ignore unviable operations`, function() {
+            const mockEventsWithUnviableOperations = structuredClone(mockEvents);
+            Object.assign(mockEventsWithUnviableOperations.at(1).events.at(0), {sqs: {arn: 'abc', enabled: true}})
+
+            const getAllFunctionsStub = sinon.stub(sls.service, 'getAllFunctions').returns (['getPet', 'login']);
+            const getFunctionStub = sinon.stub(sls.service, 'getFunction').onFirstCall().returns(mockEvents[0]).onSecondCall().returns(mockEvents[1]);
+
+            const azarroGenerator = new ArazzoGenerator(mockArazzoEvents, options);
+
+            azarroGenerator.parse()
+
+            expect(azarroGenerator.arazzo.workflows[0].steps).to.be.an('array');
+            expect(azarroGenerator.arazzo.workflows[0].steps).to.have.lengthOf(2);
+            let expectedStep = azarroGenerator.arazzo.workflows[0].steps[0];
+            expect(expectedStep).to.have.property('requestBody');
+            expectedStep = azarroGenerator.arazzo.workflows[0].steps[1];
+            expect(expectedStep).to.have.property('parameters');
+
+
+            getAllFunctionsStub.restore();
+            getFunctionStub.restore();
         });
 
         xit(`throws an error when an inputs schema is invalid`, function() {
