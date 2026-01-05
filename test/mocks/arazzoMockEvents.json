@@ -1,0 +1,27 @@
+{
+  "info": {
+    "title": "Arazzo Pet Store",
+    "summary": "An Arazzo Specification for a pet store",
+    "description": "An Arazzo Specification for a pet store",
+    "version": "1.0.0"
+  },
+  "workflows": [
+    {
+      "workflowName": "login",
+      "workflowId": "loginUser",
+      "summary": "Login the user",
+      "description": "This Workflow lays out how to login a user",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  ]
+}
