@@ -31,15 +31,17 @@ functions:
                   description: Invalid input
           arazzo:
             workflows:
-              - workflowId: AddAPet
-                steps:
-                  - stepId: AddApet
-                    stepNumber: 1
-                    requestBody:
-                      contentType: application/json
-                      payload: $inputs.addPet
-                    outputs:
-                      petId: $response.body#/id
+              - workflowName: AddAPet
+                stepId: AddApet
+                stepNumber: 1
+                requestBody:
+                  contentType: application/json
+                  payload: $inputs.addPet
+                outputs:
+                  petId: $response.body#/id
+      - sqs:
+          arn: abc
+          enabled: true
   updatePet:
     handler: handler.updatePet
     events:
@@ -132,14 +134,13 @@ functions:
                   description: Pet not found
           arazzo:
             workflows:
-              - workflowId: AddAPet
-                steps:
-                  - stepId: GetPetById
-                    stepNumber: 2
-                    parameters:
-                      - name: petId
-                        in: path
-                        value: $steps.AddAPet.outputs.petId
+              - workflowName: AddAPet
+                stepId: GetPetById
+                stepNumber: 2
+                parameters:
+                  - name: petId
+                    in: path
+                    value: $steps.AddAPet.outputs.petId
 
 
   updatePetWithForm:
@@ -233,7 +234,8 @@ custom:
       summary: Example Arazzo Specification
       version: 1.0.0
     workflows:
-      - workflowId: AddAPet
+      - workflowName: AddAPet
+        workflowId: AddAPet
         sumamry: Add a pet to the database
         description: Add a pet to the database and then check that it is there
         inputs:
