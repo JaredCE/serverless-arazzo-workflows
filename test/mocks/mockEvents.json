@@ -1,0 +1,55 @@
+[
+  {
+    "handler": "getPet",
+    "name": "getPet",
+    "events": [
+      {
+        "http": {
+          "path": "/getPet",
+          "method": "get",
+          "arazzo": {
+            "workflows": [
+              {
+                "workflowName": "login",
+                "stepId": "getPetStep",
+                "stepNumber": 2,
+                "parameters": [
+                  {
+                    "name": "petId",
+                    "in": "query",
+                    "value": "$input.petId"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "handler": "login",
+    "name": "login",
+    "events": [
+      {
+        "http": {
+          "path": "/login",
+          "method": "post",
+          "arazzo": {
+            "workflows": [
+              {
+                "workflowName": "login",
+                "stepId": "loginStep",
+                "stepNumber": 1,
+                "requestBody": {
+                  "username": "$inputs.username",
+                  "password": "$inputs.password"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+]
