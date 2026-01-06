@@ -8,6 +8,8 @@ const {
   createConfig,
 } = require("@redocly/openapi-core");
 
+const path = require('node:path');
+
 class ArazzoGenerator {
     constructor(arazzoDocumentation, options) {
         this.arazzoDocumentation = arazzoDocumentation;
@@ -22,6 +24,23 @@ class ArazzoGenerator {
         this.sourceFile = options?.sourceFile;
 
         this.ajv = new Ajv();
+
+        try {
+            this.logger.verbose(
+                `Trying to resolve Redocly rules from: ${path.resolve(
+                "options",
+                "redocly.json"
+                )}`
+            );
+            this.REDOCLY_RULES = require(path.resolve("options", "redocly.json"));
+        } catch (err) {
+            this.REDOCLY_RULES = {
+                "sourceDescriptions-name-unique": "error",
+                "sourceDescriptions-type": "error",
+                "stepId-unique": "error",
+                "workflowId-unique": "error"
+            };
+        }
     }
 
     parse() {
@@ -313,7 +332,6 @@ class ArazzoGenerator {
             .map((functionType) => {
                 const event = functionType.events.filter(isViableFunction);
                 const operationName = functionType.name.split("-").at(-1);
-                console.log(operationName)
 
                 return {
                     operationName: operationName,
@@ -328,7 +346,7 @@ class ArazzoGenerator {
     async validate() {
         const config = await createConfig({
             apis: {},
-            rules: {},
+            rules: this.REDOCLY_RULES,
         });
 
         const apiDesc = stringifyYaml(this.arazzo);
