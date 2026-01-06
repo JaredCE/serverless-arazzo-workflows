@@ -377,6 +377,32 @@ Much of this is unchanged from [Steps](#steps), however, we are adding a `stepNu
 
 If you don't provide either a `operationId`, `operationPath` or a `workflowId` for the step, the `operationId` will be set to the name of your function.  In the above example, the `operationId` would become **addPet**.
 
+## Validator
+
+Validation for the Araazo Specification is done by [Redocly](https://redocly.com/).
+
+### Rules
+
+I have configured the validator to use these Rules:
+
+- [struct](https://redocly.com/docs/cli/rules/common/struct)
+- [sourceDescriptions-name-unique](https://redocly.com/docs/cli/rules/arazzo/sourcedescriptions-name-unique)
+- [sourceDescriptions-type](https://redocly.com/docs/cli/rules/arazzo/sourcedescriptions-type)
+- [stepId-unique](https://redocly.com/docs/cli/rules/arazzo/stepid-unique)
+- [workflowId-unique](https://redocly.com/docs/cli/rules/arazzo/workflowid-unique)
+
+However, you can configure your own rules from the [ruleset available on the Redocly site](https://redocly.com/docs/cli/rules/built-in-rules#arazzo-rules). To do this, you will need to create a `redocly-arazzo.json` file within an `options` folder. The file should look like:
+
+```json
+{
+  "struct": "error",
+  "sourceDescriptions-name-unique": "error",
+  "sourceDescriptions-type": "error",
+  "stepId-unique": "error",
+  "workflowId-unique": "error"
+}
+```
+
 ## Running the Arazzo Specification
 
 For now, I recommend using the [Redocly CLI](https://redocly.com/redocly-cli) to [run your Arazzo Workflows](https://redocly.com/learn/arazzo/testing-arazzo-workflows).

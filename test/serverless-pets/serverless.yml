@@ -1,4 +1,4 @@
-service: serverless-arazzo-doc-demo
+service: pets
 frameworkVersion: "3.40.0"
 provider:
   name: aws
@@ -17,31 +17,39 @@ functions:
           method: post
           documentation:
             summary: Add a new pet to the store
+            security:
+              - Authorization: []
             tags:
               - pet
             requestBody:
               description: Pet object that needs to be added to the store
               required: true
             requestModels:
-              application/json: Pet
-              application/xml: Pet
+              application/json: createPet
+              # application/xml: Pet
             methodResponses:
+              - statusCode: 201
+                responseBody:
+                  description: Pet created
+                responseModels:
+                  application/json: createdPet
               - statusCode: 405
                 responseBody:
                   description: Invalid input
-          arazzo:
-            workflows:
-              - workflowName: AddAPet
-                stepId: AddApet
-                stepNumber: 1
-                requestBody:
-                  contentType: application/json
-                  payload: $inputs.addPet
-                outputs:
-                  petId: $response.body#/id
+          # arazzo:
+          #   workflows:
+          #     - workflowName: AddAPet
+          #       stepId: AddApet
+          #       stepNumber: 1
+          #       requestBody:
+          #         contentType: application/json
+          #         payload: $inputs.addPet
+          #       outputs:
+          #         petId: $response.body#/id
       - sqs:
           arn: abc
           enabled: true
+
   updatePet:
     handler: handler.updatePet
     events:
@@ -50,15 +58,22 @@ functions:
           method: put
           documentation:
             summary: Update an existing pet
+            security:
+              - Authorization: []
             tags:
               - pet
             requestBody:
               description: Pet object that needs to be added to the store
               required: true
             requestModels:
-              application/json: Pet
-              application/xml: Pet
+              application/json: createPet
+              # application/xml: Pet
             methodResponses:
+              - statusCode: 201
+                responseBody:
+                  description: Pet updated
+                responseModels:
+                  application/json: createdPet
               - statusCode: 400
                 responseBody:
                   description: Invalid ID supplied
@@ -96,7 +111,7 @@ functions:
                   description: successful operation
                 responseModels:
                   application/json: PetArray
-                  application/xml: PetArray
+                  # application/xml: PetArray
               - statusCode: 400
                 responseBody:
                   description: Invalid tag value
@@ -110,6 +125,8 @@ functions:
           documentation:
             summary: Find pet by ID
             description: Returns a single pet
+            security:
+              - Authorization: []
             tags:
               - pet
             pathParams:
@@ -125,23 +142,22 @@ functions:
                   description: successful operation
                 responseModels:
                   application/json: Pet
-                  application/xml: Pet
+                  # application/xml: Pet
               - statusCode: 400
                 responseBody:
                   description: Invalid ID supplied
               - statusCode: 404
                 responseBody:
                   description: Pet not found
-          arazzo:
-            workflows:
-              - workflowName: AddAPet
-                stepId: GetPetById
-                stepNumber: 2
-                parameters:
-                  - name: petId
-                    in: path
-                    value: $steps.AddAPet.outputs.petId
-
+          # arazzo:
+          #   workflows:
+          #     - workflowName: AddAPet
+          #       stepId: GetPetById
+          #       stepNumber: 2
+          #       parameters:
+          #         - name: petId
+          #           in: path
+          #           value: $steps.AddAPet.outputs.petId
 
   updatePetWithForm:
     handler: handler.updatePetWithForm
@@ -151,6 +167,8 @@ functions:
           method: post
           documentation:
             summary: Updates a pet in the store with form data
+            security:
+              - Authorization: []
             tags:
               - pet
             pathParams:
@@ -177,6 +195,8 @@ functions:
           method: delete
           documentation:
             summary: Deletes a pet
+            security:
+              - Authorization: []
             tags:
               - pet
             pathParams:
@@ -207,6 +227,8 @@ functions:
           method: post
           documentation:
             summary: uploads an image
+            security:
+              - Authorization: []
             tags:
               - pet
             pathParams:
@@ -233,56 +255,74 @@ custom:
       description: This is an example of an Arazzo Specification
       summary: Example Arazzo Specification
       version: 1.0.0
-    workflows:
-      - workflowName: AddAPet
-        workflowId: AddAPet
-        sumamry: Add a pet to the database
-        description: Add a pet to the database and then check that it is there
-        inputs:
-          type: object
-          properties:
-            addPet:
-              type: object
-              properties:
-                name:
-                  type: string
-                photoURLs:
-                  type: array
-                  items:
-                    type: string
-
-
     # workflows:
-    #   - workflowId: loginUserAndRetrievePet
-    #     summary: Login User and then retrieve pets
-    #     description: This workflow lays out the steps to login a user and then retrieve pets
+    #   - workflowName: AddAPet
+    #     workflowId: AddAPet
+    #     sumamry: Add a pet to the database
+    #     description: Add a pet to the database and then check that it is there
     #     inputs:
     #       type: object
     #       properties:
-    #         username:
-    #           type: string
-    #         password:
-    #           type: string
-    #     steps:
-    #       - stepId: loginStep
-    #         description: This step demonstrates the user login step
-    #         operationId: createUser
-    #         parameters:
-    #           # parameters to inject into the loginUser operation (parameter name must be resolvable at the referenced operation and the value is determined using {expression} syntax)
-    #           - name: username
-    #             in: query
-    #             value: $inputs.username
-    #           - name: password
-    #             in: query
-    #             value: $inputs.password
-    #         successCriteria:
-    #           # assertions to determine step was successful
-    #           - condition: $statusCode == 200
-    #         outputs:
-    #           # outputs from this step
-    #           tokenExpires: $response.header.X-Expires-After
-    #           rateLimit: $response.header.X-Rate-Limit
-    #           sessionToken: $response.body
+    #         addPet:
+    #           type: object
+    #           properties:
+    #             name:
+    #               type: string
+    #             photoURLs:
+    #               type: array
+    #               items:
+    #                 type: string
+    sourceDescriptions:
+      - name: usersOpenAPI
+        url: ./openapi.json
+        type: openapi
+    workflows:
+      - workflowId: loginUserAndRetrievePet
+        summary: Login User and then retrieve pets
+        description: This workflow lays out the steps to login a user and then retrieve pets
+        inputs:
+          type: object
+          properties:
+            username:
+              type: string
+            password:
+              type: string
+            petId:
+              type: integer
+        steps:
+          - stepId: loginStep
+            description: This step demonstrates the user login step
+            operationId: $sourceDescriptions.usersOpenAPI.loginUser
+            requestBody:
+              contentType: application/json
+              payload:
+                  username: $inputs.username
+                  password: $inputs.password
+            # parameters:
+            #   # parameters to inject into the loginUser operation (parameter name must be resolvable at the referenced operation and the value is determined using {expression} syntax)
+            #   - name: username
+            #     in: query
+            #     value: $inputs.username
+            #   - name: password
+            #     in: query
+            #     value: $inputs.password
+            # successCriteria:
+              # assertions to determine step was successful
+              # - condition: $statusCode == 200
+
+            outputs:
+              # outputs from this step
+              # tokenExpires: $response.header.X-Expires-After
+              # rateLimit: $response.header.X-Rate-Limit
+              AccessToken: $response.body/AccessToken
+          - stepId: getPet
+            description: This step brings the pet back by id
+            operationId: getPetById
+            parameters:
+              - name: petId
+                in: path
+                value: $inputs.petId
+
   documentation:
     description: |
       This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.
@@ -313,6 +353,69 @@ custom:
           description: Find out more about our store
           url: http://swagger.ios
     models:
+      - name: createPet
+        content:
+          application/json:
+            schema: &PetSchema
+              type: object
+              properties:
+                category:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                    name:
+                      type: string
+                  xml:
+                    name: Category
+                name:
+                  type: string
+                  example: doggie
+                photoUrls:
+                  type: array
+                  items:
+                    type: string
+                  xml:
+                    name: photoUrl
+                    wrapped: true
+                tags:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                      name:
+                        type: string
+                    xml:
+                      name: Tag
+                  xml:
+                    name: tag
+                    wrapped: true
+                status:
+                  type: string
+                  description: pet status in the store
+                  enum:
+                    - available
+                    - pending
+                    - sold
+              required:
+                - name
+                - photoUrls
+              xml:
+                name: Pet
+      - name: createdPet
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                  readOnly: true
       - name: Pet
         content:
           application/json:
@@ -370,9 +473,9 @@ custom:
                 - photoUrls
               xml:
                 name: Pet
-          application/xml:
-            schema:
-              *PetSchema
+          # application/xml:
+          #   schema:
+          #     *PetSchema
       - name: PetArray
         content:
           application/json:
@@ -380,11 +483,11 @@ custom:
               type: array
               items:
                 *PetSchema
-          application/xml:
-            schema:
-              type: array
-              items:
-                *PetSchema
+          # application/xml:
+          #   schema:
+          #     type: array
+          #     items:
+          #       *PetSchema
       - name: PetForm
         content:
           application/x-www-form-urlencoded:
@@ -416,3 +519,10 @@ custom:
             schema:
               type: string
               format: binary
+    securitySchemes:
+      Authorization:
+        type: apiKey
+        name: Authorization
+        in: header
+    security:
+      - Authorization: []
