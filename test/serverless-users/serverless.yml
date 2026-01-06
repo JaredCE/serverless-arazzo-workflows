@@ -1,0 +1,612 @@
+service: users
+frameworkVersion: "3.40.0"
+provider:
+  name: aws
+  runtime: nodejs20.x
+
+plugins:
+  - serverless-openapi-documenter
+  - ../../index.js
+
+functions:
+  createUser:
+    handler: handler.createUser
+    events:
+      - http:
+          path: /user
+          method: post
+          documentation:
+            summary: Create user
+            description: This can only be done by the logged in user.
+            tags:
+              - user
+            requestBody:
+              description: Created user object
+              required: true
+            requestModels:
+              application/json: createUser
+            methodResponses:
+              - statusCode: 201
+                responseBody:
+                  description: User created
+                responseModels:
+                  application/json: userCreated
+              - statusCode: 405
+                responseBody:
+                  description: Invalid input
+          arazzo:
+            workflows:
+              - workflowName: createAUser
+                stepId: createAUser
+                stepNumber: 1
+                requestBody:
+                  contentType: application/json
+                  payload: $inputs.user
+                outputs:
+                  id: $response.body#/id
+
+  createWithArray:
+    handler: handler.createWithArray
+    events:
+      - http:
+          path: /user/createWithArray
+          method: post
+          documentation:
+            summary: Creates list of users with given input array
+            tags:
+              - user
+            operationId: createUsersWithArrayInput
+            security:
+              - Authorization: []
+            requestBody:
+              description: List of user object
+              required: true
+            requestModels:
+              application/json: UserArray
+            methodResponses:
+              - statusCode: 201
+                responseBody:
+                  description: Users Created
+                responseModels:
+                  application/json: usersCreated
+              - statusCode: 405
+                responseBody:
+                  description: Invalid input
+          arazzo:
+            workflows:
+              - workflowName: createAUserArray
+                stepNumber: 1
+                stepId: Login
+                workflowId: $sourceDescriptions.users-openAPI.LoginExistingUser
+              - workflowName: createAUserArray
+                stepId: createAUserArray
+                stepNumber: 2
+                parameters:
+                  - name: Authorization
+                    in: header
+                    value: $workflows.LoginExistingUser.outputs.AccessToken
+                requestBody:
+                  contentType: application/json
+                  payload: $inputs.userArray
+
+  createWithList:
+    handler: handler.createWithList
+    events:
+      - http:
+          path: /user/createWithList
+          method: post
+          documentation:
+            summary: Creates list of users with given input array
+            tags:
+              - user
+            operationId: createUsersWithListInput
+            security:
+              - Authorization: []
+            requestBody:
+              description: List of user object
+              required: true
+            requestModels:
+              application/json: UserArray
+            methodResponses:
+              - statusCode: 201
+                responseBody:
+                  description: Users Created
+                responseModels:
+                  application/json: usersCreated
+              - statusCode: 405
+                responseBody:
+                  description: Invalid input
+          arazzo:
+            workflows:
+              - workflowName: createAUserList
+                stepNumber: 1
+                stepId: Login
+                workflowId: $sourceDescriptions.users-openAPI.LoginExistingUser
+              - workflowName: createAUserList
+                stepId: createAUserList
+                stepNumber: 1
+                parameters:
+                  - name: Authorization
+                    in: header
+                    value: $workflows.LoginExistingUser.outputs.AccessToken
+                requestBody:
+                  contentType: application/json
+                  payload: $inputs.userList
+
+  loginUser:
+    handler: handler.login
+    events:
+      - http:
+          path: /user/login
+          method: post
+          documentation:
+            summary: Logs user into the system
+            tags:
+              - user
+            requestBody:
+              description: User Login information
+              required: true
+            requestModels:
+              application/json: userLogin
+            methodResponses:
+              - statusCode: 200
+                responseBody:
+                  description: successful operation
+                responseModels:
+                  application/json: loginResponse
+                responseHeaders:
+                  x-rate-limit:
+                    description: calls per hour allowed by the user
+                    schema:
+                      type: integer
+                  X-Expires-After:
+                    description: date in UTC when token expires
+                    schema:
+                      type: string
+              - statusCode: 400
+                responseBody:
+                  description: Invalid username/password supplied
+          arazzo:
+            workflows:
+              - workflowName: LoginExistingUser
+                stepId: LoginExistingUser
+                stepNumber: 1
+                requestBody:
+                  contentType: application/json
+                  payload:
+                    username: $inputs.username
+                    password: $inputs.password
+                outputs:
+                  AccessToken: $response.body#/AccessToken
+              - workflowName: LoginNewUser
+                stepNumber: 1
+                stepId: createUser
+                workflowId: $sourceDescriptions.users-openAPI.createUser
+              - workflowName: LoginNewUser
+                stepId: LoginNewUser
+                stepNumber: 2
+                requestBody:
+                  contentType: application/json
+                  payload:
+                    username: $inputs.username
+                    password: $inputs.password
+
+  logout:
+    handler: handler.logout
+    events:
+      - http:
+          path: /user/logout
+          method: get
+          documentation:
+            sumamry: Logs out current logged in user session
+            security:
+              - Authorization: []
+            tags:
+              - user
+            methodResponses:
+              - statusCode: 200
+                responseBody:
+                  description: successful operation
+          arazzo:
+            workflows:
+              - workflowName: LoginAndLogoutAUser
+                stepNumber: 1
+                stepId: Login
+                workflowId: $sourceDescriptions.users-openAPI.LoginExistingUser
+              - workflowName: LoginAndLogoutAUser
+                stepId: LogoutUser
+                parameters:
+                  - name: Authorization
+                    in: header
+                    value: $workflows.LoginExistingUser.outputs.AccessToken
+                stepNumber: 2
+
+  getUserByName:
+    handler: handler.getUser
+    events:
+      - http:
+          path: /user/{username}
+          method: get
+          documentation:
+            security:
+              - Authorization: {}
+            tags:
+              - user
+            summary: Get user by user name
+            description:
+            pathParams:
+              - name: username
+                required: true
+                description:
+                schema:
+                  type: string
+            methodResponses:
+              - statusCode: 200
+                responseBody:
+                  description: successful operation
+                responseModels:
+                  application/json: User
+              - statusCode: 400
+                responseBody:
+                  description: Invalid username supplied
+              - statusCode: 404
+                responseBody:
+                  description: User not found
+          arazzo:
+            workflows:
+              - workflowName: getUser
+                stepId: getAUser
+                stepNumber: 1
+                operationId: getUserByName
+                parameters:
+                  - name: username
+                    in: path
+                    value: $inputs.username
+
+  updateUser:
+    handler: handler.updateUser
+    events:
+      - http:
+          path: /user/{username}
+          method: put
+          documentation:
+            tags:
+              - user
+            summary: Updated user
+            description: This can only be done by the logged in user.
+            security:
+              - Authorization: []
+            pathParams:
+              - name: username
+                required: true
+                description: name that need to be updated
+                schema:
+                  type: string
+            requestBody:
+              description: Updated user objec
+            requestModels:
+              application/json: User
+            methodResponses:
+              - statusCode: 400
+                responseBody:
+                  description: Invalid username supplied
+              - statusCode: 404
+                responseBody:
+                  description: User not found
+          arazzo:
+            workflows:
+              - workflowName: updateCurrentUser
+                stepNumber: 1
+                stepId: Login
+                workflowId: $sourceDescriptions.users-openAPI.LoginExistingUser
+              - workflowName: updateCurrentUser
+                stepId: deleteUser
+                stepNumber: 2
+                operationId: updateUser
+                parameters:
+                  - name: Authorization
+                    in: header
+                    value: $workflows.LoginExistingUser.outputs.AccessToken
+                  - name: username
+                    in: path
+                    value: $inputs.username
+                requestBody:
+                  contentType: application/json
+                  payload:
+                    firstName: $inputs.firstName
+
+  deleteUser:
+    handler: handler.deleteUser
+    events:
+      - http:
+          path: /user/{username}
+          method: delete
+          documentation:
+            tags:
+              - user
+            summary: Delete user
+            description: This can only be done by the logged in user.
+            security:
+              - Authorization: []
+            pathParams:
+              - name: username
+                required: true
+                description: The name that needs to be deleted
+                schema:
+                  type: string
+            methodResponses:
+              - statusCode: 400
+                responseBody:
+                  description: Invalid username supplied
+              - statusCode: 404
+                responseBody:
+                  description: User not found
+          arazzo:
+            workflows:
+              - workflowName: deleteCurrentUser
+                stepId: LoginUser
+                stepNumber: 1
+                workflowId: $sourceDescriptions.users-openAPI.loginExistingUser
+              - workflowName: deleteCurrentUser
+                stepId: deleteUser
+                stepNumber: 2
+                operationId: deleteUser
+                parameters:
+                  - name: Authorization
+                    in: header
+                    value: $workflows.LoginExistingUser.outputs.AccessToken
+                  - name: username
+                    in: path
+                    value: $inputs.username
+
+custom:
+  arazzo:
+    info:
+      description: The Arazzo Workflow for a Pet Store User
+      summary: Araazo Workflow for Pet Store User
+      version: 1.0.0
+    workflows:
+      - workflowName: createAUser
+        workflowId: createUser
+        summary: Create a new User
+        description: A Workflow to create a new User
+        inputs:
+          type: object
+          properties:
+            user: &user
+              type: object
+              properties:
+                username:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                phone:
+                  type: string
+                userStatus:
+                  type: integer
+      - workflowName: LoginNewUser
+        workflowId: LoginNewUser
+        summary: Create and Login a new User
+        description: Create a new User and Log Them in
+        inputs:
+          type: object
+          properties:
+            user: *user
+            username:
+              type: string
+            password:
+              type: string
+      - workflowName: createAUserArray
+        workflowId: createUsersByArray
+        summary: Create new users from an Array
+        description: Create New Users from an Array
+        inputs:
+          type: object
+          properties:
+            userArray:
+              type: array
+              items:
+                *user
+      - workflowName: createAUserList
+        workflowId: createUsersByList
+        summary: Create new users from a list
+        description:  Creates new users from a List
+        inputs:
+          type: object
+          properties:
+            userList:
+              type: array
+              items:
+                *user
+      - workflowName: LoginExistingUser
+        workflowId: loginExistingUser
+        summary: Logs in an existing user
+        description: Logs in an existing user
+        inputs:
+          type: object
+          properties:
+            username:
+              type: string
+            password:
+              type: string
+        outputs:
+          AccessToken: $steps.LoginExistingUser.outputs.AccessToken
+      - workflowName: LoginAndLogoutAUser
+        workflowId: loginAndOutUser
+        summary:  Logs a user in and then logs them out
+        description: Logs a user in and then logs them out
+        inputs:
+          type: object
+          properties:
+            username:
+              type: string
+            password:
+              type: string
+      - workflowName: getUser
+        workflowId: getUser
+        summary: Gets a user by username
+        description: Gets a user by username
+        inputs:
+          type: object
+          properties:
+            username:
+              type: string
+      - workflowName: deleteCurrentUser
+        workflowId: deleteCurrentUser
+        summary: Deletes the current user
+        description: Logs the user in and then deletes them
+        inputs:
+          type: object
+          properties:
+            username:
+              type: string
+            password:
+              type: string
+      - workflowName: updateCurrentUser
+        workflowId: updateCurrentUser
+        summary: Update the current user
+        description: Login and update the current user
+        inputs:
+          type: object
+          properties:
+            username:
+              type: string
+            password:
+              type: string
+            firstName:
+              type: string
+
+  documentation:
+    description: |
+      This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.
+    version: 1.0.0
+    title: Petstore User
+    termsOfService: http://swagger.io/terms/
+    contact:
+      email: apiteam@swagger.io
+    license:
+      name: Apache 2.0
+      url: http://www.apache.org/licenses/LICENSE-2.0.html
+    servers:
+      url: http://petstore.swagger.io/v2
+    externalDocumentation:
+      description: Find out more about Swagger
+      url: http://swagger.io
+    tags:
+      - name: user
+        description: Operations about user
+        externalDocumentation:
+          description: Find out more about our store
+          url: http://swagger.ios
+    models:
+      - name: createUser
+        content:
+          application/json:
+            schema: &UserSchema
+              type: object
+              properties:
+                username:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                phone:
+                  type: string
+                userStatus:
+                  type: integer
+                  format: int32
+                  description: User Status
+              xml:
+                name: User
+      - name: User
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                username:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                phone:
+                  type: string
+                userStatus:
+                  type: integer
+                  format: int32
+                  description: User Status
+              xml:
+                name: User
+      - name: userCreated
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
+      - name: usersCreated
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  email:
+                    type: string
+      - name: UserArray
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                *UserSchema
+      - name: userLogin
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      - name: loginResponse
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                AccessToken:
+                  type: string
+    securitySchemes:
+      Authorization:
+        type: apiKey
+        name: Authorization
+        in: header
+    security:
+      - Authorization: []
