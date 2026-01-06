@@ -35,6 +35,7 @@ class ArazzoGenerator {
             this.REDOCLY_RULES = require(path.resolve("options", "redocly-arazzo.json"));
         } catch (err) {
             this.REDOCLY_RULES = {
+                "struct": "error",
                 "sourceDescriptions-name-unique": "error",
                 "sourceDescriptions-type": "error",
                 "stepId-unique": "error",
