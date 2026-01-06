@@ -32,7 +32,7 @@ class ArazzoGenerator {
                 "redocly.json"
                 )}`
             );
-            this.REDOCLY_RULES = require(path.resolve("options", "redocly.json"));
+            this.REDOCLY_RULES = require(path.resolve("options", "redocly-arazzo.json"));
         } catch (err) {
             this.REDOCLY_RULES = {
                 "sourceDescriptions-name-unique": "error",
