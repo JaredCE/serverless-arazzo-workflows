@@ -183,7 +183,7 @@ class Expression {
 
         const parts = [];
         parsedExpression.ast.translate(parts);
-
+        console.log(parts)
         if (!parts.length) {
             throw new Error(`No parts found in expression: ${this.expression}`);
         }
@@ -197,11 +197,12 @@ class Expression {
             const [type, value] = partType;
 
             if (type === 'expression') {
-                // Store full expression for lookup (e.g., '$response.body')
-                expressionType = value;
                 // Check if it's a simple expression using just the first part
                 const firstPart = value.split('.')[0];
                 this.isSimple = this.simpleExpressions.includes(firstPart);
+
+                // For simple expressions, use base ($inputs), for complex use full ($response.body)
+                expressionType = this.isSimple ? firstPart : value;
             }
 
             if (this.isSimple) {
