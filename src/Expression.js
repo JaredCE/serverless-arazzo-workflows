@@ -127,11 +127,11 @@ class Expression {
         // Handle header access (e.g., $response.header.x-rate-limit)
         if (token) {
             const headers = this.context[normalised];
-            if (!headers || typeof headers.get !== 'function') {
-                throw new Error('Response headers not available or invalid');
-            }
+            // if (!headers || typeof headers.get !== 'function') {
+            //     throw new Error('Response headers not available or invalid');
+            // }
 
-            return { [token]: headers.get(token) };
+            return { [token]: headers[token] };
         }
 
         // Handle plain body access (e.g., $response.body with no pointer)
@@ -191,7 +191,7 @@ class Expression {
 
         const parts = [];
         parsedExpression.ast.translate(parts);
-        console.log(parts)
+
         if (!parts.length) {
             throw new Error(`No parts found in expression: ${this.expression}`);
         }
@@ -214,9 +214,18 @@ class Expression {
                 if (this.isSimple) {
                     expressionType = firstPart;
                 } else {
-                    // For $response.body or $response.header
+                    // For $response.body or $response.header.x-rate-limit
+                    // Need to extract just $response.body or $response.header (without the token)
                     const baseExpression = value.split('#')[0]; // Remove pointer part
-                    expressionType = baseExpression;
+
+                    // Check if this is a header reference (has 3 parts: $response.header.token)
+                    const parts = baseExpression.split('.');
+                    if (parts.length === 3 && parts[1] === 'header') {
+                        // Strip the token, keep just $response.header
+                        expressionType = parts.slice(0, 2).join('.');
+                    } else {
+                        expressionType = baseExpression;
+                    }
                 }
             }
 
