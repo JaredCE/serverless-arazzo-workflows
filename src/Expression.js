@@ -143,3 +143,5 @@ class Expression {
         // const expressionNormalised = this.expressionMap[expressionType];
     }
 }
+
+module.exports = Expression;
