@@ -73,7 +73,7 @@ class Expression {
      * @throws {Error} If context path is missing or invalid
      */
     mapToContext() {
-        const { normalised, contextName, token } = this.mapParts();
+        const { normalised, contextName, pointer, token } = this.mapParts();
 
         if (!normalised) {
             throw new Error(`Unable to resolve expression: ${this.expression}`);
@@ -86,19 +86,31 @@ class Expression {
 
         // Handle simple expressions (e.g., $inputs.user -> context.inputs.user)
         if (this.isSimple) {
-            if (!contextName) {
+            // Extract the property name (before any # pointer)
+            const propName = contextName?.split('#')[0];
+
+            if (!propName) {
                 return this.context[normalised];
             }
-            return this.context[normalised]?.[contextName];
+
+            const value = this.context[normalised]?.[propName];
+
+            // If there's a JSON pointer, apply it
+            if (pointer) {
+                try {
+                    return evaluate(value, pointer);
+                } catch (err) {
+                    throw new Error(`Invalid JSON pointer '${pointer}': ${err.message}`);
+                }
+            }
+
+            return value;
         }
 
         // For complex expressions like $response.body or $response.header
 
-        // Handle JSON Pointer notation (e.g., $response.body#/data/id)
-        if (contextName?.includes('#')) {
-            const [bodyPart, pointer] = contextName.split('#');
-
-            // For $response.body#/path, the entire body is stored at normalised key
+        // Handle response body with JSON pointer (e.g., $response.body#/data/id)
+        if (pointer) {
             const data = this.context[normalised];
 
             if (!data) {
@@ -112,22 +124,18 @@ class Expression {
             }
         }
 
-        // Handle header access (e.g., $response.header.Content-Type)
-        if (contextName === 'header' && token) {
+        // Handle header access (e.g., $response.header.x-rate-limit)
+        if (token) {
             const headers = this.context[normalised];
             if (!headers || typeof headers.get !== 'function') {
                 throw new Error('Response headers not available or invalid');
             }
 
-            return headers.get(token);
+            return { [token]: headers.get(token) };
         }
 
         // Handle plain body access (e.g., $response.body with no pointer)
-        if (contextName === 'body') {
-            return this.context[normalised];
-        }
-
-        throw new Error(`Unhandled expression pattern: ${this.expression}`);
+        return this.context[normalised];
     }
 
     /**
@@ -170,7 +178,7 @@ class Expression {
 
     /**
      * Parses the expression into its component parts
-     * @returns {{normalised: string, contextName: string, token: string}}
+     * @returns {{normalised: string, contextName: string, pointer: string, token: string}}
      * @throws {Error} If parsing fails
      */
     mapParts() {
@@ -191,22 +199,30 @@ class Expression {
         this.isSimple = false;
         let expressionType;
         let contextName = '';
-        let token;
+        let pointer = null;
+        let token = null;
 
         for (const partType of parts) {
             const [type, value] = partType;
 
             if (type === 'expression') {
                 // Check if it's a simple expression using just the first part
-                const firstPart = value.split('.')[0];
+                const firstPart = value.split('.')[0].split('#')[0];
                 this.isSimple = this.simpleExpressions.includes(firstPart);
 
                 // For simple expressions, use base ($inputs), for complex use full ($response.body)
-                expressionType = this.isSimple ? firstPart : value;
+                if (this.isSimple) {
+                    expressionType = firstPart;
+                } else {
+                    // For $response.body or $response.header
+                    const baseExpression = value.split('#')[0]; // Remove pointer part
+                    expressionType = baseExpression;
+                }
             }
 
             if (this.isSimple) {
-                // For $inputs.user, contextName = 'user'
+                // For $inputs.user or $inputs.user#/name
+                // contextName will be 'user' or 'user#/name'
                 if (type === 'name') {
                     contextName = value;
                 }
@@ -216,10 +232,24 @@ class Expression {
                     contextName = value;
                 }
 
+                // Extract JSON pointer for response body
+                if (type === 'json-pointer') {
+                    pointer = value;
+                }
+
+                // Extract token for response header
                 if (type === 'token') {
                     token = value;
                 }
             }
+        }
+
+        // For simple expressions with pointers (e.g., $inputs.user#/name)
+        // Extract the pointer from contextName
+        if (this.isSimple && contextName?.includes('#')) {
+            const [name, ptr] = contextName.split('#');
+            contextName = name;
+            pointer = ptr;
         }
 
         const normalised = this.expressionMap[expressionType];
@@ -228,7 +258,7 @@ class Expression {
             throw new Error(`Unknown expression type: ${expressionType}`);
         }
 
-        return { normalised, contextName, token };
+        return { normalised, contextName, pointer, token };
     }
 }
 
