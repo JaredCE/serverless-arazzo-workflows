@@ -33,7 +33,7 @@ describe(`Expression`, function () {
                 Object.assign(contextHeaders, {[header]: value});
             }
 
-            expression.addToContext('response', {header:contextHeaders});
+            expression.addToContext('response.header', contextHeaders);
 
             const expected = expression.checkSimpleExpression('$response.header.x-rate-limit == "500"');
 
@@ -50,7 +50,7 @@ describe(`Expression`, function () {
             expect(expected).to.be.false;
         });
 
-        it(`returns true when an expression does not match to a response header`, function() {
+        it(`returns false when an expression does not match to a response header`, function() {
             const expression = new Expression();
             const headers = new Headers()
             headers.append('x-rate-limit', '500');
@@ -89,7 +89,7 @@ describe(`Expression`, function () {
                 expect(expected).to.be.eql({ name: 'john' });
             });
 
-            xit(`should resolve a dotted expression for a steps output`, function() {
+            it(`should resolve a dotted expression for a steps output`, function() {
                 const expression = new Expression();
 
                 // expression.addToContext('steps.createAUser.outputs.user', { name: 'john' });
@@ -123,7 +123,7 @@ describe(`Expression`, function () {
 
                 const expected = expression.resolveExpression('$response.header.x-rate-limit');
 
-                expect(expected).to.be.eql({ 'x-rate-limit': '500' });
+                expect(expected).to.be.eql('500');
             });
 
             it(`should resolve a dotted expression for a specific request QueryParams`, function() {
