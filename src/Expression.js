@@ -40,7 +40,49 @@ class Expression {
     }
 
     /**
+     * Runs a check on a runtime expression from a simple Criterion Object
+     * @public
+     * @param {string} expression - The runtime expression to resolve
+     */
+    checkSimpleExpression(expression) {
+        try {
+            const normalisedExpression = this.normalisedExpression(expression);
+            const normalisedContext = this.normaliseContext()
+
+            const evaluate = new Function(
+                ...Object.keys(normalisedContext),
+                `return ${normalisedExpression};`
+            );
+
+            // Evaluate the modified expression
+            return evaluate(...Object.values(normalisedContext));
+        } catch (e) {
+            console.error('Error evaluating expression:', expression, e);
+            return false;
+        }
+    }
+
+    /**
+     * Runs a check on a runtime expression from a regex Criterion Object
+     * @public
+     * @param {string} expression - The runtime expression to resolve
+     */
+    checkRegexExpression(expression) {
+
+    }
+
+    /**
+     * Runs a check on a runtime expression from a JSON Path Criterion Object
+     * @public
+     * @param {string} expression - The runtime expression to resolve
+     */
+    checkJSONPathExpression(expression) {
+
+    }
+
+    /**
      * Resolves a runtime expression to its value in the context
+     * @public
      * @param {string} expression - The runtime expression to resolve
      * @returns {*} The resolved value
      * @throws {Error} If expression is invalid or context path doesn't exist
@@ -68,7 +110,119 @@ class Expression {
     }
 
     /**
+     * Adds data to the context under a specific type
+     * @public
+     * @param {string} type - The context type (e.g., 'inputs', 'response')
+     * @param {*} obj - The data to add
+     */
+    addToContext(type, obj) {
+        if (Object.hasOwn(this.context, type)) {
+            if (Array.isArray(this.context[type])) {
+                // Merge arrays
+                if (Array.isArray(obj)) {
+                    this.context[type].push(...obj);
+                } else {
+                    this.context[type].push(obj);
+                }
+            } else if (typeof this.context[type] === 'object' && typeof obj === 'object') {
+                // Merge objects
+                Object.assign(this.context[type], obj);
+            } else {
+                // Replace primitive values
+                this.context[type] = obj;
+            }
+        } else {
+            this.context[type] = obj;
+        }
+    }
+
+    /**
+     * @private
+     * @param {string} expression - The Criteria Condition expression
+     * @returns {string}
+     */
+    normalisedExpression(expression) {
+        const normalisedSymbolsExpression = this.normaliseSymbolsExpression(expression);
+        const cleanedJsExpression = normalisedSymbolsExpression.replace(/{(.*?)}/g, '$1');
+        const expressionWithBrackets = this.convertNumericIndices(cleanedJsExpression);
+        const headerParameterNameRegex = /\.header\.([a-zA-Z0-9._-]+)/g;
+        const normalisedExpression = expressionWithBrackets.replace(
+            headerParameterNameRegex,
+            (_match, p1) => {
+            return `.header.${p1.toLowerCase()}`;
+            }
+        );
+
+        return normalisedExpression;
+    }
+
+    /**
+     * Alters the expression by replacing hyphens with underscores and converting to lowercase
+     * @private
+     * @param {string} expression - The Criteria Condition expression
+     * @returns {string}
+     */
+    normaliseSymbolsExpression(expression) {
+        return expression.replace(/\$([a-zA-Z0-9._-]+)/g, (_match, variable) => {
+            // Normalise variable by replacing hyphens with underscores and converting to lowercase
+            const normalisedKey = variable.replace(/-/g, '_'); // Replace hyphens with underscores
+
+            return `$${normalisedKey}`; // Return the normalised variable for evaluation
+        });
+    }
+
+    /**
+     * Alters the expression to match a dot followed by a number (.1) and change to [1]
+     * @private
+     * @param {string} expression - The Criteria Condition expression
+     * @returns {string}
+     */
+    convertNumericIndices(expression) {
+        return expression.replace(/\.(\d+)/g, (match, num, offset, str) => {
+            // Look at the character right before the dot
+            const charBeforeDot = str[offset - 1];
+            // If the character before the dot is a digit, it's a float
+            const isFloat = /\d/.test(charBeforeDot);
+            return isFloat ? match : `[${num}]`;
+        });
+    }
+
+    normaliseContext() {
+        const normalised = {};
+
+        for (const [key, value] of Object.entries(this.context)) {
+            // Normalise variable names to lowercase and replace hyphens with underscores
+            const normalisedKey = `$${key.replace(/-/g, '_')}`;
+
+            normalised[normalisedKey] = this.normaliseValue(value);
+        }
+
+        return normalised;
+    }
+
+    // Normalise values recursively, handling objects and primitives
+    normaliseValue(value) {
+        if (Array.isArray(value)) {
+            // If the value is an array, return it as-is without modifying
+            return value;
+        } else if (typeof value === 'object' && value !== null) {
+            return this.normaliseObject(value);
+        }
+        return value;
+    }
+
+    // Normalise an object by replacing hyphens with underscores in keys
+    normaliseObject(obj) {
+        return Object.keys(obj).reduce((acc, key) => {
+            const normalisedKey = key.replace(/-/g, '_'); // Convert hyphens to underscores
+            acc[normalisedKey] = this.normaliseValue(obj[key]);
+            return acc;
+        }, {});
+    }
+
+    /**
      * Maps the parsed expression to the corresponding context value
+     * @private
      * @returns {*} The value from context
      * @throws {Error} If context path is missing or invalid
      */
@@ -140,6 +294,7 @@ class Expression {
 
     /**
      * Tests if the expression is a runtime expression
+     * @private
      * @returns {boolean}
      */
     isARunTimeExpression() {
@@ -151,33 +306,8 @@ class Expression {
     }
 
     /**
-     * Adds data to the context under a specific type
-     * @param {string} type - The context type (e.g., 'inputs', 'response')
-     * @param {*} obj - The data to add
-     */
-    addToContext(type, obj) {
-        if (Object.hasOwn(this.context, type)) {
-            if (Array.isArray(this.context[type])) {
-                // Merge arrays
-                if (Array.isArray(obj)) {
-                    this.context[type].push(...obj);
-                } else {
-                    this.context[type].push(obj);
-                }
-            } else if (typeof this.context[type] === 'object' && typeof obj === 'object') {
-                // Merge objects
-                Object.assign(this.context[type], obj);
-            } else {
-                // Replace primitive values
-                this.context[type] = obj;
-            }
-        } else {
-            this.context[type] = obj;
-        }
-    }
-
-    /**
      * Parses the expression into its component parts
+     * @private
      * @returns {{normalised: string, contextName: string, pointer: string, token: string}}
      * @throws {Error} If parsing fails
      */
