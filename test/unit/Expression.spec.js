@@ -172,6 +172,26 @@ describe(`Expression`, function () {
 
             expect(expected).to.be.eql('john');
         });
+
+        it(`can resolve all expressions in an object`, function() {
+            const expression = new Expression();
+
+            expression.addToContext('inputs', {user: {name: 'john'}, petId: 1224});
+
+            const expected = expression.resolveExpression({user: {name: '$inputs.user#/name'}, petId: "$inputs.petId"});
+
+            expect(expected).to.be.eql({ user: {name: 'john'}, petId: 1224 });
+        });
+
+        it(`can resolve all expressions in an array`, function() {
+            const expression = new Expression();
+
+            expression.addToContext('inputs', {user: {name: 'john'}, petId: 1224});
+
+            const expected = expression.resolveExpression(['$inputs.user#/name']);
+
+            expect(expected).to.be.eql( ['john'] );
+        });
     });
 
     describe(`addToContext`, function () {
