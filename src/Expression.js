@@ -28,6 +28,10 @@ class Expression {
 
         this.expressionMap = {
             $request: 'request',
+            '$request.header': 'request.header',
+            '$request.query': 'request.query',
+            '$request.path': 'request.path',
+            '$request.body': 'request.body',
             $response: 'response',
             '$response.body': 'response.body',
             '$response.header': 'response.header',
@@ -187,6 +191,10 @@ class Expression {
         });
     }
 
+    /**
+     * @private
+     * @returns {*}
+     */
     normaliseContext() {
         const normalised = {};
 
@@ -200,7 +208,12 @@ class Expression {
         return normalised;
     }
 
-    // Normalise values recursively, handling objects and primitives
+    /**
+     * Normalise values recursively, handling objects and primitives
+     * @private
+     * @param {any} value
+     * @returns {*}
+     */
     normaliseValue(value) {
         if (Array.isArray(value)) {
             // If the value is an array, return it as-is without modifying
@@ -211,7 +224,12 @@ class Expression {
         return value;
     }
 
-    // Normalise an object by replacing hyphens with underscores in keys
+    /**
+     * Normalise an object by replacing hyphens with underscores in keys
+     * @private
+     * @param {*} obj
+     * @returns
+     */
     normaliseObject(obj) {
         return Object.keys(obj).reduce((acc, key) => {
             const normalisedKey = key.replace(/-/g, '_'); // Convert hyphens to underscores
@@ -350,7 +368,8 @@ class Expression {
 
                     // Check if this is a header reference (has 3 parts: $response.header.token)
                     const parts = baseExpression.split('.');
-                    if (parts.length === 3 && parts[1] === 'header') {
+
+                    if (parts.length === 3 && ['query', 'header', 'path'].includes(parts[1])) {
                         // Strip the token, keep just $response.header
                         expressionType = parts.slice(0, 2).join('.');
                     } else {
