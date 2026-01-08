@@ -47,61 +47,23 @@ class OpenAPI extends Document {
         }
     }
 
-    // mapInputs(inputs, step) {
-    //     if (step.parameters) {
-    //         this.mapParamsToInputs(inputs, step);
-    //     }
+    async getSecurity() {
+        const pipeline = await this.JSONPicker('security', this.filePath);
 
-    //     if (step.requestBody) {
-    //         this.mapRequestBodyToInputs(inputs, step);
-    //     }
-    // }
+        for await (const { value } of pipeline) {
+            if (value)
+                this.security = value;
+        }
 
-    // mapParamsToInputs(inputs, step) {
-    //     const headers = new Headers();
-    //     const queryParams = new URLSearchParams();
-
-    //     for (const param of step.parameters) {
-    //         if (this.matchesExpectedRunTimeExpression(param.value, '$inputs.')) {
-    //             const inputName = param.value.split('.')[1];
-    //             const inputValue = inputs[inputName];
-
-    //             if (param.in === 'header') {
-    //                 headers.append(param.name, inputValue);
-    //             } else if (param.in === 'query') {
-    //                 queryParams.append(param.name, inputValue);
-    //             } else if (param.in === 'path') {
-    //                 this.path = this.path.replace(`{${inputName}}`, inputValue)
-    //             }
-    //         }
-    //     }
-
-    //     this.headers = headers;
-    //     this.queryParams = queryParams;
-    // }
-
-    // mapRequestBodyToInputs(inputs, step) {
-    //     if (step.requestBody.contentType || Object.keys(this.operationDetails.requestBody.content) === 1) {
-    //         for (const contentType in this.operationDetails.requestBody.content) {
-    //             if (step.requestBody.contentType === contentType) {
-    //                 if (contentType === 'application/json') {
-    //                     const payload = structuredClonestep.requestBody.payload;
-    //                     traverse(payload).forEach(function(value) {
-    //                         if (this.matchesExpectedRunTimeExpression(value, '$inputs.')) {
-    //                             const inputName = param.value.split('.')[1];
-    //                             const inputValue = inputs[inputName];
-
-    //                             this.update(inputValue);
-    //                         }
-    //                     });
-    //                     this.payload = payload;
-    //                 }
-    //             }
-    //         }
-    //     } else {
-    //         throw new Error(`Too many contentTypes on ${this.operationDetails.operationId}, please add the targeted contentType to the Arazzo Documentation`);
-    //     }
-    // }
+        if (this.security) {
+            const componentPipeline = await this.JSONPicker('components', this.filePath);
+            for await (const { value } of componentPipeline) {
+                if (value.securitySchemes) {
+                    console.log(value.securitySchemes)
+                }
+            }
+        }
+    }
 
     buildOperations() {
         this.operations = []
