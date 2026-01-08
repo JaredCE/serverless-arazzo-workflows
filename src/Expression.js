@@ -27,9 +27,12 @@ class Expression {
         ];
 
         this.expressionMap = {
+            '$url': 'url',
+            '$method': 'method',
+            '$statusCode': 'statusCode',
             $request: 'request',
-            '$request.header': 'request.header',
             '$request.query': 'request.query',
+            '$request.header': 'request.header',
             '$request.path': 'request.path',
             '$request.body': 'request.body',
             $response: 'response',
@@ -51,18 +54,61 @@ class Expression {
     checkSimpleExpression(expression) {
         try {
             const normalisedExpression = this.normalisedExpression(expression);
-            const normalisedContext = this.normaliseContext()
-
-            const evaluate = new Function(
-                ...Object.keys(normalisedContext),
-                `return ${normalisedExpression};`
-            );
-
-            // Evaluate the modified expression
-            return evaluate(...Object.values(normalisedContext));
+            return this.safeEvaluate(normalisedExpression);
         } catch (e) {
             console.error('Error evaluating expression:', expression, e);
             return false;
+        }
+    }
+
+    /**
+     * Safely evaluates an expression by resolving runtime expressions first
+     * @private
+     * @param {string} expression - The normalized expression to evaluate
+     * @returns {boolean} Result of evaluation
+     */
+    safeEvaluate(expression) {
+        let resolvedExpression = expression;
+
+        const runtimeExprRegex = /\$[a-zA-Z0-9._\[\]]+/g;
+        const matches = expression.match(runtimeExprRegex);
+
+        if (matches) {
+            const uniqueMatches = [...new Set(matches)];
+
+            for (const match of uniqueMatches) {
+                try {
+                    let originalExpr = match;
+                    const parts = match.split('.');
+
+                    if (parts.length > 0) {
+                        parts[0] = parts[0].replace(/_/g, '.');
+                    }
+
+                    for (let i = 1; i < parts.length; i++) {
+                        parts[i] = parts[i].replace(/_/g, '-');
+                    }
+
+                    originalExpr = parts.join('.');
+
+                    const value = this.resolveExpression(originalExpr);
+
+                    const escapedMatch = match.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    resolvedExpression = resolvedExpression.replace(
+                        new RegExp(escapedMatch, 'g'),
+                        JSON.stringify(value)
+                    );
+                } catch (err) {
+                    console.warn(`Could not resolve ${match}:`, err.message);
+                }
+            }
+        }
+
+        try {
+            // eslint-disable-next-line no-eval
+            return eval(resolvedExpression);
+        } catch (err) {
+            throw new Error(`Failed to evaluate expression: ${err.message}`);
         }
     }
 
@@ -71,8 +117,15 @@ class Expression {
      * @public
      * @param {string} expression - The runtime expression to resolve
      */
-    checkRegexExpression(expression) {
-
+    checkRegexExpression(expression, pattern) {
+        try {
+            const value = this.resolveExpression(expression);
+            const regex = new RegExp(pattern);
+            return regex.test(String(value));
+        } catch (e) {
+            console.error('Error evaluating regex expression:', expression, e);
+            return false;
+        }
     }
 
     /**
@@ -80,8 +133,15 @@ class Expression {
      * @public
      * @param {string} expression - The runtime expression to resolve
      */
-    checkJSONPathExpression(expression) {
-
+    checkJSONPathExpression(expression, jsonPath) {
+        try {
+            const value = this.resolveExpression(expression);
+            const jp = require('jsonpath');
+            return jp.query(value, jsonPath);
+        } catch (e) {
+            console.error('Error evaluating JSONPath expression:', expression, e);
+            return null;
+        }
     }
 
     /**
@@ -102,14 +162,12 @@ class Expression {
             return this.mapToContext();
         }
 
-        // Check for templated expression (e.g., "Hello {$inputs.name}")
         const extractedExpression = extract(expression);
         if (extractedExpression !== expression && test(extractedExpression)) {
             this.expression = extractedExpression;
             return this.mapToContext();
         }
 
-        // Not a runtime expression, return as-is
         return expression;
     }
 
@@ -122,17 +180,14 @@ class Expression {
     addToContext(type, obj) {
         if (Object.hasOwn(this.context, type)) {
             if (Array.isArray(this.context[type])) {
-                // Merge arrays
                 if (Array.isArray(obj)) {
                     this.context[type].push(...obj);
                 } else {
                     this.context[type].push(obj);
                 }
             } else if (typeof this.context[type] === 'object' && typeof obj === 'object') {
-                // Merge objects
                 Object.assign(this.context[type], obj);
             } else {
-                // Replace primitive values
                 this.context[type] = obj;
             }
         } else {
@@ -168,10 +223,8 @@ class Expression {
      */
     normaliseSymbolsExpression(expression) {
         return expression.replace(/\$([a-zA-Z0-9._-]+)/g, (_match, variable) => {
-            // Normalise variable by replacing hyphens with underscores and converting to lowercase
-            const normalisedKey = variable.replace(/-/g, '_'); // Replace hyphens with underscores
-
-            return `$${normalisedKey}`; // Return the normalised variable for evaluation
+            const normalisedKey = variable.replace(/-/g, '_');
+            return `$${normalisedKey}`;
         });
     }
 
@@ -183,9 +236,7 @@ class Expression {
      */
     convertNumericIndices(expression) {
         return expression.replace(/\.(\d+)/g, (match, num, offset, str) => {
-            // Look at the character right before the dot
             const charBeforeDot = str[offset - 1];
-            // If the character before the dot is a digit, it's a float
             const isFloat = /\d/.test(charBeforeDot);
             return isFloat ? match : `[${num}]`;
         });
@@ -199,9 +250,7 @@ class Expression {
         const normalised = {};
 
         for (const [key, value] of Object.entries(this.context)) {
-            // Normalise variable names to lowercase and replace hyphens with underscores
             const normalisedKey = `$${key.replace(/-/g, '_')}`;
-
             normalised[normalisedKey] = this.normaliseValue(value);
         }
 
@@ -216,7 +265,6 @@ class Expression {
      */
     normaliseValue(value) {
         if (Array.isArray(value)) {
-            // If the value is an array, return it as-is without modifying
             return value;
         } else if (typeof value === 'object' && value !== null) {
             return this.normaliseObject(value);
@@ -232,7 +280,7 @@ class Expression {
      */
     normaliseObject(obj) {
         return Object.keys(obj).reduce((acc, key) => {
-            const normalisedKey = key.replace(/-/g, '_'); // Convert hyphens to underscores
+            const normalisedKey = key.replace(/-/g, '_');
             acc[normalisedKey] = this.normaliseValue(obj[key]);
             return acc;
         }, {});
@@ -251,23 +299,41 @@ class Expression {
             throw new Error(`Unable to resolve expression: ${this.expression}`);
         }
 
-        // Validate context exists
-        if (!this.context[normalised]) {
+        let contextData = this.context[normalised];
+
+        if (!contextData && normalised.includes('.')) {
+            const parts = normalised.split('.');
+            contextData = this.context[parts[0]];
+
+            if (contextData) {
+                for (let i = 1; i < parts.length; i++) {
+                    contextData = contextData?.[parts[i]];
+                    if (!contextData) break;
+                }
+            }
+        }
+
+        if (!contextData) {
             throw new Error(`Context '${normalised}' not found for expression: ${this.expression}`);
         }
 
-        // Handle simple expressions (e.g., $inputs.user -> context.inputs.user)
         if (this.isSimple) {
-            // Extract the property name (before any # pointer)
             const propName = contextName?.split('#')[0];
 
             if (!propName) {
-                return this.context[normalised];
+                return contextData;
             }
 
-            const value = this.context[normalised]?.[propName];
+            const propertyPath = propName.split('.');
+            let value = contextData;
 
-            // If there's a JSON pointer, apply it
+            for (const prop of propertyPath) {
+                if (value === undefined || value === null) {
+                    return undefined;
+                }
+                value = value[prop];
+            }
+
             if (pointer) {
                 try {
                     return evaluate(value, pointer);
@@ -279,35 +345,31 @@ class Expression {
             return value;
         }
 
-        // For complex expressions like $response.body or $response.header
-
-        // Handle response body with JSON pointer (e.g., $response.body#/data/id)
         if (pointer) {
-            const data = this.context[normalised];
-
-            if (!data) {
+            if (!contextData) {
                 throw new Error(`Context path '${normalised}' not found`);
             }
 
             try {
-                return evaluate(data, pointer);
+                return evaluate(contextData, pointer);
             } catch (err) {
                 throw new Error(`Invalid JSON pointer '${pointer}': ${err.message}`);
             }
         }
 
-        // Handle header access (e.g., $response.header.x-rate-limit)
         if (token) {
-            const headers = this.context[normalised];
-            // if (!headers || typeof headers.get !== 'function') {
-            //     throw new Error('Response headers not available or invalid');
-            // }
+            if (!contextData) {
+                throw new Error(`Context path '${normalised}' not found`);
+            }
 
-            return { [token]: headers[token] };
+            if (typeof contextData.get === 'function') {
+                return contextData.get(token);
+            }
+
+            return contextData[token];
         }
 
-        // Handle plain body access (e.g., $response.body with no pointer)
-        return this.context[normalised];
+        return contextData;
     }
 
     /**
@@ -354,23 +416,15 @@ class Expression {
             const [type, value] = partType;
 
             if (type === 'expression') {
-                // Check if it's a simple expression using just the first part
                 const firstPart = value.split('.')[0].split('#')[0];
                 this.isSimple = this.simpleExpressions.includes(firstPart);
 
-                // For simple expressions, use base ($inputs), for complex use full ($response.body)
                 if (this.isSimple) {
                     expressionType = firstPart;
                 } else {
-                    // For $response.body or $response.header.x-rate-limit
-                    // Need to extract just $response.body or $response.header (without the token)
-                    const baseExpression = value.split('#')[0]; // Remove pointer part
-
-                    // Check if this is a header reference (has 3 parts: $response.header.token)
+                    const baseExpression = value.split('#')[0];
                     const parts = baseExpression.split('.');
-
                     if (parts.length === 3 && ['query', 'header', 'path'].includes(parts[1])) {
-                        // Strip the token, keep just $response.header
                         expressionType = parts.slice(0, 2).join('.');
                     } else {
                         expressionType = baseExpression;
@@ -379,31 +433,24 @@ class Expression {
             }
 
             if (this.isSimple) {
-                // For $inputs.user or $inputs.user#/name
-                // contextName will be 'user' or 'user#/name'
                 if (type === 'name') {
                     contextName = value;
                 }
             } else {
-                // For $response.body or $response.header.Content-Type
                 if (type === 'source') {
                     contextName = value;
                 }
 
-                // Extract JSON pointer for response body
                 if (type === 'json-pointer') {
                     pointer = value;
                 }
 
-                // Extract token for response header
                 if (type === 'token') {
                     token = value;
                 }
             }
         }
 
-        // For simple expressions with pointers (e.g., $inputs.user#/name)
-        // Extract the pointer from contextName
         if (this.isSimple && contextName?.includes('#')) {
             const [name, ptr] = contextName.split('#');
             contextName = name;
