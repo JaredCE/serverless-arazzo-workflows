@@ -27,7 +27,7 @@ class Expression {
         ];
 
         this.expressionMap = {
-            '$url': 'url',
+            $url: 'url',
             '$method': 'method',
             '$statusCode': 'statusCode',
             $request: 'request',
@@ -147,11 +147,26 @@ class Expression {
     /**
      * Resolves a runtime expression to its value in the context
      * @public
-     * @param {string} expression - The runtime expression to resolve
+     * @param {string|Object|Array} expression - The runtime expression to resolve
      * @returns {*} The resolved value
      * @throws {Error} If expression is invalid or context path doesn't exist
      */
     resolveExpression(expression) {
+        // Handle arrays recursively
+        if (Array.isArray(expression)) {
+            return expression.map(item => this.resolveExpression(item));
+        }
+
+        // Handle objects recursively
+        if (typeof expression === 'object' && expression !== null) {
+            const resolved = {};
+            for (const [key, value] of Object.entries(expression)) {
+                resolved[key] = this.resolveExpression(value);
+            }
+            return resolved;
+        }
+
+        // Handle strings (runtime expressions)
         if (typeof expression !== 'string') {
             return expression;
         }
