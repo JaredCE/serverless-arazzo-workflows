@@ -13,6 +13,60 @@ describe(`Expression`, function () {
         });
     });
 
+    describe(`checkSimpleExpression`, function () {
+        it(`returns true when an expression matches`, function() {
+            const expression = new Expression();
+
+            expression.addToContext('statusCode', 200);
+
+            const expected = expression.checkSimpleExpression('$statusCode == 200');
+
+            expect(expected).to.be.true;
+        });
+
+        it(`returns true when an expression matches to a response header`, function() {
+            const expression = new Expression();
+            const headers = new Headers()
+            headers.append('x-rate-limit', '500');
+            const contextHeaders = {}
+            for (const [header, value] of headers.entries()) {
+                Object.assign(contextHeaders, {[header]: value});
+            }
+
+            expression.addToContext('response', {header:contextHeaders});
+
+            const expected = expression.checkSimpleExpression('$response.header.x-rate-limit == "500"');
+
+            expect(expected).to.be.true;
+        });
+
+        it(`returns false when an expression does not match`, function() {
+            const expression = new Expression();
+
+            expression.addToContext('statusCode', 200);
+
+            const expected = expression.checkSimpleExpression('$statusCode == 201');
+
+            expect(expected).to.be.false;
+        });
+
+        it(`returns true when an expression does not match to a response header`, function() {
+            const expression = new Expression();
+            const headers = new Headers()
+            headers.append('x-rate-limit', '500');
+            const contextHeaders = {}
+            for (const [header, value] of headers.entries()) {
+                Object.assign(contextHeaders, {[header]: value});
+            }
+
+            expression.addToContext('response', {header:contextHeaders});
+
+            const expected = expression.checkSimpleExpression('$response.header.x-rate-limit == "600"');
+
+            expect(expected).to.be.false;
+        });
+    });
+
     describe(`resolveExpression`, function () {
         it(`can resolve a simple expression`, function() {
             const expression = new Expression();
