@@ -5,12 +5,14 @@ const expect = require("chai").expect;
 const Rules = require("../../src/Rules");
 
 describe(`Rules`, function () {
-  it(`constructor`, function () {
-    const expected = new Rules();
+  describe(`constructor`, function () {
+    it(`returns an instance of Rules`, function () {
+      const expected = new Rules();
 
-    expect(expected).to.be.an.instanceOf(Rules);
-    expect(rules.rules).to.be.an("array");
-    expect(rules.rules).to.have.lengthOf(0);
+      expect(expected).to.be.an.instanceOf(Rules);
+      expect(expected.rules).to.be.an("array");
+      expect(expected.rules).to.have.lengthOf(0);
+    });
   });
 
   describe(`setWorkflowFailures`, function () {
@@ -57,7 +59,7 @@ describe(`Rules`, function () {
         },
       ];
 
-      rules.setStepFailures(workflowOnFailures);
+      rules.setStepFailures(stepOnFailures);
 
       expect(rules).to.have.property("workflowFailures");
       expect(rules).to.have.property("stepFailures");
@@ -67,6 +69,40 @@ describe(`Rules`, function () {
       expect(rules.stepFailures).to.have.lengthOf(1);
       expect(rules.rules).to.be.an("array");
       expect(rules.rules).to.have.lengthOf(2);
+    });
+  });
+
+  describe(`buildRules`, function () {
+    it(`reverses the rules, so step rules are first and workflow rules are last`, function () {
+      const rules = new Rules();
+
+      const workflowOnFailures = [
+        {
+          name: "404Failure",
+          type: "end",
+          criteria: [{ condition: "$statusCode == 404" }],
+        },
+      ];
+
+      rules.setWorkflowFailures(workflowOnFailures);
+
+      const stepOnFailures = [
+        {
+          name: "404Failure",
+          type: "goto",
+          criteria: [{ condition: "$statusCode == 404" }],
+        },
+      ];
+
+      rules.setStepFailures(stepOnFailures);
+
+      rules.buildRules();
+
+      expect(rules.rules.at(0)).to.be.eql({
+        name: "404Failure",
+        type: "goto",
+        criteria: [{ condition: "$statusCode == 404" }],
+      });
     });
   });
 });
