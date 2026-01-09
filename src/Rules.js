@@ -14,6 +14,10 @@ class Rules {
     this.stepFailures = failureActions;
     this.rules.push(...failureActions);
   }
+
+  buildRules() {
+    this.rules.reverse();
+  }
 }
 
 module.exports = Rules;
