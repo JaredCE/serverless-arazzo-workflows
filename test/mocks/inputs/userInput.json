@@ -9,6 +9,17 @@
       "userStatus": 1
     }
   },
+  "createUserMultiStep": {
+    "user": {
+      "username": "DannyB",
+      "firstName": "Danny",
+      "lastName": "Brown",
+      "email": "dannyb@example.com",
+      "phone": "+443333333333",
+      "userStatus": 1
+    },
+    "username": "DannyB"
+  },
   "LoginNewUser": {
     "user": {
       "username": "FatboyS",
@@ -84,5 +95,8 @@
     "username": "SlimS",
     "password": "--p4ssW0rd",
     "firstName": "Slim"
+  },
+  "loginUser": {
+    "password": "--p4ssW0rd"
   }
 }
