@@ -15,7 +15,7 @@ class Rules {
     this.rules.push(...failureActions);
   }
 
-  buildRules() {
+  buildFailureRules() {
     this.rules.reverse();
   }
 }
