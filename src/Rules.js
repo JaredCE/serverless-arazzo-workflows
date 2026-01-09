@@ -1,10 +1,18 @@
 "use strict";
 
 class Rules {
-  constructor() {}
+  constructor() {
+    this.rules = [];
+  }
 
   setWorkflowFailures(failureActions) {
     this.workflowFailures = failureActions;
+    this.rules.push(...failureActions);
+  }
+
+  setStepFailures(failureActions) {
+    this.stepFailures = failureActions;
+    this.rules.push(...failureActions);
   }
 }
 
