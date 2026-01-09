@@ -72,7 +72,7 @@ describe(`Rules`, function () {
     });
   });
 
-  describe(`buildRules`, function () {
+  describe(`buildFailureRules`, function () {
     it(`reverses the rules, so step rules are first and workflow rules are last`, function () {
       const rules = new Rules();
 
@@ -96,7 +96,7 @@ describe(`Rules`, function () {
 
       rules.setStepFailures(stepOnFailures);
 
-      rules.buildRules();
+      rules.buildFailureRules();
 
       expect(rules.rules.at(0)).to.be.eql({
         name: "404Failure",
