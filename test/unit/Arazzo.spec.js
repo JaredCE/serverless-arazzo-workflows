@@ -73,7 +73,7 @@ describe(`Arazzo Document`, function () {
   describe(`runWorkflows`, function () {
     describe(`OpenAPI SourceDescriptions`, function () {
       describe(`single workflow`, function () {
-        xdescribe(`single step`, function () {
+        describe(`single step`, function () {
           describe(`without successCriteria`, function () {
             it(`should throw an error when the operation does not respond with json`, async function () {
               nock("https://raw.githubusercontent.com:443", {
@@ -144,7 +144,7 @@ describe(`Arazzo Document`, function () {
               );
 
               const arazzo = new Arazzo(
-                "./test/mocks/arazzoMock-user-single-workflow-single-step.json",
+                "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step.json",
                 "arazzo",
                 { logger: logger, parser },
               );
@@ -216,7 +216,7 @@ describe(`Arazzo Document`, function () {
               );
 
               const arazzo = new Arazzo(
-                "./test/mocks/arazzoMock-user-single-workflow-single-step.json",
+                "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step.json",
                 "arazzo",
                 { logger: logger, parser },
               );
@@ -288,7 +288,7 @@ describe(`Arazzo Document`, function () {
               );
 
               const arazzo = new Arazzo(
-                "./test/mocks/arazzoMock-user-single-workflow-single-step.json",
+                "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step.json",
                 "arazzo",
                 { logger: logger, parser },
               );
@@ -356,7 +356,7 @@ describe(`Arazzo Document`, function () {
               );
 
               const arazzo = new Arazzo(
-                "./test/mocks/arazzoMock-user-single-workflow-single-step.json",
+                "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step.json",
                 "arazzo",
                 { logger: logger, parser },
               );
@@ -426,7 +426,7 @@ describe(`Arazzo Document`, function () {
               );
 
               const arazzo = new Arazzo(
-                "./test/mocks/arazzoMock-user-single-workflow-single-step-with-successCriteria.json",
+                "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step-with-successCriteria.json",
                 "arazzo",
                 { logger: logger, parser },
               );
@@ -498,7 +498,7 @@ describe(`Arazzo Document`, function () {
               );
 
               const arazzo = new Arazzo(
-                "./test/mocks/arazzoMock-user-single-workflow-single-step-with-successCriteria.json",
+                "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step-with-successCriteria.json",
                 "arazzo",
                 { logger: logger, parser },
               );
@@ -570,7 +570,7 @@ describe(`Arazzo Document`, function () {
                     );
 
                     const arazzo = new Arazzo(
-                      "./test/mocks/arazzoMock-user-single-workflow-single-step-with-successCriteria-and-onFailure-set-to-end.json",
+                      "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step-with-successCriteria-and-onFailure-set-to-end.json",
                       "arazzo",
                       { logger: logger, parser },
                     );
@@ -640,7 +640,7 @@ describe(`Arazzo Document`, function () {
                     );
 
                     const arazzo = new Arazzo(
-                      "./test/mocks/arazzoMock-user-single-workflow-single-step-with-successCriteria-and-onFailure-set-to-retry.json",
+                      "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step-with-successCriteria-and-onFailure-set-to-retry.json",
                       "arazzo",
                       { logger: logger, parser },
                     );
@@ -715,7 +715,7 @@ describe(`Arazzo Document`, function () {
                     );
 
                     const arazzo = new Arazzo(
-                      "./test/mocks/arazzoMock-user-single-workflow-single-step-with-successCriteria-and-onFailure-set-to-retry.json",
+                      "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step-with-successCriteria-and-onFailure-set-to-retry.json",
                       "arazzo",
                       { logger: logger, parser },
                     );
@@ -792,7 +792,7 @@ describe(`Arazzo Document`, function () {
                     );
 
                     const arazzo = new Arazzo(
-                      "./test/mocks/arazzoMock-user-single-workflow-single-step-with-successCriteria.json",
+                      "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step-with-successCriteria.json",
                       "arazzo",
                       { logger: logger, parser },
                     );
@@ -867,7 +867,7 @@ describe(`Arazzo Document`, function () {
                     );
 
                     const arazzo = new Arazzo(
-                      "./test/mocks/arazzoMock-user-single-workflow-single-step-with-successCriteria-and-onFailure-set-to-retry.json",
+                      "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step-with-successCriteria-and-onFailure-set-to-retry.json",
                       "arazzo",
                       { logger: logger, parser },
                     );
@@ -1497,7 +1497,7 @@ describe(`Arazzo Document`, function () {
                     );
 
                     const arazzo = new Arazzo(
-                      "./test/mocks/arazzoMock-user-single-workflow-single-step-with-successCriteria-and-onFailure-set-to-end.json",
+                      "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step-with-successCriteria-and-onFailure-set-to-end.json",
                       "arazzo",
                       { logger: logger, parser },
                     );
@@ -1567,7 +1567,7 @@ describe(`Arazzo Document`, function () {
                     );
 
                     const arazzo = new Arazzo(
-                      "./test/mocks/arazzoMock-user-single-workflow-single-step-with-successCriteria-and-onFailure-set-to-retry.json",
+                      "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step-with-successCriteria-and-onFailure-set-to-retry.json",
                       "arazzo",
                       { logger: logger, parser },
                     );
@@ -1642,7 +1642,7 @@ describe(`Arazzo Document`, function () {
                     );
 
                     const arazzo = new Arazzo(
-                      "./test/mocks/arazzoMock-user-single-workflow-single-step-with-successCriteria-and-onFailure-set-to-retry.json",
+                      "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step-with-successCriteria-and-onFailure-set-to-retry.json",
                       "arazzo",
                       { logger: logger, parser },
                     );
@@ -1719,7 +1719,7 @@ describe(`Arazzo Document`, function () {
                     );
 
                     const arazzo = new Arazzo(
-                      "./test/mocks/arazzoMock-user-single-workflow-single-step-with-successCriteria.json",
+                      "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step-with-successCriteria.json",
                       "arazzo",
                       { logger: logger, parser },
                     );
@@ -1794,7 +1794,7 @@ describe(`Arazzo Document`, function () {
                     );
 
                     const arazzo = new Arazzo(
-                      "./test/mocks/arazzoMock-user-single-workflow-single-step-with-successCriteria-and-onFailure-set-to-retry.json",
+                      "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step-with-successCriteria-and-onFailure-set-to-retry.json",
                       "arazzo",
                       { logger: logger, parser },
                     );
@@ -2288,7 +2288,7 @@ describe(`Arazzo Document`, function () {
       );
     });
 
-    xit(`should throw an error when writing a downloaded sourceDescription file fails`, async function () {
+    it(`should throw an error when writing a downloaded sourceDescription file fails`, async function () {
       nock("https://raw.githubusercontent.com:443", {
         encodedQueryParams: true,
       })
@@ -2363,7 +2363,7 @@ describe(`Arazzo Document`, function () {
       stub.restore();
     });
 
-    xit(`handles more than oe source description correctly `, async function () {
+    it(`handles more than oe source description correctly `, async function () {
       nock("https://raw.githubusercontent.com:443", {
         encodedQueryParams: true,
       })
@@ -2447,7 +2447,7 @@ describe(`Arazzo Document`, function () {
       }
     });
 
-    xit(`should throw an error when there is more than one sourceDescription and it is incorrectly referenced`, async function () {
+    it(`should throw an error when there is more than one sourceDescription and it is incorrectly referenced`, async function () {
       const inputFile = new Input(
         "./test/mocks/inputs/petsInput.json",
         "inputs",
@@ -2472,7 +2472,7 @@ describe(`Arazzo Document`, function () {
       }
     });
 
-    xit(`should throw an error when loading a sourceDescription from a URL fails`, async function () {
+    it(`should throw an error when loading a sourceDescription from a URL fails`, async function () {
       nock("https://raw.githubusercontent.com:443", {
         encodedQueryParams: true,
       })
@@ -2505,7 +2505,7 @@ describe(`Arazzo Document`, function () {
       }
     });
 
-    xit(`should throw an error when a workflow does not have steps`, async function () {
+    it(`should throw an error when a workflow does not have steps`, async function () {
       const inputFile = new Input(
         "./test/mocks/inputs/validInput.json",
         "inputs",
@@ -2529,7 +2529,7 @@ describe(`Arazzo Document`, function () {
       }
     });
 
-    xit(`should throw an error when an invalid input file is attached and does not conform to the workflow schema`, async function () {
+    it(`should throw an error when an invalid input file is attached and does not conform to the workflow schema`, async function () {
       const inputFile = new Input(
         "./test/mocks/inputs/invalidInput.json",
         "inputs",
@@ -2553,7 +2553,7 @@ describe(`Arazzo Document`, function () {
       }
     });
 
-    xit(`should throw an error when workflows are omitted`, async function () {
+    it(`should throw an error when workflows are omitted`, async function () {
       const arazzo = new Arazzo(
         "./test/mocks/arazzoMockMissingWorkflows.json",
         "arazzo",
@@ -2570,7 +2570,7 @@ describe(`Arazzo Document`, function () {
       }
     });
 
-    xit(`should throw an error when sourceDescriptions are omitted`, async function () {
+    it(`should throw an error when sourceDescriptions are omitted`, async function () {
       const arazzo = new Arazzo(
         "./test/mocks/arazzoMockMissingSourceDescriptions.json",
         "arazzo",
