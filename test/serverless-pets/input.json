@@ -1,5 +1,6 @@
 {
-  "findPetByStatus": {
-    "status": "pending"
+  "loginUserAndRetrievePet": {
+    "username": "FatBoyS",
+    "petId": "12345"
   }
 }
