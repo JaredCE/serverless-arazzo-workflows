@@ -9,6 +9,7 @@ const path = require("node:path");
 const Document = require("./Document");
 const docFactory = require("./DocFactory");
 const Expression = require("./Expression");
+const Rules = require("./Rules");
 
 class MatrixParams {
   constructor(matrixString = "") {
@@ -115,17 +116,41 @@ class Arazzo extends Document {
     await this.getWorkflows();
 
     await this.startWorkflows();
+
+    console.log("all workflows run");
   }
 
   async startWorkflows(index = 0) {
-    const continueRunning = await this.runWorkflow(index);
+    this.abortWorkflowController = new AbortController();
 
-    if (continueRunning.noMoreWorkflows === false) {
+    this.workflowIndex = index;
+    console.log("running  workflow index", index);
+    if (index <= this.workflows.length - 1) {
+      await this.runWorkflow(index).catch((err) => {
+        if (err.name === "AbortError") {
+        } else {
+          throw err;
+        }
+      });
+
       await this.startWorkflows(index + 1);
+    } else {
+      console.log("no more workflows");
     }
+    // this.workflowIndex = index;
+    // const continueRunning = await this.runWorkflow(index);
+
+    // if (continueRunning.noMoreWorkflows === false) {
+    //   await this.startWorkflows(index + 1);
+    // }
   }
 
   async runWorkflow(index) {
+    if (this.abortWorkflowController.signal.aborted) {
+      throw new DOMException("Aborted", "AbortError");
+    }
+
+    const rules = new Rules(this.expression);
     const workflow = await this.JSONPickerToIndex("workflows", index);
 
     if (workflow) {
@@ -138,6 +163,11 @@ class Arazzo extends Document {
       this.expression.addToContext("inputs", this.inputs);
 
       this.workflow = workflow;
+      this.workflow.rules = rules;
+
+      if (this.workflow.onSuccess) {
+        this.workflow.rules.setWorkflowSuccess(this.workflow.onSuccess);
+      }
 
       await this.runSteps();
 
@@ -171,11 +201,22 @@ class Arazzo extends Document {
   }
 
   async runSteps(index = 0) {
-    const contineuRunning = await this.runStep(index);
+    if (this.abortWorkflowController.signal.aborted) {
+      throw new DOMException("Aborted", "AbortError");
+    }
 
-    if (contineuRunning.noMoreSteps === false) {
+    this.stepIndex = index;
+    if (index <= this.workflow?.steps?.length - 1) {
+      await this.runStep(index);
       await this.runSteps(index + 1);
     }
+
+    // console.log("no steps to run");
+    // const contineuRunning = await this.runStep(index);
+
+    // if (contineuRunning.noMoreSteps === false) {
+    //   await this.runSteps(index + 1);
+    // }
   }
 
   async runStep(index) {
@@ -183,6 +224,11 @@ class Arazzo extends Document {
 
     if (step) {
       this.step = step;
+      console.log(`running step: ${step.stepId}`);
+      if (this.step.onSuccess) {
+        this.workflow.rules.setStepSuccesses(this.step.onSuccess);
+      }
+
       this.logger.notice(`Running Step: ${this.step.stepId}`);
 
       await this.loadOperationData();
@@ -279,15 +325,13 @@ class Arazzo extends Document {
   async dealWithResponse(response) {
     this.doNotProcessStep = false;
     this.alreadyProcessingOnFailure = false;
-    if (
-      this.step.successCriteria ||
-      this.step.onSuccess ||
-      this.step.onFailure
-    ) {
+
+    if (this.step.successCriteria) {
       if (this.step.successCriteria) {
         const passedSuccessCriteria = this.hasPassedSuccessCriteria();
 
         if (passedSuccessCriteria) {
+          await this.dealWithPassedRule(response);
         } else {
           if (this.step.onFailure) {
             await this.dealWithFailedResponse();
@@ -298,10 +342,10 @@ class Arazzo extends Document {
           }
         }
       }
-    }
-
-    if (this.step?.outputs && this.doNotProcessStep === false) {
-      await this.dealWithStepOutputs(response);
+    } else {
+      if (this.step?.outputs) {
+        await this.dealWithStepOutputs(response);
+      }
     }
   }
 
@@ -318,6 +362,82 @@ class Arazzo extends Document {
     }
 
     return hasPassed.length === this.step.successCriteria.length;
+  }
+
+  async dealWithPassedRule(response) {
+    if (this.step?.outputs) {
+      await this.dealWithStepOutputs(response);
+    }
+
+    const whatNext = this.workflow.rules.runRules(true);
+    console.log(whatNext);
+    if (whatNext.endWorkflow) {
+      this.workflowIndex += 1;
+      // const index = this.workflowIndex + 1;
+
+      console.log("ending workflow");
+      this.abortWorkflowController.abort();
+      throw new DOMException("Aborted", "AbortError");
+      console.log("still here though");
+      // this.abortStep = new AbortController();
+      // this.abortSignal = this.abortStep.signal;
+
+      // this.startWorkflows(index);
+      // this.abortSignal.addEventListener("abort", () => {
+      //   console.log("in the listener");
+      // });
+      // console.log(this.abortSignal.aborted);
+      // console.log("back here");
+    } else if (whatNext.goto) {
+      console.log("goto command");
+      if (whatNext.stepId) {
+        const stepIndex = this.workflow.steps.findIndex(
+          (step) => step.stepId === whatNext.stepId,
+        );
+
+        if (stepIndex === -1) {
+          throw new Error(`goto Step does not exist within current workflow`);
+        }
+
+        await this.runSteps(stepIndex);
+      } else {
+        const workflowId = this.expression.resolveExpression(
+          whatNext.workflowId,
+        );
+
+        const workflowIndex = this.workflows.findIndex(
+          (workflow) => workflow.workflowId === workflowId,
+        );
+
+        if (workflowIndex === -1) {
+          throw new Error(
+            `goto Workflow does not exist within current workflows`,
+          );
+        }
+
+        // console.log(
+        //   "is a run time?",
+        //   this.expression.isARunTimeExpression(whatNext.workflowId),
+        // );
+        // console.log(whatNext.workflowId);
+        // if (this.expression.isARunTimeExpression(whatNext.workflowId)) {
+        //   const value = this.expression.resolveExpression(whatNext.workflowId);
+        //   if (value) {
+        //   }
+        // } else {
+        //   console.log("goto workflow");
+        //   const workflowIndex = this.workflows.findIndex(
+        //     (workflow) => workflow.workflowId === whatNext.workflowId,
+        //   );
+
+        //   if (!workflowIndex) {
+        //     throw new Error(
+        //       `goto Workflow does not exist within current workflows`,
+        //     );
+        //   }
+        // }
+      }
+    }
   }
 
   async dealWithStepOutputs(response) {
@@ -338,64 +458,6 @@ class Arazzo extends Document {
       [this.step.stepId]: { outputs: outputs },
     });
   }
-
-  // async dealWithOutputs(response) {
-  //     const json = await response.json();
-
-  //     if (this.step?.outputs) {
-  //         const outputs = {}
-  //         for (const key in this.step.outputs) {
-  //             // console.log(key)
-
-  //             const isARuntimeValue = this.matchesExpectedRunTimeExpression(this.step.outputs[key], '$response.');
-
-  //             if (isARuntimeValue) {
-  //                 const parseResult = parse(this.step.outputs[key]);
-  //                 const parts = [];
-
-  //                 parseResult.ast.translate(parts);
-  //                 for (const result of parts) {
-  //                     if (result.at(0) === 'source') {
-  //                         // if (result.at(1) === 'body') {
-  //                         //     outputs[key] = json;
-  //                         //     // console.log(JSON.stringify(json))
-  //                         // }
-  //                         if (result.at(1).startsWith('body')) {
-  //                             // console.log(result.at(1))
-  //                             let path;
-  //                             if (result.at(1) === 'body') {
-  //                                 path = '$'
-  //                             } else {
-  //                                 const splitArr = result.at(1).split('body#/')
-  //                                 path = `$..${splitArr[1]}`;
-  //                             }
-  //                             // console.log(path)
-  //                             const value1 = jp.query(json, path);
-  //                             // console.log(value1);
-  //                         }
-
-  //                         if (result.at(1).startsWith('header')) {
-  //                             const headerName = parts[3][1]
-  //                             outputs[key] = response.headers.get(headerName);
-  //                         }
-  //                     }
-  //                     // console.log(result)
-  //                     // if (result.at(1).at(0) === 'body' && !result?.at(3)) {
-  //                     //     outputs[key] = json;
-  //                     // }
-
-  //                     // if (result[1].startsWith('header')) {
-  //                     //     outputs[key] = response.headers[result[3][1]];
-  //                     // }
-  //                 }
-  //             }
-  //         }
-
-  //         Object.assign(this.outputs, {[this.step.stepId]: outputs})
-  //     }
-
-  //     console.log(this.outputs);
-  // }
 
   async dealWithFailedResponse() {
     this.doNotProcessStep = false;
@@ -528,23 +590,6 @@ class Arazzo extends Document {
     }
     return result;
   }
-
-  // parseRunTimeExpression(expression) {
-  //     let value = expression;
-  //     if (test(value)) {
-  //         const parts = []
-  //         const parseResult = parse(value);
-  //         parseResult.ast.translate(parts);
-  //         console.log(parts);
-  //         for (const part of parts) {
-  //             if (part[0] === 'name') {
-  //                 value = this.inputs[part[1]];
-  //             }
-  //         }
-  //     }
-
-  //     return value;
-  // }
 
   async loadOperationData() {
     this.sourceDescription = this.getOperationIdSourceDescription();
