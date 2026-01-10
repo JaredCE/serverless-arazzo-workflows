@@ -628,7 +628,9 @@ class Arazzo extends Document {
     } else {
       const operationOrWorkflowPointerArr =
         operationOrWorkflowPointer.split(".");
+
       const joinedoperationOrWorkflowPointer = `${operationOrWorkflowPointerArr[0]}.${operationOrWorkflowPointerArr[1]}`;
+
       const sourceDescription = this.expression.resolveExpression(
         joinedoperationOrWorkflowPointer,
       );
@@ -637,56 +639,6 @@ class Arazzo extends Document {
         return sourceDescription;
       }
     }
-
-    // const sourceDescriptionName = this.expression.resolveExpression(operationOrWorkflowPointer);
-    // console.log(sourceDescriptionName)
-    // if (sourceDescriptionName) {
-    //     // return sourceDescription;
-    //     const sourceDescription = this.sourceDescriptions.filter(sourceDescription => sourceDescription.name === sourceDescriptionName);
-    //     console.log(sourceDescription)
-    //     if (sourceDescription.length === 1) {
-    //         return sourceDescription;
-    //     }
-    // }
-
-    // if (this.sourceDescriptions.length === 1) {
-    //     return this.sourceDescriptions[0]
-    // } else {
-    //     console.log('here')
-    //     const abc = this.expression.resolveExpression(operationOrWorkflowPointer);
-    //     // console.log(abc);
-    //     // return abc
-    //     // if (this.isARuntimeExpression(operationOrWorkflowPointer)) {
-    //     //     if (operationOrWorkflowPointer.startsWith("$sourceDescription")) {
-    //     //         const sourceDescriptionName = operationOrWorkflowPointer.split('.').at(1)
-    //     //         const sourceDescriptionArr = this.sourceDescriptions.filter((sourceDescription) => {
-    //     //             if (sourceDescription.name === sourceDescriptionName) {
-    //     //                 return sourceDescription
-    //     //             }
-    //     //         });
-
-    //     //         if (sourceDescriptionArr.length === 1) {
-    //     //             return sourceDescriptionArr.at(0);
-    //     //         }
-    //     //     }
-
-    //     //     // const parseResult = parse(operationOrWorkflowPointer);
-    //     //     // const parts = [];
-    //     //     // parseResult.ast.translate(parts);
-    //     //     // console.log(parts)
-    //     //     // console.log(parseResult.ast.translate)
-    //     // }
-    //     // if (this.matchesExpectedRunTimeExpression(operationOrWorkflowPointer, '$sourceDescriptions.')) {
-    //     //     const sourceDescription = this.sourceDescriptions.filter((sourceDescription) => {
-    //     //         if (sourceDescription.name === operationOrWorkflowPointer.split('.')[1]) {
-    //     //             return sourceDescription;
-    //     //         }
-    //     //     });
-    //     //     if (sourceDescription.length === 1) {
-    //     //         return sourceDescription;
-    //     //     }
-    //     // }
-    // }
 
     throw new Error(
       `No known matching source description for ${this.step.operationId}`,
