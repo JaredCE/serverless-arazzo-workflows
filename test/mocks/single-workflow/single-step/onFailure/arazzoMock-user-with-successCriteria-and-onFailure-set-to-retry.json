@@ -46,7 +46,7 @@
           },
           "successCriteria": [
             {
-              "condition": "$statusCode == 200"
+              "condition": "$statusCode == 201"
             }
           ],
           "onFailure": [

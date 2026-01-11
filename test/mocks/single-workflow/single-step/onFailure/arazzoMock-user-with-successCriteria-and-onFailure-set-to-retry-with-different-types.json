@@ -51,12 +51,21 @@
           ],
           "onFailure": [
             {
-              "name": "retryStepWithDelay",
+              "name": "retry400",
               "type": "retry",
-              "retryAfter": 5,
+              "retryLimit": 3,
               "criteria": [
                 {
                   "condition": "$statusCode == 400"
+                }
+              ]
+            },
+            {
+              "name": "retry404",
+              "type": "retry",
+              "criteria": [
+                {
+                  "condition": "$statusCode == 404"
                 }
               ]
             }

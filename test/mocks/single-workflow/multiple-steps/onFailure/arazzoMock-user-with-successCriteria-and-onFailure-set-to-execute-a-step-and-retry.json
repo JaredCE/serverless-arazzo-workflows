@@ -49,19 +49,36 @@
               "condition": "$statusCode == 201"
             }
           ],
+          "outputs": { "username": "$response.body#/username" }
+        },
+        {
+          "stepId": "getAUser",
+          "operationId": "getUserByName",
+          "parameters": [
+            {
+              "name": "username",
+              "in": "path",
+              "value": "$steps.createAUser.outputs.username"
+            }
+          ],
+          "outputs": { "id": "$response.body#/id" },
+          "successCriteria": [
+            {
+              "condition": "$statusCode == 200"
+            }
+          ],
           "onFailure": [
             {
-              "name": "retryStepWithDelay",
+              "name": "retryStepOnce",
+              "stepId": "createAUser",
               "type": "retry",
-              "retryAfter": 5,
               "criteria": [
                 {
-                  "condition": "$statusCode == 400"
+                  "condition": "$statusCode == 404"
                 }
               ]
             }
-          ],
-          "outputs": { "id": "$response.body#/id" }
+          ]
         }
       ]
     }
