@@ -302,6 +302,78 @@ describe(`Arazzo Document`, function () {
                 }
               });
 
+              xit(`resolve if the outputs resolve on a 201 Array`, async function () {
+                nock.recorder.rec();
+                nock("https://raw.githubusercontent.com:443", {
+                  encodedQueryParams: true,
+                })
+                  .get(
+                    "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                  )
+                  .reply(
+                    200,
+                    [
+                      "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                    ],
+                    {
+                      "accept-ranges": "bytes",
+                      "access-control-allow-origin": "*",
+                      "cache-control": "max-age=300",
+                      connection: "keep-alive",
+                      "content-encoding": "gzip",
+                      "content-length": "1638",
+                      "content-security-policy":
+                        "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                      "content-type": "text/plain; charset=utf-8",
+                      "cross-origin-resource-policy": "cross-origin",
+                      date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                      etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                      expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                      "source-age": "0",
+                      "strict-transport-security": "max-age=31536000",
+                      vary: "Authorization,Accept-Encoding",
+                      via: "1.1 varnish",
+                      "x-cache": "HIT",
+                      "x-cache-hits": "0",
+                      "x-content-type-options": "nosniff",
+                      "x-fastly-request-id":
+                        "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                      "x-frame-options": "deny",
+                      "x-github-request-id": "8DCE:156854:683A3:BD766:695D41E9",
+                      "x-served-by": "cache-lhr-egll1980052-LHR",
+                      "x-timer": "S1767727197.761065,VS0,VE107",
+                      "x-xss-protection": "1; mode=block",
+                    },
+                  );
+
+                nock("http://petstore.swagger.io:80", {
+                  encodedQueryParams: true,
+                })
+                  .post(
+                    "/v2/user/createWithArray",
+                    "[object Object],[object Object]",
+                  )
+                  .reply(201, { id: 123 });
+
+                const inputFile = new Input(
+                  "./test/mocks/inputs/userInput.json",
+                  "inputs",
+                );
+
+                const arazzo = new Arazzo(
+                  "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step copy.json",
+                  "arazzo",
+                  { logger: logger, parser },
+                );
+                arazzo.setMainArazzo();
+
+                try {
+                  await arazzo.runWorkflows(inputFile);
+                } catch (err) {
+                  expect(err).to.not.be.instanceOf(Error);
+                }
+              });
+
               it(`resolve if the outputs resolve on a 404`, async function () {
                 nock("https://raw.githubusercontent.com:443", {
                   encodedQueryParams: true,
@@ -512,9 +584,9 @@ describe(`Arazzo Document`, function () {
                 }
               });
 
-              xdescribe(`with onFailure`, function () {
+              describe(`with onFailure`, function () {
                 describe(`single onFailure`, function () {
-                  describe(`onFailure without criteria`, function () {
+                  xdescribe(`onFailure without criteria`, function () {
                     it(`resolves when onFailure is set to end`, async function () {
                       nock("https://raw.githubusercontent.com:443", {
                         encodedQueryParams: true,
@@ -736,160 +808,982 @@ describe(`Arazzo Document`, function () {
                     });
                   });
 
-                  xdescribe(`onFailure with criteria`, function () {
-                    xit(`resolves when onFailure is set to end and matches the criteria`, async function () {
-                      nock("https://raw.githubusercontent.com:443", {
-                        encodedQueryParams: true,
-                      })
-                        .get(
-                          "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
-                        )
-                        .reply(
-                          200,
-                          [
-                            "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
-                          ],
-                          {
-                            "accept-ranges": "bytes",
-                            "access-control-allow-origin": "*",
-                            "cache-control": "max-age=300",
-                            connection: "keep-alive",
-                            "content-encoding": "gzip",
-                            "content-length": "1638",
-                            "content-security-policy":
-                              "default-src 'none'; style-src 'unsafe-inline'; sandbox",
-                            "content-type": "text/plain; charset=utf-8",
-                            "cross-origin-resource-policy": "cross-origin",
-                            date: "Tue, 06 Jan 2026 19:19:56 GMT",
-                            etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
-                            expires: "Tue, 06 Jan 2026 19:24:56 GMT",
-                            "source-age": "0",
-                            "strict-transport-security": "max-age=31536000",
-                            vary: "Authorization,Accept-Encoding",
-                            via: "1.1 varnish",
-                            "x-cache": "HIT",
-                            "x-cache-hits": "0",
-                            "x-content-type-options": "nosniff",
-                            "x-fastly-request-id":
-                              "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
-                            "x-frame-options": "deny",
-                            "x-github-request-id":
-                              "8DCE:156854:683A3:BD766:695D41E9",
-                            "x-served-by": "cache-lhr-egll1980052-LHR",
-                            "x-timer": "S1767727197.761065,VS0,VE107",
-                            "x-xss-protection": "1; mode=block",
-                          },
+                  describe(`onFailure with criteria`, function () {
+                    describe(`end`, function () {
+                      it(`resolves when onFailure is set to end and matches the criteria`, async function () {
+                        nock("https://raw.githubusercontent.com:443", {
+                          encodedQueryParams: true,
+                        })
+                          .get(
+                            "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                          )
+                          .reply(
+                            200,
+                            [
+                              "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                            ],
+                            {
+                              "accept-ranges": "bytes",
+                              "access-control-allow-origin": "*",
+                              "cache-control": "max-age=300",
+                              connection: "keep-alive",
+                              "content-encoding": "gzip",
+                              "content-length": "1638",
+                              "content-security-policy":
+                                "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                              "content-type": "text/plain; charset=utf-8",
+                              "cross-origin-resource-policy": "cross-origin",
+                              date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                              etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                              expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                              "source-age": "0",
+                              "strict-transport-security": "max-age=31536000",
+                              vary: "Authorization,Accept-Encoding",
+                              via: "1.1 varnish",
+                              "x-cache": "HIT",
+                              "x-cache-hits": "0",
+                              "x-content-type-options": "nosniff",
+                              "x-fastly-request-id":
+                                "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                              "x-frame-options": "deny",
+                              "x-github-request-id":
+                                "8DCE:156854:683A3:BD766:695D41E9",
+                              "x-served-by": "cache-lhr-egll1980052-LHR",
+                              "x-timer": "S1767727197.761065,VS0,VE107",
+                              "x-xss-protection": "1; mode=block",
+                            },
+                          );
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .reply(400, { id: 123 });
+
+                        const inputFile = new Input(
+                          "./test/mocks/inputs/userInput.json",
+                          "inputs",
                         );
 
-                      nock("http://petstore.swagger.io:80", {
-                        encodedQueryParams: true,
-                      })
-                        .post("/v2/user", "[object Object]")
-                        .reply(201, { id: 123 });
-
-                      const inputFile = new Input(
-                        "./test/mocks/inputs/userInput.json",
-                        "inputs",
-                      );
-
-                      const arazzo = new Arazzo(
-                        "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step-with-successCriteria.json",
-                        "arazzo",
-                        { logger: logger, parser },
-                      );
-                      arazzo.setMainArazzo();
-
-                      try {
-                        await arazzo.runWorkflows(inputFile);
-                        throw new Error(
-                          "Expected promise to reject but it resolved",
+                        const arazzo = new Arazzo(
+                          "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-end.json",
+                          "arazzo",
+                          { logger: logger, parser },
                         );
-                      } catch (err) {
-                        expect(err).to.be.instanceOf(Error);
-                        expect(err.message).to.be.equal(
-                          `createAUser step of the createUser workflow failed the successCriteria`,
-                        );
-                      }
+                        arazzo.setMainArazzo();
+
+                        try {
+                          await arazzo.runWorkflows(inputFile);
+                        } catch (err) {
+                          console.error(err);
+                          expect(err).to.not.be.instanceOf(Error);
+                        }
+                      });
                     });
 
-                    xit(`retries when onFailure is set to retry and matches the criteria`, async function () {
-                      nock("https://raw.githubusercontent.com:443", {
-                        encodedQueryParams: true,
-                      })
-                        .get(
-                          "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
-                        )
-                        .reply(
-                          200,
-                          [
-                            "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
-                          ],
-                          {
-                            "accept-ranges": "bytes",
-                            "access-control-allow-origin": "*",
-                            "cache-control": "max-age=300",
-                            connection: "keep-alive",
-                            "content-encoding": "gzip",
-                            "content-length": "1638",
-                            "content-security-policy":
-                              "default-src 'none'; style-src 'unsafe-inline'; sandbox",
-                            "content-type": "text/plain; charset=utf-8",
-                            "cross-origin-resource-policy": "cross-origin",
-                            date: "Tue, 06 Jan 2026 19:19:56 GMT",
-                            etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
-                            expires: "Tue, 06 Jan 2026 19:24:56 GMT",
-                            "source-age": "0",
-                            "strict-transport-security": "max-age=31536000",
-                            vary: "Authorization,Accept-Encoding",
-                            via: "1.1 varnish",
-                            "x-cache": "HIT",
-                            "x-cache-hits": "0",
-                            "x-content-type-options": "nosniff",
-                            "x-fastly-request-id":
-                              "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
-                            "x-frame-options": "deny",
-                            "x-github-request-id":
-                              "8DCE:156854:683A3:BD766:695D41E9",
-                            "x-served-by": "cache-lhr-egll1980052-LHR",
-                            "x-timer": "S1767727197.761065,VS0,VE107",
-                            "x-xss-protection": "1; mode=block",
-                          },
+                    describe(`goto`, function () {
+                      it(`should handle a non existant step`, async function () {
+                        nock("https://raw.githubusercontent.com:443", {
+                          encodedQueryParams: true,
+                        })
+                          .get(
+                            "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                          )
+                          .reply(
+                            200,
+                            [
+                              "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                            ],
+                            {
+                              "accept-ranges": "bytes",
+                              "access-control-allow-origin": "*",
+                              "cache-control": "max-age=300",
+                              connection: "keep-alive",
+                              "content-encoding": "gzip",
+                              "content-length": "1638",
+                              "content-security-policy":
+                                "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                              "content-type": "text/plain; charset=utf-8",
+                              "cross-origin-resource-policy": "cross-origin",
+                              date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                              etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                              expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                              "source-age": "0",
+                              "strict-transport-security": "max-age=31536000",
+                              vary: "Authorization,Accept-Encoding",
+                              via: "1.1 varnish",
+                              "x-cache": "HIT",
+                              "x-cache-hits": "0",
+                              "x-content-type-options": "nosniff",
+                              "x-fastly-request-id":
+                                "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                              "x-frame-options": "deny",
+                              "x-github-request-id":
+                                "8DCE:156854:683A3:BD766:695D41E9",
+                              "x-served-by": "cache-lhr-egll1980052-LHR",
+                              "x-timer": "S1767727197.761065,VS0,VE107",
+                              "x-xss-protection": "1; mode=block",
+                            },
+                          );
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .reply(201, { id: 123 });
+
+                        const inputFile = new Input(
+                          "./test/mocks/inputs/userInput.json",
+                          "inputs",
                         );
 
-                      nock("http://petstore.swagger.io:80", {
-                        encodedQueryParams: true,
-                      })
-                        .post("/v2/user", "[object Object]")
-                        .reply(201, { id: 123 });
+                        const arazzo = new Arazzo(
+                          "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-goto-non-existant-step.json",
+                          "arazzo",
+                          { logger: logger, parser },
+                        );
+                        arazzo.setMainArazzo();
 
-                      const inputFile = new Input(
-                        "./test/mocks/inputs/userInput.json",
-                        "inputs",
+                        try {
+                          await arazzo.runWorkflows(inputFile);
+                        } catch (err) {
+                          console.error(err);
+                          expect(err).to.be.instanceOf(Error);
+                          expect(err.message).to.be.equal(
+                            "goto Step does not exist within current workflow",
+                          );
+                        }
+                      });
+
+                      it(`should handle a non existant workflow`, async function () {
+                        nock("https://raw.githubusercontent.com:443", {
+                          encodedQueryParams: true,
+                        })
+                          .get(
+                            "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                          )
+                          .reply(
+                            200,
+                            [
+                              "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                            ],
+                            {
+                              "accept-ranges": "bytes",
+                              "access-control-allow-origin": "*",
+                              "cache-control": "max-age=300",
+                              connection: "keep-alive",
+                              "content-encoding": "gzip",
+                              "content-length": "1638",
+                              "content-security-policy":
+                                "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                              "content-type": "text/plain; charset=utf-8",
+                              "cross-origin-resource-policy": "cross-origin",
+                              date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                              etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                              expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                              "source-age": "0",
+                              "strict-transport-security": "max-age=31536000",
+                              vary: "Authorization,Accept-Encoding",
+                              via: "1.1 varnish",
+                              "x-cache": "HIT",
+                              "x-cache-hits": "0",
+                              "x-content-type-options": "nosniff",
+                              "x-fastly-request-id":
+                                "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                              "x-frame-options": "deny",
+                              "x-github-request-id":
+                                "8DCE:156854:683A3:BD766:695D41E9",
+                              "x-served-by": "cache-lhr-egll1980052-LHR",
+                              "x-timer": "S1767727197.761065,VS0,VE107",
+                              "x-xss-protection": "1; mode=block",
+                            },
+                          );
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .reply(201, { id: 123 });
+
+                        const inputFile = new Input(
+                          "./test/mocks/inputs/userInput.json",
+                          "inputs",
+                        );
+
+                        const arazzo = new Arazzo(
+                          "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-goto-non-existant-workflow.json",
+                          "arazzo",
+                          { logger: logger, parser },
+                        );
+                        arazzo.setMainArazzo();
+
+                        try {
+                          await arazzo.runWorkflows(inputFile);
+                        } catch (err) {
+                          console.error(err);
+                          expect(err).to.be.instanceOf(Error);
+                          expect(err.message).to.be.equal(
+                            "goto Workflow does not exist within current workflows",
+                          );
+                        }
+                      });
+
+                      xit(`should handle a non existant workflow referencing a non-existant sourceDescription`, async function () {
+                        nock("https://raw.githubusercontent.com:443", {
+                          encodedQueryParams: true,
+                        })
+                          .get(
+                            "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                          )
+                          .reply(
+                            200,
+                            [
+                              "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                            ],
+                            {
+                              "accept-ranges": "bytes",
+                              "access-control-allow-origin": "*",
+                              "cache-control": "max-age=300",
+                              connection: "keep-alive",
+                              "content-encoding": "gzip",
+                              "content-length": "1638",
+                              "content-security-policy":
+                                "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                              "content-type": "text/plain; charset=utf-8",
+                              "cross-origin-resource-policy": "cross-origin",
+                              date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                              etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                              expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                              "source-age": "0",
+                              "strict-transport-security": "max-age=31536000",
+                              vary: "Authorization,Accept-Encoding",
+                              via: "1.1 varnish",
+                              "x-cache": "HIT",
+                              "x-cache-hits": "0",
+                              "x-content-type-options": "nosniff",
+                              "x-fastly-request-id":
+                                "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                              "x-frame-options": "deny",
+                              "x-github-request-id":
+                                "8DCE:156854:683A3:BD766:695D41E9",
+                              "x-served-by": "cache-lhr-egll1980052-LHR",
+                              "x-timer": "S1767727197.761065,VS0,VE107",
+                              "x-xss-protection": "1; mode=block",
+                            },
+                          );
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .reply(201, { id: 123 });
+
+                        const inputFile = new Input(
+                          "./test/mocks/inputs/userInput.json",
+                          "inputs",
+                        );
+
+                        const arazzo = new Arazzo(
+                          "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-goto-non-existant-sourceDescription-workflow.json",
+                          "arazzo",
+                          { logger: logger, parser },
+                        );
+                        arazzo.setMainArazzo();
+
+                        try {
+                          await arazzo.runWorkflows(inputFile);
+                        } catch (err) {
+                          console.error(err);
+                          expect(err).to.be.instanceOf(Error);
+                          expect(err.message).to.be.equal(
+                            "goto Workflow does not exist within current workflows",
+                          );
+                        }
+                      });
+
+                      it(`should handle a non self referential infinite loop`, async function () {
+                        nock("https://raw.githubusercontent.com:443", {
+                          encodedQueryParams: true,
+                        })
+                          .get(
+                            "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                          )
+                          .reply(
+                            200,
+                            [
+                              "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                            ],
+                            {
+                              "accept-ranges": "bytes",
+                              "access-control-allow-origin": "*",
+                              "cache-control": "max-age=300",
+                              connection: "keep-alive",
+                              "content-encoding": "gzip",
+                              "content-length": "1638",
+                              "content-security-policy":
+                                "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                              "content-type": "text/plain; charset=utf-8",
+                              "cross-origin-resource-policy": "cross-origin",
+                              date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                              etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                              expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                              "source-age": "0",
+                              "strict-transport-security": "max-age=31536000",
+                              vary: "Authorization,Accept-Encoding",
+                              via: "1.1 varnish",
+                              "x-cache": "HIT",
+                              "x-cache-hits": "0",
+                              "x-content-type-options": "nosniff",
+                              "x-fastly-request-id":
+                                "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                              "x-frame-options": "deny",
+                              "x-github-request-id":
+                                "8DCE:156854:683A3:BD766:695D41E9",
+                              "x-served-by": "cache-lhr-egll1980052-LHR",
+                              "x-timer": "S1767727197.761065,VS0,VE107",
+                              "x-xss-protection": "1; mode=block",
+                            },
+                          );
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .times(3)
+                          .reply(400);
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .reply(201, { id: 1234 });
+
+                        const inputFile = new Input(
+                          "./test/mocks/inputs/userInput.json",
+                          "inputs",
+                        );
+
+                        const arazzo = new Arazzo(
+                          "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-goto-self-referential.json",
+                          "arazzo",
+                          { logger: logger, parser },
+                        );
+                        arazzo.setMainArazzo();
+
+                        const spy = sinon.spy(arazzo, "runStep");
+
+                        try {
+                          await arazzo.runWorkflows(inputFile);
+                          expect(spy.callCount).to.be.equal(4);
+                        } catch (err) {
+                          console.error(err);
+                          expect(err).to.be.instanceOf(Error);
+                          expect(err.message).to.be.equal(
+                            "createAUser step of the createUser workflow failed the successCriteria",
+                          );
+                        }
+
+                        spy.restore();
+                      });
+                    });
+
+                    describe(`retry`, function () {
+                      it(`retries the step once when no retry options are added`, async function () {
+                        nock("https://raw.githubusercontent.com:443", {
+                          encodedQueryParams: true,
+                        })
+                          .get(
+                            "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                          )
+                          .reply(
+                            200,
+                            [
+                              "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                            ],
+                            {
+                              "accept-ranges": "bytes",
+                              "access-control-allow-origin": "*",
+                              "cache-control": "max-age=300",
+                              connection: "keep-alive",
+                              "content-encoding": "gzip",
+                              "content-length": "1638",
+                              "content-security-policy":
+                                "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                              "content-type": "text/plain; charset=utf-8",
+                              "cross-origin-resource-policy": "cross-origin",
+                              date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                              etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                              expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                              "source-age": "0",
+                              "strict-transport-security": "max-age=31536000",
+                              vary: "Authorization,Accept-Encoding",
+                              via: "1.1 varnish",
+                              "x-cache": "HIT",
+                              "x-cache-hits": "0",
+                              "x-content-type-options": "nosniff",
+                              "x-fastly-request-id":
+                                "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                              "x-frame-options": "deny",
+                              "x-github-request-id":
+                                "8DCE:156854:683A3:BD766:695D41E9",
+                              "x-served-by": "cache-lhr-egll1980052-LHR",
+                              "x-timer": "S1767727197.761065,VS0,VE107",
+                              "x-xss-protection": "1; mode=block",
+                            },
+                          );
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .reply(400);
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .reply(201, { id: 123 });
+
+                        const inputFile = new Input(
+                          "./test/mocks/inputs/userInput.json",
+                          "inputs",
+                        );
+
+                        const arazzo = new Arazzo(
+                          "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-retry.json",
+                          "arazzo",
+                          { logger: logger, parser },
+                        );
+                        arazzo.setMainArazzo();
+
+                        const spy = sinon.spy(arazzo, "runStep");
+
+                        try {
+                          await arazzo.runWorkflows(inputFile);
+
+                          expect(spy.callCount).to.be.equal(2);
+                        } catch (err) {
+                          expect(err).to.not.be.instanceOf(Error);
+                        }
+
+                        spy.restore();
+                      });
+
+                      it(`retries the step multiple times when a retrylimit is set and all retries fail`, async function () {
+                        nock("https://raw.githubusercontent.com:443", {
+                          encodedQueryParams: true,
+                        })
+                          .get(
+                            "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                          )
+                          .reply(
+                            200,
+                            [
+                              "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                            ],
+                            {
+                              "accept-ranges": "bytes",
+                              "access-control-allow-origin": "*",
+                              "cache-control": "max-age=300",
+                              connection: "keep-alive",
+                              "content-encoding": "gzip",
+                              "content-length": "1638",
+                              "content-security-policy":
+                                "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                              "content-type": "text/plain; charset=utf-8",
+                              "cross-origin-resource-policy": "cross-origin",
+                              date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                              etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                              expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                              "source-age": "0",
+                              "strict-transport-security": "max-age=31536000",
+                              vary: "Authorization,Accept-Encoding",
+                              via: "1.1 varnish",
+                              "x-cache": "HIT",
+                              "x-cache-hits": "0",
+                              "x-content-type-options": "nosniff",
+                              "x-fastly-request-id":
+                                "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                              "x-frame-options": "deny",
+                              "x-github-request-id":
+                                "8DCE:156854:683A3:BD766:695D41E9",
+                              "x-served-by": "cache-lhr-egll1980052-LHR",
+                              "x-timer": "S1767727197.761065,VS0,VE107",
+                              "x-xss-protection": "1; mode=block",
+                            },
+                          );
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .times(4)
+                          .reply(400);
+
+                        const inputFile = new Input(
+                          "./test/mocks/inputs/userInput.json",
+                          "inputs",
+                        );
+
+                        const arazzo = new Arazzo(
+                          "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-retry-multiple-times.json",
+                          "arazzo",
+                          { logger: logger, parser },
+                        );
+                        arazzo.setMainArazzo();
+
+                        const spy = sinon.spy(arazzo, "runStep");
+
+                        try {
+                          await arazzo.runWorkflows(inputFile);
+                          expect(spy.callCount).to.be.equal(4);
+
+                          throw new Error(
+                            "createAUser step of the createUser workflow failed the successCriteria",
+                          );
+                        } catch (err) {
+                          expect(err).to.be.instanceOf(Error);
+                          expect(err.message).to.be.equal(
+                            `createAUser step of the createUser workflow failed the successCriteria`,
+                          );
+                        }
+
+                        spy.restore();
+                      });
+
+                      it(`retries the step multiple times when a retrylimit is set and breaks the retry circle if a retry passes`, async function () {
+                        nock("https://raw.githubusercontent.com:443", {
+                          encodedQueryParams: true,
+                        })
+                          .get(
+                            "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                          )
+                          .reply(
+                            200,
+                            [
+                              "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                            ],
+                            {
+                              "accept-ranges": "bytes",
+                              "access-control-allow-origin": "*",
+                              "cache-control": "max-age=300",
+                              connection: "keep-alive",
+                              "content-encoding": "gzip",
+                              "content-length": "1638",
+                              "content-security-policy":
+                                "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                              "content-type": "text/plain; charset=utf-8",
+                              "cross-origin-resource-policy": "cross-origin",
+                              date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                              etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                              expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                              "source-age": "0",
+                              "strict-transport-security": "max-age=31536000",
+                              vary: "Authorization,Accept-Encoding",
+                              via: "1.1 varnish",
+                              "x-cache": "HIT",
+                              "x-cache-hits": "0",
+                              "x-content-type-options": "nosniff",
+                              "x-fastly-request-id":
+                                "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                              "x-frame-options": "deny",
+                              "x-github-request-id":
+                                "8DCE:156854:683A3:BD766:695D41E9",
+                              "x-served-by": "cache-lhr-egll1980052-LHR",
+                              "x-timer": "S1767727197.761065,VS0,VE107",
+                              "x-xss-protection": "1; mode=block",
+                            },
+                          );
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .times(2)
+                          .reply(400);
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .reply(201, { id: 123 });
+
+                        const inputFile = new Input(
+                          "./test/mocks/inputs/userInput.json",
+                          "inputs",
+                        );
+
+                        const arazzo = new Arazzo(
+                          "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-retry-multiple-times.json",
+                          "arazzo",
+                          { logger: logger, parser },
+                        );
+                        arazzo.setMainArazzo();
+
+                        const spy = sinon.spy(arazzo, "runStep");
+
+                        try {
+                          await arazzo.runWorkflows(inputFile);
+                          expect(spy.callCount).to.be.equal(3);
+                        } catch (err) {
+                          expect(err).to.not.be.instanceOf(Error);
+                        }
+
+                        spy.restore();
+                      });
+
+                      it(`retries can deal with different types of retry rules being triggered`, async function () {
+                        nock("https://raw.githubusercontent.com:443", {
+                          encodedQueryParams: true,
+                        })
+                          .get(
+                            "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                          )
+                          .reply(
+                            200,
+                            [
+                              "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                            ],
+                            {
+                              "accept-ranges": "bytes",
+                              "access-control-allow-origin": "*",
+                              "cache-control": "max-age=300",
+                              connection: "keep-alive",
+                              "content-encoding": "gzip",
+                              "content-length": "1638",
+                              "content-security-policy":
+                                "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                              "content-type": "text/plain; charset=utf-8",
+                              "cross-origin-resource-policy": "cross-origin",
+                              date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                              etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                              expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                              "source-age": "0",
+                              "strict-transport-security": "max-age=31536000",
+                              vary: "Authorization,Accept-Encoding",
+                              via: "1.1 varnish",
+                              "x-cache": "HIT",
+                              "x-cache-hits": "0",
+                              "x-content-type-options": "nosniff",
+                              "x-fastly-request-id":
+                                "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                              "x-frame-options": "deny",
+                              "x-github-request-id":
+                                "8DCE:156854:683A3:BD766:695D41E9",
+                              "x-served-by": "cache-lhr-egll1980052-LHR",
+                              "x-timer": "S1767727197.761065,VS0,VE107",
+                              "x-xss-protection": "1; mode=block",
+                            },
+                          );
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .reply(400);
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .reply(404);
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .reply(201, { id: 123 });
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .reply(400);
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .reply(201, { id: 123 });
+
+                        const inputFile = new Input(
+                          "./test/mocks/inputs/userInput.json",
+                          "inputs",
+                        );
+
+                        const arazzo = new Arazzo(
+                          "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-retry-with-different-types.json",
+                          "arazzo",
+                          { logger: logger, parser },
+                        );
+                        arazzo.setMainArazzo();
+
+                        const spy = sinon.spy(arazzo, "runStep");
+
+                        try {
+                          await arazzo.runWorkflows(inputFile);
+                          expect(spy.callCount).to.be.equal(5);
+                        } catch (err) {
+                          console.error(err);
+                          expect(err).to.not.be.instanceOf(Error);
+                        }
+
+                        spy.restore();
+                      });
+
+                      xit(
+                        `retries the step with a delay if a retryAfter is set`,
+                        async function () {
+                          this.timeout(7000);
+
+                          nock("https://raw.githubusercontent.com:443", {
+                            encodedQueryParams: true,
+                          })
+                            .get(
+                              "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                            )
+                            .reply(
+                              200,
+                              [
+                                "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                              ],
+                              {
+                                "accept-ranges": "bytes",
+                                "access-control-allow-origin": "*",
+                                "cache-control": "max-age=300",
+                                connection: "keep-alive",
+                                "content-encoding": "gzip",
+                                "content-length": "1638",
+                                "content-security-policy":
+                                  "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                                "content-type": "text/plain; charset=utf-8",
+                                "cross-origin-resource-policy": "cross-origin",
+                                date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                                etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                                expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                                "source-age": "0",
+                                "strict-transport-security": "max-age=31536000",
+                                vary: "Authorization,Accept-Encoding",
+                                via: "1.1 varnish",
+                                "x-cache": "HIT",
+                                "x-cache-hits": "0",
+                                "x-content-type-options": "nosniff",
+                                "x-fastly-request-id":
+                                  "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                                "x-frame-options": "deny",
+                                "x-github-request-id":
+                                  "8DCE:156854:683A3:BD766:695D41E9",
+                                "x-served-by": "cache-lhr-egll1980052-LHR",
+                                "x-timer": "S1767727197.761065,VS0,VE107",
+                                "x-xss-protection": "1; mode=block",
+                              },
+                            );
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(400);
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(201, { id: 123 });
+
+                          const inputFile = new Input(
+                            "./test/mocks/inputs/userInput.json",
+                            "inputs",
+                          );
+
+                          const arazzo = new Arazzo(
+                            "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-retry-with-delay.json",
+                            "arazzo",
+                            { logger: logger, parser },
+                          );
+                          arazzo.setMainArazzo();
+
+                          try {
+                            await arazzo.runWorkflows(inputFile);
+                          } catch (err) {
+                            expect(err).to.not.be.instanceOf(Error);
+                          }
+                        },
+                        "turning off as we know these pass, should not be comitted as turned off",
                       );
 
-                      const arazzo = new Arazzo(
-                        "./test/mocks/single-workflow/single-step/arazzoMock-user-single-workflow-single-step-with-successCriteria-and-onFailure-set-to-retry.json",
-                        "arazzo",
-                        { logger: logger, parser },
-                      );
-                      arazzo.setMainArazzo();
+                      xit(
+                        `retries the step with ignoring the retryAfter if the response returns a retryAfter header`,
+                        async function () {
+                          this.timeout(7000);
 
-                      try {
-                        await arazzo.runWorkflows(inputFile);
-                        throw new Error(
-                          "Expected promise to reject but it resolved",
+                          nock("https://raw.githubusercontent.com:443", {
+                            encodedQueryParams: true,
+                          })
+                            .get(
+                              "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                            )
+                            .reply(
+                              200,
+                              [
+                                "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                              ],
+                              {
+                                "accept-ranges": "bytes",
+                                "access-control-allow-origin": "*",
+                                "cache-control": "max-age=300",
+                                connection: "keep-alive",
+                                "content-encoding": "gzip",
+                                "content-length": "1638",
+                                "content-security-policy":
+                                  "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                                "content-type": "text/plain; charset=utf-8",
+                                "cross-origin-resource-policy": "cross-origin",
+                                date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                                etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                                expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                                "source-age": "0",
+                                "strict-transport-security": "max-age=31536000",
+                                vary: "Authorization,Accept-Encoding",
+                                via: "1.1 varnish",
+                                "x-cache": "HIT",
+                                "x-cache-hits": "0",
+                                "x-content-type-options": "nosniff",
+                                "x-fastly-request-id":
+                                  "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                                "x-frame-options": "deny",
+                                "x-github-request-id":
+                                  "8DCE:156854:683A3:BD766:695D41E9",
+                                "x-served-by": "cache-lhr-egll1980052-LHR",
+                                "x-timer": "S1767727197.761065,VS0,VE107",
+                                "x-xss-protection": "1; mode=block",
+                              },
+                            );
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(400, {}, { "retry-after": 3 });
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(201, { id: 123 });
+
+                          const inputFile = new Input(
+                            "./test/mocks/inputs/userInput.json",
+                            "inputs",
+                          );
+
+                          const arazzo = new Arazzo(
+                            "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-retry-with-delay.json",
+                            "arazzo",
+                            { logger: logger, parser },
+                          );
+                          arazzo.setMainArazzo();
+
+                          try {
+                            await arazzo.runWorkflows(inputFile);
+                          } catch (err) {
+                            expect(err).to.not.be.instanceOf(Error);
+                          }
+                        },
+                        "turning off as we know these pass, should not be comitted as turned off",
+                      );
+
+                      xit(`retries the step with ignoring the retryAfter if the response returns a retryAfter header in date format`, async function () {
+                        this.timeout(7000);
+
+                        nock("https://raw.githubusercontent.com:443", {
+                          encodedQueryParams: true,
+                        })
+                          .get(
+                            "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                          )
+                          .reply(
+                            200,
+                            [
+                              "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                            ],
+                            {
+                              "accept-ranges": "bytes",
+                              "access-control-allow-origin": "*",
+                              "cache-control": "max-age=300",
+                              connection: "keep-alive",
+                              "content-encoding": "gzip",
+                              "content-length": "1638",
+                              "content-security-policy":
+                                "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                              "content-type": "text/plain; charset=utf-8",
+                              "cross-origin-resource-policy": "cross-origin",
+                              date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                              etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                              expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                              "source-age": "0",
+                              "strict-transport-security": "max-age=31536000",
+                              vary: "Authorization,Accept-Encoding",
+                              via: "1.1 varnish",
+                              "x-cache": "HIT",
+                              "x-cache-hits": "0",
+                              "x-content-type-options": "nosniff",
+                              "x-fastly-request-id":
+                                "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                              "x-frame-options": "deny",
+                              "x-github-request-id":
+                                "8DCE:156854:683A3:BD766:695D41E9",
+                              "x-served-by": "cache-lhr-egll1980052-LHR",
+                              "x-timer": "S1767727197.761065,VS0,VE107",
+                              "x-xss-protection": "1; mode=block",
+                            },
+                          );
+
+                        let timeObject = new Date();
+                        const milliseconds = 3 * 1000; // 10 seconds = 10000 milliseconds
+                        timeObject = new Date(
+                          timeObject.getTime() + milliseconds,
                         );
-                      } catch (err) {
-                        expect(err).to.be.instanceOf(Error);
-                        expect(err.message).to.be.equal(
-                          `createAUser step of the createUser workflow failed the successCriteria`,
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .reply(
+                            400,
+                            {},
+                            { "retry-after": timeObject.toUTCString() },
+                          );
+
+                        nock("http://petstore.swagger.io:80", {
+                          encodedQueryParams: true,
+                        })
+                          .post("/v2/user", "[object Object]")
+                          .reply(201, { id: 123 });
+
+                        const inputFile = new Input(
+                          "./test/mocks/inputs/userInput.json",
+                          "inputs",
                         );
-                      }
+
+                        const arazzo = new Arazzo(
+                          "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-retry-with-delay.json",
+                          "arazzo",
+                          { logger: logger, parser },
+                        );
+                        arazzo.setMainArazzo();
+
+                        try {
+                          await arazzo.runWorkflows(inputFile);
+                        } catch (err) {
+                          expect(err).to.not.be.instanceOf(Error);
+                        }
+                      });
                     });
                   });
                 });
 
-                describe(`multiple onFailure`, function () {});
+                xdescribe(`multiple onFailure`, function () {});
               });
 
               describe(`with onSuccess`, () => {
@@ -1817,10 +2711,10 @@ describe(`Arazzo Document`, function () {
                 }
               });
 
-              xdescribe(`with onFailure`, function () {
+              describe(`with onFailure`, function () {
                 describe(`single onFailure`, function () {
                   describe(`onFailure without criteria`, function () {
-                    it(`resolves when onFailure is set to end`, async function () {
+                    xit(`resolves when onFailure is set to end`, async function () {
                       nock("https://raw.githubusercontent.com:443", {
                         encodedQueryParams: true,
                       })
@@ -1889,7 +2783,7 @@ describe(`Arazzo Document`, function () {
                       }
                     });
 
-                    it(`retries when onFailure is set to retry and no retryLimit is set`, async function () {
+                    xit(`retries when onFailure is set to retry and no retryLimit is set`, async function () {
                       nock("https://raw.githubusercontent.com:443", {
                         encodedQueryParams: true,
                       })
@@ -2041,7 +2935,1158 @@ describe(`Arazzo Document`, function () {
                     });
                   });
 
-                  xdescribe(`onFailure with criteria`, function () {
+                  describe(`onFailure with criteria`, function () {
+                    describe(`onFailure with criteria`, function () {
+                      xdescribe(`end`, function () {
+                        it(`resolves when onFailure is set to end and matches the criteria`, async function () {
+                          nock("https://raw.githubusercontent.com:443", {
+                            encodedQueryParams: true,
+                          })
+                            .get(
+                              "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                            )
+                            .reply(
+                              200,
+                              [
+                                "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                              ],
+                              {
+                                "accept-ranges": "bytes",
+                                "access-control-allow-origin": "*",
+                                "cache-control": "max-age=300",
+                                connection: "keep-alive",
+                                "content-encoding": "gzip",
+                                "content-length": "1638",
+                                "content-security-policy":
+                                  "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                                "content-type": "text/plain; charset=utf-8",
+                                "cross-origin-resource-policy": "cross-origin",
+                                date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                                etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                                expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                                "source-age": "0",
+                                "strict-transport-security": "max-age=31536000",
+                                vary: "Authorization,Accept-Encoding",
+                                via: "1.1 varnish",
+                                "x-cache": "HIT",
+                                "x-cache-hits": "0",
+                                "x-content-type-options": "nosniff",
+                                "x-fastly-request-id":
+                                  "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                                "x-frame-options": "deny",
+                                "x-github-request-id":
+                                  "8DCE:156854:683A3:BD766:695D41E9",
+                                "x-served-by": "cache-lhr-egll1980052-LHR",
+                                "x-timer": "S1767727197.761065,VS0,VE107",
+                                "x-xss-protection": "1; mode=block",
+                              },
+                            );
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(400, { id: 123 });
+
+                          const inputFile = new Input(
+                            "./test/mocks/inputs/userInput.json",
+                            "inputs",
+                          );
+
+                          const arazzo = new Arazzo(
+                            "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-end.json",
+                            "arazzo",
+                            { logger: logger, parser },
+                          );
+                          arazzo.setMainArazzo();
+
+                          try {
+                            await arazzo.runWorkflows(inputFile);
+                          } catch (err) {
+                            console.error(err);
+                            expect(err).to.not.be.instanceOf(Error);
+                          }
+                        });
+                      });
+
+                      xdescribe(`goto`, function () {
+                        it(`should handle a non existant step`, async function () {
+                          nock("https://raw.githubusercontent.com:443", {
+                            encodedQueryParams: true,
+                          })
+                            .get(
+                              "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                            )
+                            .reply(
+                              200,
+                              [
+                                "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                              ],
+                              {
+                                "accept-ranges": "bytes",
+                                "access-control-allow-origin": "*",
+                                "cache-control": "max-age=300",
+                                connection: "keep-alive",
+                                "content-encoding": "gzip",
+                                "content-length": "1638",
+                                "content-security-policy":
+                                  "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                                "content-type": "text/plain; charset=utf-8",
+                                "cross-origin-resource-policy": "cross-origin",
+                                date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                                etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                                expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                                "source-age": "0",
+                                "strict-transport-security": "max-age=31536000",
+                                vary: "Authorization,Accept-Encoding",
+                                via: "1.1 varnish",
+                                "x-cache": "HIT",
+                                "x-cache-hits": "0",
+                                "x-content-type-options": "nosniff",
+                                "x-fastly-request-id":
+                                  "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                                "x-frame-options": "deny",
+                                "x-github-request-id":
+                                  "8DCE:156854:683A3:BD766:695D41E9",
+                                "x-served-by": "cache-lhr-egll1980052-LHR",
+                                "x-timer": "S1767727197.761065,VS0,VE107",
+                                "x-xss-protection": "1; mode=block",
+                              },
+                            );
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(201, { id: 123 });
+
+                          const inputFile = new Input(
+                            "./test/mocks/inputs/userInput.json",
+                            "inputs",
+                          );
+
+                          const arazzo = new Arazzo(
+                            "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-goto-non-existant-step.json",
+                            "arazzo",
+                            { logger: logger, parser },
+                          );
+                          arazzo.setMainArazzo();
+
+                          try {
+                            await arazzo.runWorkflows(inputFile);
+                          } catch (err) {
+                            console.error(err);
+                            expect(err).to.be.instanceOf(Error);
+                            expect(err.message).to.be.equal(
+                              "goto Step does not exist within current workflow",
+                            );
+                          }
+                        });
+
+                        it(`should handle a non existant workflow`, async function () {
+                          nock("https://raw.githubusercontent.com:443", {
+                            encodedQueryParams: true,
+                          })
+                            .get(
+                              "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                            )
+                            .reply(
+                              200,
+                              [
+                                "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                              ],
+                              {
+                                "accept-ranges": "bytes",
+                                "access-control-allow-origin": "*",
+                                "cache-control": "max-age=300",
+                                connection: "keep-alive",
+                                "content-encoding": "gzip",
+                                "content-length": "1638",
+                                "content-security-policy":
+                                  "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                                "content-type": "text/plain; charset=utf-8",
+                                "cross-origin-resource-policy": "cross-origin",
+                                date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                                etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                                expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                                "source-age": "0",
+                                "strict-transport-security": "max-age=31536000",
+                                vary: "Authorization,Accept-Encoding",
+                                via: "1.1 varnish",
+                                "x-cache": "HIT",
+                                "x-cache-hits": "0",
+                                "x-content-type-options": "nosniff",
+                                "x-fastly-request-id":
+                                  "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                                "x-frame-options": "deny",
+                                "x-github-request-id":
+                                  "8DCE:156854:683A3:BD766:695D41E9",
+                                "x-served-by": "cache-lhr-egll1980052-LHR",
+                                "x-timer": "S1767727197.761065,VS0,VE107",
+                                "x-xss-protection": "1; mode=block",
+                              },
+                            );
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(201, { id: 123 });
+
+                          const inputFile = new Input(
+                            "./test/mocks/inputs/userInput.json",
+                            "inputs",
+                          );
+
+                          const arazzo = new Arazzo(
+                            "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-goto-non-existant-workflow.json",
+                            "arazzo",
+                            { logger: logger, parser },
+                          );
+                          arazzo.setMainArazzo();
+
+                          try {
+                            await arazzo.runWorkflows(inputFile);
+                          } catch (err) {
+                            console.error(err);
+                            expect(err).to.be.instanceOf(Error);
+                            expect(err.message).to.be.equal(
+                              "goto Workflow does not exist within current workflows",
+                            );
+                          }
+                        });
+
+                        xit(`should handle a non existant workflow referencing a non-existant sourceDescription`, async function () {
+                          nock("https://raw.githubusercontent.com:443", {
+                            encodedQueryParams: true,
+                          })
+                            .get(
+                              "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                            )
+                            .reply(
+                              200,
+                              [
+                                "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                              ],
+                              {
+                                "accept-ranges": "bytes",
+                                "access-control-allow-origin": "*",
+                                "cache-control": "max-age=300",
+                                connection: "keep-alive",
+                                "content-encoding": "gzip",
+                                "content-length": "1638",
+                                "content-security-policy":
+                                  "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                                "content-type": "text/plain; charset=utf-8",
+                                "cross-origin-resource-policy": "cross-origin",
+                                date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                                etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                                expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                                "source-age": "0",
+                                "strict-transport-security": "max-age=31536000",
+                                vary: "Authorization,Accept-Encoding",
+                                via: "1.1 varnish",
+                                "x-cache": "HIT",
+                                "x-cache-hits": "0",
+                                "x-content-type-options": "nosniff",
+                                "x-fastly-request-id":
+                                  "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                                "x-frame-options": "deny",
+                                "x-github-request-id":
+                                  "8DCE:156854:683A3:BD766:695D41E9",
+                                "x-served-by": "cache-lhr-egll1980052-LHR",
+                                "x-timer": "S1767727197.761065,VS0,VE107",
+                                "x-xss-protection": "1; mode=block",
+                              },
+                            );
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(201, { id: 123 });
+
+                          const inputFile = new Input(
+                            "./test/mocks/inputs/userInput.json",
+                            "inputs",
+                          );
+
+                          const arazzo = new Arazzo(
+                            "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-goto-non-existant-sourceDescription-workflow.json",
+                            "arazzo",
+                            { logger: logger, parser },
+                          );
+                          arazzo.setMainArazzo();
+
+                          try {
+                            await arazzo.runWorkflows(inputFile);
+                          } catch (err) {
+                            console.error(err);
+                            expect(err).to.be.instanceOf(Error);
+                            expect(err.message).to.be.equal(
+                              "goto Workflow does not exist within current workflows",
+                            );
+                          }
+                        });
+
+                        it(`should handle a non self referential infinite loop`, async function () {
+                          nock("https://raw.githubusercontent.com:443", {
+                            encodedQueryParams: true,
+                          })
+                            .get(
+                              "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                            )
+                            .reply(
+                              200,
+                              [
+                                "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                              ],
+                              {
+                                "accept-ranges": "bytes",
+                                "access-control-allow-origin": "*",
+                                "cache-control": "max-age=300",
+                                connection: "keep-alive",
+                                "content-encoding": "gzip",
+                                "content-length": "1638",
+                                "content-security-policy":
+                                  "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                                "content-type": "text/plain; charset=utf-8",
+                                "cross-origin-resource-policy": "cross-origin",
+                                date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                                etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                                expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                                "source-age": "0",
+                                "strict-transport-security": "max-age=31536000",
+                                vary: "Authorization,Accept-Encoding",
+                                via: "1.1 varnish",
+                                "x-cache": "HIT",
+                                "x-cache-hits": "0",
+                                "x-content-type-options": "nosniff",
+                                "x-fastly-request-id":
+                                  "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                                "x-frame-options": "deny",
+                                "x-github-request-id":
+                                  "8DCE:156854:683A3:BD766:695D41E9",
+                                "x-served-by": "cache-lhr-egll1980052-LHR",
+                                "x-timer": "S1767727197.761065,VS0,VE107",
+                                "x-xss-protection": "1; mode=block",
+                              },
+                            );
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .times(3)
+                            .reply(400);
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(201, { id: 1234 });
+
+                          const inputFile = new Input(
+                            "./test/mocks/inputs/userInput.json",
+                            "inputs",
+                          );
+
+                          const arazzo = new Arazzo(
+                            "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-goto-self-referential.json",
+                            "arazzo",
+                            { logger: logger, parser },
+                          );
+                          arazzo.setMainArazzo();
+
+                          const spy = sinon.spy(arazzo, "runStep");
+
+                          try {
+                            await arazzo.runWorkflows(inputFile);
+                            expect(spy.callCount).to.be.equal(4);
+                          } catch (err) {
+                            console.error(err);
+                            expect(err).to.be.instanceOf(Error);
+                            expect(err.message).to.be.equal(
+                              "createAUser step of the createUser workflow failed the successCriteria",
+                            );
+                          }
+
+                          spy.restore();
+                        });
+                      });
+
+                      describe(`retry`, function () {
+                        it(`retries calls the relevant step first and then retries the current failing step`, async function () {
+                          nock("https://raw.githubusercontent.com:443", {
+                            encodedQueryParams: true,
+                          })
+                            .get(
+                              "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                            )
+                            .reply(
+                              200,
+                              [
+                                "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                              ],
+                              {
+                                "accept-ranges": "bytes",
+                                "access-control-allow-origin": "*",
+                                "cache-control": "max-age=300",
+                                connection: "keep-alive",
+                                "content-encoding": "gzip",
+                                "content-length": "1638",
+                                "content-security-policy":
+                                  "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                                "content-type": "text/plain; charset=utf-8",
+                                "cross-origin-resource-policy": "cross-origin",
+                                date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                                etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                                expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                                "source-age": "0",
+                                "strict-transport-security": "max-age=31536000",
+                                vary: "Authorization,Accept-Encoding",
+                                via: "1.1 varnish",
+                                "x-cache": "HIT",
+                                "x-cache-hits": "0",
+                                "x-content-type-options": "nosniff",
+                                "x-fastly-request-id":
+                                  "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                                "x-frame-options": "deny",
+                                "x-github-request-id":
+                                  "8DCE:156854:683A3:BD766:695D41E9",
+                                "x-served-by": "cache-lhr-egll1980052-LHR",
+                                "x-timer": "S1767727197.761065,VS0,VE107",
+                                "x-xss-protection": "1; mode=block",
+                              },
+                            );
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .times(2)
+                            .reply(201, { username: "MarshallM" });
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .get("/v2/user/MarshallM")
+                            .reply(404);
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .get("/v2/user/MarshallM")
+                            .reply(200, { id: 123 });
+
+                          const inputFile = new Input(
+                            "./test/mocks/inputs/userInput.json",
+                            "inputs",
+                          );
+
+                          const arazzo = new Arazzo(
+                            "./test/mocks/single-workflow/multiple-steps/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-execute-a-step-and-retry.json",
+                            "arazzo",
+                            { logger: logger, parser },
+                          );
+                          arazzo.setMainArazzo();
+
+                          const spy = sinon.spy(arazzo, "runStep");
+
+                          try {
+                            await arazzo.runWorkflows(inputFile);
+
+                            expect(spy.callCount).to.be.equal(4);
+                          } catch (err) {
+                            expect(err).to.not.be.instanceOf(Error);
+                          }
+
+                          spy.restore();
+                        });
+
+                        it(`retries calls the relevant step first and then retries the current failing step Skipping other steps inbetween`, async function () {
+                          nock("https://raw.githubusercontent.com:443", {
+                            encodedQueryParams: true,
+                          })
+                            .get(
+                              "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                            )
+                            .reply(
+                              200,
+                              [
+                                "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                              ],
+                              {
+                                "accept-ranges": "bytes",
+                                "access-control-allow-origin": "*",
+                                "cache-control": "max-age=300",
+                                connection: "keep-alive",
+                                "content-encoding": "gzip",
+                                "content-length": "1638",
+                                "content-security-policy":
+                                  "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                                "content-type": "text/plain; charset=utf-8",
+                                "cross-origin-resource-policy": "cross-origin",
+                                date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                                etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                                expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                                "source-age": "0",
+                                "strict-transport-security": "max-age=31536000",
+                                vary: "Authorization,Accept-Encoding",
+                                via: "1.1 varnish",
+                                "x-cache": "HIT",
+                                "x-cache-hits": "0",
+                                "x-content-type-options": "nosniff",
+                                "x-fastly-request-id":
+                                  "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                                "x-frame-options": "deny",
+                                "x-github-request-id":
+                                  "8DCE:156854:683A3:BD766:695D41E9",
+                                "x-served-by": "cache-lhr-egll1980052-LHR",
+                                "x-timer": "S1767727197.761065,VS0,VE107",
+                                "x-xss-protection": "1; mode=block",
+                              },
+                            );
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .times(2)
+                            .reply(201, { username: "MarshallM" });
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post(
+                              "/v2/user/createWithArray",
+                              "[object Object],[object Object]",
+                            )
+                            .reply(201, { username: "FatBoyS" });
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .get("/v2/user/MarshallM")
+                            .reply(404);
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .get("/v2/user/MarshallM")
+                            .reply(200, { id: 123 });
+
+                          const inputFile = new Input(
+                            "./test/mocks/inputs/userInput.json",
+                            "inputs",
+                          );
+
+                          const arazzo = new Arazzo(
+                            "./test/mocks/single-workflow/multiple-steps/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-execute-a-step-and-retry-do-not-execute-sequential-step.json",
+                            "arazzo",
+                            { logger: logger, parser },
+                          );
+                          arazzo.setMainArazzo();
+
+                          const spy = sinon.spy(arazzo, "runStep");
+
+                          try {
+                            await arazzo.runWorkflows(inputFile);
+
+                            expect(spy.callCount).to.be.equal(5);
+                          } catch (err) {
+                            expect(err).to.not.be.instanceOf(Error);
+                          }
+
+                          spy.restore();
+                        });
+
+                        xit(`retries the step once when no retry options are added`, async function () {
+                          nock("https://raw.githubusercontent.com:443", {
+                            encodedQueryParams: true,
+                          })
+                            .get(
+                              "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                            )
+                            .reply(
+                              200,
+                              [
+                                "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                              ],
+                              {
+                                "accept-ranges": "bytes",
+                                "access-control-allow-origin": "*",
+                                "cache-control": "max-age=300",
+                                connection: "keep-alive",
+                                "content-encoding": "gzip",
+                                "content-length": "1638",
+                                "content-security-policy":
+                                  "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                                "content-type": "text/plain; charset=utf-8",
+                                "cross-origin-resource-policy": "cross-origin",
+                                date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                                etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                                expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                                "source-age": "0",
+                                "strict-transport-security": "max-age=31536000",
+                                vary: "Authorization,Accept-Encoding",
+                                via: "1.1 varnish",
+                                "x-cache": "HIT",
+                                "x-cache-hits": "0",
+                                "x-content-type-options": "nosniff",
+                                "x-fastly-request-id":
+                                  "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                                "x-frame-options": "deny",
+                                "x-github-request-id":
+                                  "8DCE:156854:683A3:BD766:695D41E9",
+                                "x-served-by": "cache-lhr-egll1980052-LHR",
+                                "x-timer": "S1767727197.761065,VS0,VE107",
+                                "x-xss-protection": "1; mode=block",
+                              },
+                            );
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(400);
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(201, { id: 123 });
+
+                          const inputFile = new Input(
+                            "./test/mocks/inputs/userInput.json",
+                            "inputs",
+                          );
+
+                          const arazzo = new Arazzo(
+                            "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-retry.json",
+                            "arazzo",
+                            { logger: logger, parser },
+                          );
+                          arazzo.setMainArazzo();
+
+                          const spy = sinon.spy(arazzo, "runStep");
+
+                          try {
+                            await arazzo.runWorkflows(inputFile);
+
+                            expect(spy.callCount).to.be.equal(2);
+                          } catch (err) {
+                            expect(err).to.not.be.instanceOf(Error);
+                          }
+
+                          spy.restore();
+                        });
+
+                        xit(`retries the step multiple times when a retrylimit is set and all retries fail`, async function () {
+                          nock("https://raw.githubusercontent.com:443", {
+                            encodedQueryParams: true,
+                          })
+                            .get(
+                              "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                            )
+                            .reply(
+                              200,
+                              [
+                                "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                              ],
+                              {
+                                "accept-ranges": "bytes",
+                                "access-control-allow-origin": "*",
+                                "cache-control": "max-age=300",
+                                connection: "keep-alive",
+                                "content-encoding": "gzip",
+                                "content-length": "1638",
+                                "content-security-policy":
+                                  "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                                "content-type": "text/plain; charset=utf-8",
+                                "cross-origin-resource-policy": "cross-origin",
+                                date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                                etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                                expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                                "source-age": "0",
+                                "strict-transport-security": "max-age=31536000",
+                                vary: "Authorization,Accept-Encoding",
+                                via: "1.1 varnish",
+                                "x-cache": "HIT",
+                                "x-cache-hits": "0",
+                                "x-content-type-options": "nosniff",
+                                "x-fastly-request-id":
+                                  "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                                "x-frame-options": "deny",
+                                "x-github-request-id":
+                                  "8DCE:156854:683A3:BD766:695D41E9",
+                                "x-served-by": "cache-lhr-egll1980052-LHR",
+                                "x-timer": "S1767727197.761065,VS0,VE107",
+                                "x-xss-protection": "1; mode=block",
+                              },
+                            );
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .times(4)
+                            .reply(400);
+
+                          const inputFile = new Input(
+                            "./test/mocks/inputs/userInput.json",
+                            "inputs",
+                          );
+
+                          const arazzo = new Arazzo(
+                            "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-retry-multiple-times.json",
+                            "arazzo",
+                            { logger: logger, parser },
+                          );
+                          arazzo.setMainArazzo();
+
+                          const spy = sinon.spy(arazzo, "runStep");
+
+                          try {
+                            await arazzo.runWorkflows(inputFile);
+                            expect(spy.callCount).to.be.equal(4);
+
+                            throw new Error(
+                              "createAUser step of the createUser workflow failed the successCriteria",
+                            );
+                          } catch (err) {
+                            expect(err).to.be.instanceOf(Error);
+                            expect(err.message).to.be.equal(
+                              `createAUser step of the createUser workflow failed the successCriteria`,
+                            );
+                          }
+
+                          spy.restore();
+                        });
+
+                        xit(`retries the step multiple times when a retrylimit is set and breaks the retry circle if a retry passes`, async function () {
+                          nock("https://raw.githubusercontent.com:443", {
+                            encodedQueryParams: true,
+                          })
+                            .get(
+                              "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                            )
+                            .reply(
+                              200,
+                              [
+                                "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                              ],
+                              {
+                                "accept-ranges": "bytes",
+                                "access-control-allow-origin": "*",
+                                "cache-control": "max-age=300",
+                                connection: "keep-alive",
+                                "content-encoding": "gzip",
+                                "content-length": "1638",
+                                "content-security-policy":
+                                  "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                                "content-type": "text/plain; charset=utf-8",
+                                "cross-origin-resource-policy": "cross-origin",
+                                date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                                etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                                expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                                "source-age": "0",
+                                "strict-transport-security": "max-age=31536000",
+                                vary: "Authorization,Accept-Encoding",
+                                via: "1.1 varnish",
+                                "x-cache": "HIT",
+                                "x-cache-hits": "0",
+                                "x-content-type-options": "nosniff",
+                                "x-fastly-request-id":
+                                  "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                                "x-frame-options": "deny",
+                                "x-github-request-id":
+                                  "8DCE:156854:683A3:BD766:695D41E9",
+                                "x-served-by": "cache-lhr-egll1980052-LHR",
+                                "x-timer": "S1767727197.761065,VS0,VE107",
+                                "x-xss-protection": "1; mode=block",
+                              },
+                            );
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .times(2)
+                            .reply(400);
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(201, { id: 123 });
+
+                          const inputFile = new Input(
+                            "./test/mocks/inputs/userInput.json",
+                            "inputs",
+                          );
+
+                          const arazzo = new Arazzo(
+                            "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-retry-multiple-times.json",
+                            "arazzo",
+                            { logger: logger, parser },
+                          );
+                          arazzo.setMainArazzo();
+
+                          const spy = sinon.spy(arazzo, "runStep");
+
+                          try {
+                            await arazzo.runWorkflows(inputFile);
+                            expect(spy.callCount).to.be.equal(3);
+                          } catch (err) {
+                            expect(err).to.not.be.instanceOf(Error);
+                          }
+
+                          spy.restore();
+                        });
+
+                        xit(`retries can deal with different types of retry rules being triggered`, async function () {
+                          nock("https://raw.githubusercontent.com:443", {
+                            encodedQueryParams: true,
+                          })
+                            .get(
+                              "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                            )
+                            .reply(
+                              200,
+                              [
+                                "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                              ],
+                              {
+                                "accept-ranges": "bytes",
+                                "access-control-allow-origin": "*",
+                                "cache-control": "max-age=300",
+                                connection: "keep-alive",
+                                "content-encoding": "gzip",
+                                "content-length": "1638",
+                                "content-security-policy":
+                                  "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                                "content-type": "text/plain; charset=utf-8",
+                                "cross-origin-resource-policy": "cross-origin",
+                                date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                                etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                                expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                                "source-age": "0",
+                                "strict-transport-security": "max-age=31536000",
+                                vary: "Authorization,Accept-Encoding",
+                                via: "1.1 varnish",
+                                "x-cache": "HIT",
+                                "x-cache-hits": "0",
+                                "x-content-type-options": "nosniff",
+                                "x-fastly-request-id":
+                                  "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                                "x-frame-options": "deny",
+                                "x-github-request-id":
+                                  "8DCE:156854:683A3:BD766:695D41E9",
+                                "x-served-by": "cache-lhr-egll1980052-LHR",
+                                "x-timer": "S1767727197.761065,VS0,VE107",
+                                "x-xss-protection": "1; mode=block",
+                              },
+                            );
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(400);
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(404);
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(201, { id: 123 });
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(400);
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(201, { id: 123 });
+
+                          const inputFile = new Input(
+                            "./test/mocks/inputs/userInput.json",
+                            "inputs",
+                          );
+
+                          const arazzo = new Arazzo(
+                            "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-retry-with-different-types.json",
+                            "arazzo",
+                            { logger: logger, parser },
+                          );
+                          arazzo.setMainArazzo();
+
+                          const spy = sinon.spy(arazzo, "runStep");
+
+                          try {
+                            await arazzo.runWorkflows(inputFile);
+                            expect(spy.callCount).to.be.equal(5);
+                          } catch (err) {
+                            console.error(err);
+                            expect(err).to.not.be.instanceOf(Error);
+                          }
+
+                          spy.restore();
+                        });
+
+                        xit(`retries the step with a delay if a retryAfter is set`, async function () {
+                          this.timeout(7000);
+
+                          nock("https://raw.githubusercontent.com:443", {
+                            encodedQueryParams: true,
+                          })
+                            .get(
+                              "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                            )
+                            .reply(
+                              200,
+                              [
+                                "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                              ],
+                              {
+                                "accept-ranges": "bytes",
+                                "access-control-allow-origin": "*",
+                                "cache-control": "max-age=300",
+                                connection: "keep-alive",
+                                "content-encoding": "gzip",
+                                "content-length": "1638",
+                                "content-security-policy":
+                                  "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                                "content-type": "text/plain; charset=utf-8",
+                                "cross-origin-resource-policy": "cross-origin",
+                                date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                                etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                                expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                                "source-age": "0",
+                                "strict-transport-security": "max-age=31536000",
+                                vary: "Authorization,Accept-Encoding",
+                                via: "1.1 varnish",
+                                "x-cache": "HIT",
+                                "x-cache-hits": "0",
+                                "x-content-type-options": "nosniff",
+                                "x-fastly-request-id":
+                                  "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                                "x-frame-options": "deny",
+                                "x-github-request-id":
+                                  "8DCE:156854:683A3:BD766:695D41E9",
+                                "x-served-by": "cache-lhr-egll1980052-LHR",
+                                "x-timer": "S1767727197.761065,VS0,VE107",
+                                "x-xss-protection": "1; mode=block",
+                              },
+                            );
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(400);
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(201, { id: 123 });
+
+                          const inputFile = new Input(
+                            "./test/mocks/inputs/userInput.json",
+                            "inputs",
+                          );
+
+                          const arazzo = new Arazzo(
+                            "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-retry-with-delay.json",
+                            "arazzo",
+                            { logger: logger, parser },
+                          );
+                          arazzo.setMainArazzo();
+
+                          try {
+                            await arazzo.runWorkflows(inputFile);
+                          } catch (err) {
+                            expect(err).to.not.be.instanceOf(Error);
+                          }
+                        });
+
+                        xit(`retries the step with ignoring the retryAfter if the response returns a retryAfter header`, async function () {
+                          this.timeout(7000);
+
+                          nock("https://raw.githubusercontent.com:443", {
+                            encodedQueryParams: true,
+                          })
+                            .get(
+                              "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                            )
+                            .reply(
+                              200,
+                              [
+                                "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                              ],
+                              {
+                                "accept-ranges": "bytes",
+                                "access-control-allow-origin": "*",
+                                "cache-control": "max-age=300",
+                                connection: "keep-alive",
+                                "content-encoding": "gzip",
+                                "content-length": "1638",
+                                "content-security-policy":
+                                  "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                                "content-type": "text/plain; charset=utf-8",
+                                "cross-origin-resource-policy": "cross-origin",
+                                date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                                etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                                expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                                "source-age": "0",
+                                "strict-transport-security": "max-age=31536000",
+                                vary: "Authorization,Accept-Encoding",
+                                via: "1.1 varnish",
+                                "x-cache": "HIT",
+                                "x-cache-hits": "0",
+                                "x-content-type-options": "nosniff",
+                                "x-fastly-request-id":
+                                  "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                                "x-frame-options": "deny",
+                                "x-github-request-id":
+                                  "8DCE:156854:683A3:BD766:695D41E9",
+                                "x-served-by": "cache-lhr-egll1980052-LHR",
+                                "x-timer": "S1767727197.761065,VS0,VE107",
+                                "x-xss-protection": "1; mode=block",
+                              },
+                            );
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(400, {}, { "retry-after": 3 });
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(201, { id: 123 });
+
+                          const inputFile = new Input(
+                            "./test/mocks/inputs/userInput.json",
+                            "inputs",
+                          );
+
+                          const arazzo = new Arazzo(
+                            "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-retry-with-delay.json",
+                            "arazzo",
+                            { logger: logger, parser },
+                          );
+                          arazzo.setMainArazzo();
+
+                          try {
+                            await arazzo.runWorkflows(inputFile);
+                          } catch (err) {
+                            expect(err).to.not.be.instanceOf(Error);
+                          }
+                        });
+
+                        xit(`retries the step with ignoring the retryAfter if the response returns a retryAfter header in date format`, async function () {
+                          this.timeout(7000);
+
+                          nock("https://raw.githubusercontent.com:443", {
+                            encodedQueryParams: true,
+                          })
+                            .get(
+                              "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                            )
+                            .reply(
+                              200,
+                              [
+                                "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                              ],
+                              {
+                                "accept-ranges": "bytes",
+                                "access-control-allow-origin": "*",
+                                "cache-control": "max-age=300",
+                                connection: "keep-alive",
+                                "content-encoding": "gzip",
+                                "content-length": "1638",
+                                "content-security-policy":
+                                  "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                                "content-type": "text/plain; charset=utf-8",
+                                "cross-origin-resource-policy": "cross-origin",
+                                date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                                etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                                expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                                "source-age": "0",
+                                "strict-transport-security": "max-age=31536000",
+                                vary: "Authorization,Accept-Encoding",
+                                via: "1.1 varnish",
+                                "x-cache": "HIT",
+                                "x-cache-hits": "0",
+                                "x-content-type-options": "nosniff",
+                                "x-fastly-request-id":
+                                  "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                                "x-frame-options": "deny",
+                                "x-github-request-id":
+                                  "8DCE:156854:683A3:BD766:695D41E9",
+                                "x-served-by": "cache-lhr-egll1980052-LHR",
+                                "x-timer": "S1767727197.761065,VS0,VE107",
+                                "x-xss-protection": "1; mode=block",
+                              },
+                            );
+
+                          let timeObject = new Date();
+                          const milliseconds = 3 * 1000; // 10 seconds = 10000 milliseconds
+                          timeObject = new Date(
+                            timeObject.getTime() + milliseconds,
+                          );
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(
+                              400,
+                              {},
+                              { "retry-after": timeObject.toUTCString() },
+                            );
+
+                          nock("http://petstore.swagger.io:80", {
+                            encodedQueryParams: true,
+                          })
+                            .post("/v2/user", "[object Object]")
+                            .reply(201, { id: 123 });
+
+                          const inputFile = new Input(
+                            "./test/mocks/inputs/userInput.json",
+                            "inputs",
+                          );
+
+                          const arazzo = new Arazzo(
+                            "./test/mocks/single-workflow/single-step/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-retry-with-delay.json",
+                            "arazzo",
+                            { logger: logger, parser },
+                          );
+                          arazzo.setMainArazzo();
+
+                          try {
+                            await arazzo.runWorkflows(inputFile);
+                          } catch (err) {
+                            expect(err).to.not.be.instanceOf(Error);
+                          }
+                        });
+                      });
+                    });
+
                     xit(`resolves when onFailure is set to end and matches the criteria`, async function () {
                       nock("https://raw.githubusercontent.com:443", {
                         encodedQueryParams: true,
@@ -2672,79 +4717,182 @@ describe(`Arazzo Document`, function () {
 
           describe(`with successCriteria`, function () {
             describe(`with onSuccess`, function () {
-              it(`should handle a going to a different workflow`, async function () {
-                nock("https://raw.githubusercontent.com:443", {
-                  encodedQueryParams: true,
-                })
-                  .get(
-                    "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
-                  )
-                  .reply(
-                    200,
-                    [
-                      "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
-                    ],
-                    {
-                      "accept-ranges": "bytes",
-                      "access-control-allow-origin": "*",
-                      "cache-control": "max-age=300",
-                      connection: "keep-alive",
-                      "content-encoding": "gzip",
-                      "content-length": "1638",
-                      "content-security-policy":
-                        "default-src 'none'; style-src 'unsafe-inline'; sandbox",
-                      "content-type": "text/plain; charset=utf-8",
-                      "cross-origin-resource-policy": "cross-origin",
-                      date: "Tue, 06 Jan 2026 19:19:56 GMT",
-                      etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
-                      expires: "Tue, 06 Jan 2026 19:24:56 GMT",
-                      "source-age": "0",
-                      "strict-transport-security": "max-age=31536000",
-                      vary: "Authorization,Accept-Encoding",
-                      via: "1.1 varnish",
-                      "x-cache": "HIT",
-                      "x-cache-hits": "0",
-                      "x-content-type-options": "nosniff",
-                      "x-fastly-request-id":
-                        "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
-                      "x-frame-options": "deny",
-                      "x-github-request-id": "8DCE:156854:683A3:BD766:695D41E9",
-                      "x-served-by": "cache-lhr-egll1980052-LHR",
-                      "x-timer": "S1767727197.761065,VS0,VE107",
-                      "x-xss-protection": "1; mode=block",
-                    },
+              xdescribe(`goto`, function () {
+                it(`should handle going to a different workflow`, async function () {
+                  nock("https://raw.githubusercontent.com:443", {
+                    encodedQueryParams: true,
+                  })
+                    .get(
+                      "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                    )
+                    .reply(
+                      200,
+                      [
+                        "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                      ],
+                      {
+                        "accept-ranges": "bytes",
+                        "access-control-allow-origin": "*",
+                        "cache-control": "max-age=300",
+                        connection: "keep-alive",
+                        "content-encoding": "gzip",
+                        "content-length": "1638",
+                        "content-security-policy":
+                          "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                        "content-type": "text/plain; charset=utf-8",
+                        "cross-origin-resource-policy": "cross-origin",
+                        date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                        etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                        expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                        "source-age": "0",
+                        "strict-transport-security": "max-age=31536000",
+                        vary: "Authorization,Accept-Encoding",
+                        via: "1.1 varnish",
+                        "x-cache": "HIT",
+                        "x-cache-hits": "0",
+                        "x-content-type-options": "nosniff",
+                        "x-fastly-request-id":
+                          "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                        "x-frame-options": "deny",
+                        "x-github-request-id":
+                          "8DCE:156854:683A3:BD766:695D41E9",
+                        "x-served-by": "cache-lhr-egll1980052-LHR",
+                        "x-timer": "S1767727197.761065,VS0,VE107",
+                        "x-xss-protection": "1; mode=block",
+                      },
+                    );
+
+                  nock("http://petstore.swagger.io:80", {
+                    encodedQueryParams: true,
+                  })
+                    .post("/v2/user", "[object Object]")
+                    .reply(201, { username: "DannyB" });
+
+                  nock("http://petstore.swagger.io:80", {
+                    encodedQueryParams: true,
+                  })
+                    .post("/v2/user/login", "[object Object]")
+                    .reply(200, { username: "DannyB" });
+
+                  const inputFile = new Input(
+                    "./test/mocks/inputs/userInput.json",
+                    "inputs",
                   );
 
-                nock("http://petstore.swagger.io:80", {
-                  encodedQueryParams: true,
-                })
-                  .post("/v2/user", "[object Object]")
-                  .reply(201, { username: "DannyB" });
+                  const arazzo = new Arazzo(
+                    "./test/mocks/multiple-workflows/single-sourceDescription/arazzoMock-user-with-successCriteria-and-onSuccess-set-to-goto-different-workflow.json",
+                    "arazzo",
+                    { logger: logger, parser },
+                  );
+                  arazzo.setMainArazzo();
 
-                nock("http://petstore.swagger.io:80", {
-                  encodedQueryParams: true,
-                })
-                  .post("/v2/user/login", "[object Object]")
-                  .reply(200, { username: "DannyB" });
+                  try {
+                    await arazzo.runWorkflows(inputFile);
+                  } catch (err) {
+                    console.error(err);
+                    expect(err).to.not.be.instanceOf(Error);
+                  }
+                });
+              });
+            });
 
-                const inputFile = new Input(
-                  "./test/mocks/inputs/userInput.json",
-                  "inputs",
-                );
+            describe(`with onFalure`, function () {
+              describe(`single onFailure`, function () {
+                describe(`onFailure with criteria`, function () {
+                  xdescribe(`goto`, function () {
+                    it(`should handle skipping over workflows`, async function () {});
+                  });
 
-                const arazzo = new Arazzo(
-                  "./test/mocks/multiple-workflows/single-sourceDescription/arazzoMock-user-with-successCriteria-and-onSuccess-set-to-goto-different-workflow.json",
-                  "arazzo",
-                  { logger: logger, parser },
-                );
-                arazzo.setMainArazzo();
+                  describe(`retry`, function () {
+                    it(`retries the step once and the referenced workflowId`, async function () {
+                      nock("https://raw.githubusercontent.com:443", {
+                        encodedQueryParams: true,
+                      })
+                        .get(
+                          "/JaredCE/serverless-arazzo-workflows/refs/heads/main/test/serverless-users/openapi.json",
+                        )
+                        .reply(
+                          200,
+                          [
+                            "1f8b0800000000000013ed5a5b6fdb36147ecfaf3850f7b00289eca6dd1ef2b4346d8760415b2c29b6212b50463ab6d84aa4461ec5f18afcf781d4c51265c9d724ee9a3c38b6481e9ecb773e9247fcba07e0c914054bb97704de737fe83ff7f6cdd34026a91428487b47f0750f00c0d34184099b3d30dd1432c20f1a55ed298047d3148d4479f51903b2228b9654c9141571d48d11005ea6510996a0f3bc264d93e262ecd51a6ff7eb12465c697abb9188986d2a0113c6e3f587a74ceb8954e10612222936d0df84e19c18656e806a32b8201ca3f2f69bcd23a912464587e7876e73883a503c252e85e9635003c54c756daaef35bdbc9bc4f5a95760c5ca990928875783bdeda093f744641977fcfca2dfe58fc87f44feb6916f0c3ab10c1dee5c022c505bf7eacd9462d3bada9c306969dc69659f9df32d5d686bbfb50ed23a73a517ac75a7f53bd0e0e2d8bae801bcd749668b8c73c1d349692b0aea24b615e5ac1732474827c9ad2a672ed5ad28a487f056067c8bf496a63d07d70da0b5c9af93fe1673ca991c73b10bfbd4b556ba1ee36263d8efa85329346e6ee07110a0d617f20b8a6d697873a018e141cc134ef3152c51d61afae7c1eb9b942bd407c723eadac935b56986bd15abae517bb5b19ec620539ca6e7e6d0d3f091779c512415ff9715c09e47b129ff0d1b1c5b82b639b84ec23647226461cd0b7be5a755cbe3622467e731e2145b99ef913449856033a230c049be8b886be01a186896a4318246758d0aaab1f96f1fe02f9941c0048cb80841660489696657e6ebf9848dc7a880115c4644e9d160a0f3473e971f7f6c3d7a0a52811470c955e08f14a29021fa02691f9e14bde68c1a70150c9efa006fa402328ae73aefc3b4d02dd3081421b094c3179cc2279d62c0597cf005a79f8024106aca7bd4fd0d231e132aedff5dbadebb46a50b173df387feb07c4ea812fd6e748eea9a07d6cb6d356d9f41392290825850877715f42aced522621042c8925f66e2bc06fe621e60339b67104a5910211c56ca1aa0abb8a6e36432f199ede54b351e14b2f4e0ecf4e4f5dbf3d70787fed08f28893d075f25e8bd23b8b44d9d98bffc580dfd6887a68ca25aad6090354f5d5e2ab593f93a4b12a6cc5c5ebed9834c379699b91036d197229ec215422805c2d5d4c63996e33186c02d36945f176378ceea7d6a18b75eb3a8d321532c41030e6b5dad85d858570ea9f1ca8cfbeabd15fe93a1a697329cbabcea9853ec70adbe306f9765447165f7c0a4326cb419b0a1a0363fb3348d7960cd1d7cd6b2cde05521674e0b80f783c291d1eec96056021a14959f41cd75cec8dbbdae5ff34f35aa58ad5a8bcfe1f059dba8791b89a03820387b9a2ec72ce79a7ee72c724ffdbcd51a7cdbef31c78c7c1db0dee9de1dbd18feb4d057a7e29ac5dc24469a91ebacae59da2b79839baca10518fee014b9678d65925d43cc35811c59fc6b98708a60ccaf51e4aa42eb94e218b65486eb4abd53c7fead257c8b33f33f272a1dfce9fa7b3d2639ab79f21b6192d911f5a18944c3c96e3289fe1ea9c440797799c468f748248f44f248243b4a24b153e2e9e78f3339d639d6b93067c608414f3561b21e59d8c91ffe5c6177c7b6d605a65e606a74cd52c34ee6f1ac407777793c5c884c9dd9dad7288ba10aee2ea573b3d2b7bd7c760de9acd775392e6071ac21450591cc14b03896130ccbc3b973b0df86271a1a2e7644ab36dd5756ec323234450a2ee0c3c5094c221440a6460a980bdab281ae82ab06bb87a117e741c9d065fd745096ac416706e3ed456e53da965963df37c66eda5e9b9de537b771bb632adb28685f4b70dc2e1bb85f91f2e5f66a9affb715cdb5a2394632ebdccbe95b474433a8dde1288ba9d51b02c7357939de543517bccc779b7b96d63e4258bc3a5a2d97580cef1bc81dd0b957203fe49a3caf1c7a475bebd5897b65be76667cb15c3156488291ccc406cb42f52a23cdba19e4431a5635f3bb7f5390d9d9fa77f4f7c030368e14310281189ab75b5708b96e2d7f7f77ecb3d5fa471d5e79fda3f3d83462b1de8573d39dbe8cf94e1827c418093b49e7956dbe27cec9757970ceb988109abca30be2c9157c249e4df6efffefbcda2b3fcb4b05e662896edf2968de59488b8b287eed82c5f5e1ec86427ecda011d9d6cd88468abae6bd2b134d1797599abdf1868ca3e3573268c6cb95f366cebd1853f3b0dad793b669dfcc2cddbede931b37578565a62faee5943751ba2636f3deeeddfe076e0f2055f7310000",
+                          ],
+                          {
+                            "accept-ranges": "bytes",
+                            "access-control-allow-origin": "*",
+                            "cache-control": "max-age=300",
+                            connection: "keep-alive",
+                            "content-encoding": "gzip",
+                            "content-length": "1638",
+                            "content-security-policy":
+                              "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+                            "content-type": "text/plain; charset=utf-8",
+                            "cross-origin-resource-policy": "cross-origin",
+                            date: "Tue, 06 Jan 2026 19:19:56 GMT",
+                            etag: 'W/"d38379461bc9571f3e57ed61b7c4f2b6d189a3b3cf79f0449c1fde6e9379637e"',
+                            expires: "Tue, 06 Jan 2026 19:24:56 GMT",
+                            "source-age": "0",
+                            "strict-transport-security": "max-age=31536000",
+                            vary: "Authorization,Accept-Encoding",
+                            via: "1.1 varnish",
+                            "x-cache": "HIT",
+                            "x-cache-hits": "0",
+                            "x-content-type-options": "nosniff",
+                            "x-fastly-request-id":
+                              "6345964a5ff2dfaf90e7f710c781377e2f0b2a7e",
+                            "x-frame-options": "deny",
+                            "x-github-request-id":
+                              "8DCE:156854:683A3:BD766:695D41E9",
+                            "x-served-by": "cache-lhr-egll1980052-LHR",
+                            "x-timer": "S1767727197.761065,VS0,VE107",
+                            "x-xss-protection": "1; mode=block",
+                          },
+                        );
 
-                try {
-                  await arazzo.runWorkflows(inputFile);
-                } catch (err) {
-                  console.error(err);
-                  expect(err).to.not.be.instanceOf(Error);
-                }
+                      nock("http://petstore.swagger.io:80", {
+                        encodedQueryParams: true,
+                      })
+                        .post("/v2/user", "[object Object]")
+                        .times(2)
+                        .reply(201, { username: "FatBoyS" });
+
+                      nock("http://petstore.swagger.io:80", {
+                        encodedQueryParams: true,
+                      })
+                        .post("/v2/user/login", "[object Object]")
+                        .reply(404);
+
+                      nock("http://petstore.swagger.io:80", {
+                        encodedQueryParams: true,
+                      })
+                        .post("/v2/user/login", "[object Object]")
+                        .reply(200, { AccessToken: "abc-def.123" });
+
+                      const inputFile = new Input(
+                        "./test/mocks/inputs/userInput.json",
+                        "inputs",
+                      );
+
+                      const arazzo = new Arazzo(
+                        "./test/mocks/multiple-workflows/single-sourceDescription/onFailure/arazzoMock-user-with-successCriteria-and-onFailure-set-to-execute-a-step-and-retry-workflow.json",
+                        "arazzo",
+                        { logger: logger, parser },
+                      );
+                      arazzo.setMainArazzo();
+
+                      const spy = sinon.spy(arazzo, "runOperation");
+
+                      try {
+                        await arazzo.runWorkflows(inputFile);
+                        expect(spy.callCount).to.be.equal(3);
+                      } catch (err) {
+                        console.error(err);
+                        expect(err).to.not.be.instanceOf(Error);
+                      }
+
+                      spy.restore();
+                    });
+                  });
+                });
               });
             });
           });
