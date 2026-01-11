@@ -2,6 +2,7 @@
 
 const { parse, test } = require("@swaggerexpert/arazzo-runtime-expression");
 const jp = require("jsonpath");
+const URLParams = require("openapi-params");
 const traverse = require("traverse");
 
 const path = require("node:path");
