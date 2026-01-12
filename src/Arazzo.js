@@ -207,6 +207,39 @@ class Arazzo extends Document {
       return new Promise((resolve) => setTimeout(resolve, ms));
     };
 
+    const parseRetryAfter = function (retryAfter) {
+      if (!retryAfter || typeof retryAfter !== "string") {
+        return null;
+      }
+
+      const trimmed = retryAfter.trim();
+
+      // Try parsing as a number (seconds format)
+      const asNumber = parseInt(trimmed, 10);
+      if (!isNaN(asNumber) && asNumber >= 0 && String(asNumber) === trimmed) {
+        return asNumber;
+      }
+
+      // Try parsing as HTTP date format
+      try {
+        const date = new Date(trimmed);
+
+        // Check if date is valid
+        if (isNaN(date.getTime())) {
+          return null;
+        }
+
+        // Calculate seconds from now until the date
+        const now = new Date();
+        const secondsUntil = Math.ceil((date.getTime() - now.getTime()) / 1000);
+
+        // Return the delay, but don't return negative values
+        return secondsUntil >= 0 ? secondsUntil : 0;
+      } catch (err) {
+        return null;
+      }
+    };
+
     for (const operation of this.operations) {
       let url = operation.url;
 
@@ -234,7 +267,11 @@ class Arazzo extends Document {
 
       if (response.headers.has("retry-after")) {
         // assume seconds for now
-        this.retryAfter = response.headers.get("retry-after");
+        // this.retryAfter = response.headers.get("retry-after");
+        const retryAfter = parseRetryAfter(response.headers.get("retry-after"));
+        if (retryAfter !== null) {
+          this.retryAfter = retryAfter;
+        }
       }
 
       this.addParamsToContext(response.headers, "headers", "response");
