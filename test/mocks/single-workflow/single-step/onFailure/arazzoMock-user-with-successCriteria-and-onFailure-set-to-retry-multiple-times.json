@@ -46,13 +46,19 @@
           },
           "successCriteria": [
             {
-              "condition": "$statusCode == 200"
+              "condition": "$statusCode == 201"
             }
           ],
           "onFailure": [
             {
-              "name": "endGame",
-              "type": "end"
+              "name": "retryStepMultipleTimes",
+              "type": "retry",
+              "retryLimit": 3,
+              "criteria": [
+                {
+                  "condition": "$statusCode == 400"
+                }
+              ]
             }
           ],
           "outputs": { "id": "$response.body#/id" }

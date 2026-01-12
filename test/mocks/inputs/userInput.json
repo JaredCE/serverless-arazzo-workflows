@@ -98,5 +98,33 @@
   },
   "loginUser": {
     "password": "--p4ssW0rd"
+  },
+  "createUserWithMoreSteps": {
+    "user": {
+      "username": "DannyB",
+      "firstName": "Danny",
+      "lastName": "Brown",
+      "email": "dannyb@example.com",
+      "phone": "+443333333333",
+      "userStatus": 1
+    },
+    "userArray": [
+      {
+        "username": "SlimS",
+        "firstName": "Marshall",
+        "lastName": "Mathers",
+        "email": "MarshamM@example.com",
+        "phone": "+442222222222",
+        "userStatus": 1
+      },
+      {
+        "username": "IceC",
+        "firstName": "O'Shea",
+        "lastName": "Jackson",
+        "email": "OSheaJ@example.com",
+        "phone": "+444444444444",
+        "userStatus": 1
+      }
+    ]
   }
 }

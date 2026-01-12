@@ -27,7 +27,7 @@ class Rules {
     this.successRules.push(...successActions);
   }
 
-  runRules(successRules) {
+  runRules(successRules = false) {
     if (successRules) {
       this.buildSuccessRules();
     } else {
@@ -48,6 +48,13 @@ class Rules {
             obj.goto = true;
             if (rule.stepId) obj.stepId = rule.stepId;
             else obj.workflowId = rule.workflowId;
+          } else {
+            obj.name = rule.name;
+            obj.retry = true;
+            if (rule.stepId) obj.stepId = rule.stepId;
+            if (rule.workflowId) obj.workflowId = rule.workflowId;
+            obj.retryLimit = rule?.retryLimit || 1;
+            if (rule.retryAfter) obj.retryAfter = rule.retryAfter;
           }
         }
       }
@@ -65,7 +72,7 @@ class Rules {
         const hasPassedCheck = this.expression.checkSimpleExpression(
           criteriaObject.condition,
         );
-
+        // console.log(criteriaObject.condition);
         if (hasPassedCheck) passedCriteria.push(hasPassedCheck);
       }
     }
