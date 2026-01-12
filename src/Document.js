@@ -104,15 +104,13 @@ class Document {
 
     JSONPicker(key, file) {
         let pipeline;
-        // if (this.httpPath) {
-        //     pipeline = this.readStreamFromURL(key)
-        // } else {
-            pipeline = chain([
-                fs.createReadStream(path.resolve(file)),
-                Pick.withParser({filter: key}),
-                streamValues()
-            ]);
-        // }
+
+        pipeline = chain([
+            fs.createReadStream(path.resolve(file)),
+            Pick.withParser({filter: key}),
+            streamValues()
+        ]);
+
 
         return pipeline;
     }

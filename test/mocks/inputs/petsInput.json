@@ -1,6 +1,7 @@
 {
   "loginUserAndRetrievePet": {
     "username": "FatBoyS",
-    "petId": "12345"
+    "password": "--p4ssW0rd",
+    "petId": 12345
   }
 }

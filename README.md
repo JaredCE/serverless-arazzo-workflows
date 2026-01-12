@@ -59,7 +59,7 @@ Options:
 ```
 --format -f  Whether to output the Arazzo Specification as json or yaml. Default: json
 --output -o  The name of the Arazzo Specification file. Default: arazzo.json
---source -s  The default openAPI source file. Default: openapi.json
+--source -s  The default OpenAPI Description source file. Default: openapi.json
 ```
 
 ### Configuration
@@ -125,7 +125,7 @@ Mostly everything is optional in the `info` object.  If you don't provide a `tit
 
 #### sourceDescriptions
 
-This section is optional.  It allows you to document any extra OpenAPI or Arazzo Specification files that your workflows and steps may require.  If you do not document this section, it will end up with a default of:
+This section is optional.  It allows you to document any extra OpenAPI descriptions or Arazzo Specification files that your workflows and steps may require.  If you do not document this section, it will end up with a default of:
 
 ```
 sourceDescriptions:
@@ -136,7 +136,7 @@ sourceDescriptions:
 
 That is, that it generates the `name` property from the `title` property of the `info` object (or the one that is generated for you if you omitted the `info` object).
 
-The `url` will be that of a local openapi.json file, this is what the [Serverless OpenAPI Documenter](https://github.com/JaredCE/serverless-openapi-documenter) generates by default.  This can be changed by the CLI by providing a source argument with the path to a different OpenAPI file.  To make this usable, this should really be an accessible URL, so you should switch the `--source` CLI input to be the final resting place of the specification (an S3 bucket perhaps), for running locally it will be fine to keep it as a local location.
+The `url` will be that of a local openapi.json file, this is what the [Serverless OpenAPI Documenter](https://github.com/JaredCE/serverless-openapi-documenter) generates by default.  This can be changed by the CLI by providing a source argument with the path to a different OpenAPI Description file.  To make this usable, this should really be an accessible URL, so you should switch the `--source` CLI input to be the final resting place of the specification (an S3 bucket perhaps), for running locally it will be fine to keep it as a local location.
 
 If you do provide this section, then any further additions will be added to that of the default `sourceDescription`.  This is useful if you need to incorporate a step or workflow that resides in a different API (perhaps a Login service).
 
@@ -183,7 +183,7 @@ The `inputs` here will be used in a login step and can be verified by this JSON 
 
 #### steps
 
-Describes a single workflow step which MAY be a call to an API operation (OpenAPI Operation Object) or another Workflow Object.
+Describes a single workflow step which MAY be a call to an API operation (OpenAPI Description Operation Object) or another Workflow Object.
 
 ```yml
 steps:
@@ -201,7 +201,7 @@ steps:
       - condition:
 ```
 
-Each step object requires a `stepId` which conforms to the Regex `[A-Za-z0-9_\-]+`.  The `operationId` should point to an `operationId` within an OpenAPI document that is registered within the `sourceDescriptions` array.  If you are using multiple OpenAPI files within the `sourceDescriptions` array, then you will need to reference the `operationId` via: `$sourceDescriptions.<name>.<operationId>` e.g.
+Each step object requires a `stepId` which conforms to the Regex `[A-Za-z0-9_\-]+`.  The `operationId` should point to an `operationId` within an OpenAPI Description that is registered within the `sourceDescriptions` array.  If you are using multiple OpenAPI files within the `sourceDescriptions` array, then you will need to reference the `operationId` via: `$sourceDescriptions.<name>.<operationId>` e.g.
 
 ```yml
 sourceDescriptions:
@@ -221,7 +221,7 @@ workflows:
       operationId: $sourceDescriptions.contactOpenAPI.updateUser
 ```
 
-`parameters` map to what must be passed into the referenced operation of the OpenAPI document, they map to the inputs described in the workflow section` e.g.
+`parameters` map to what must be passed into the referenced operation of the OpenAPI Description, they map to the inputs described in the workflow section` e.g.
 
 ```yml
 - workflowId: loginUserWorkflow
@@ -242,7 +242,7 @@ workflows:
           value: $inputs.username
 ```
 
-`requestBody` is very similar, the contentType should map to that of the operationId that is referenced in the OpenAPI document and the value map to the `inputs` referenced in the `workflow`.
+`requestBody` is very similar, the contentType should map to that of the operationId that is referenced in the OpenAPI Description and the value map to the `inputs` referenced in the `workflow`.
 
 For `successCriteria`, it is probably worth reading through the [Arazzo Specification for Criterion objects](https://spec.openapis.org/arazzo/v1.0.1.html#criterion-object), but this can be as simple as
 
