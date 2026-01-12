@@ -1,9 +1,7 @@
 "use strict";
 
 const { parse, test } = require("@swaggerexpert/arazzo-runtime-expression");
-const jp = require("jsonpath");
 const URLParams = require("openapi-params");
-const traverse = require("traverse");
 
 const path = require("node:path");
 
@@ -48,6 +46,7 @@ class Arazzo extends Document {
     console.log("running  workflow index", index);
     if (index <= this.workflows.length - 1) {
       await this.runWorkflow(index).catch((err) => {
+        console.log("caught", err);
         if (err.name === "AbortError") {
         } else {
           throw err;
@@ -295,61 +294,41 @@ class Arazzo extends Document {
       // console.log(this.abortSignal.aborted);
       // console.log("back here");
     } else if (whatNext.goto) {
-      console.log("goto command");
-      if (whatNext.stepId) {
-        // const stepIndex = this.workflow.steps.findIndex(
-        //   (step) => step.stepId === whatNext.stepId,
-        // );
+      console.log("goto command onSuccess");
+      await this.goto(whatNext);
+      console.log("onSuccess");
+      // if (whatNext.stepId) {
+      //   // const stepIndex = this.workflow.steps.findIndex(
+      //   //   (step) => step.stepId === whatNext.stepId,
+      //   // );
 
-        // if (stepIndex === -1) {
-        //   throw new Error(`goto Step does not exist within current workflow`);
-        // }
-        const stepIndex = this.findStepIndexInWorkflowByStepId(whatNext.stepId);
+      //   // if (stepIndex === -1) {
+      //   //   throw new Error(`goto Step does not exist within current workflow`);
+      //   // }
+      //   const stepIndex = this.findStepIndexInWorkflowByStepId(whatNext.stepId);
 
-        await this.runSteps(stepIndex);
-      } else {
-        // const workflowId = this.expression.resolveExpression(
-        //   whatNext.workflowId,
-        // );
+      //   await this.runSteps(stepIndex);
+      // } else {
+      //   // const workflowId = this.expression.resolveExpression(
+      //   //   whatNext.workflowId,
+      //   // );
 
-        // const workflowIndex = this.workflows.findIndex(
-        //   (workflow) => workflow.workflowId === workflowId,
-        // );
+      //   // const workflowIndex = this.workflows.findIndex(
+      //   //   (workflow) => workflow.workflowId === workflowId,
+      //   // );
 
-        // if (workflowIndex === -1) {
-        //   throw new Error(
-        //     `goto Workflow does not exist within current workflows`,
-        //   );
-        // }
-        const workflowIndex = this.findWorkflowIndexByWorkflowId(
-          whatNext.workflowId,
-        );
-
-        await this.runWorkflow(workflowIndex);
-        console.log("back at goto");
-
-        // console.log(
-        //   "is a run time?",
-        //   this.expression.isARunTimeExpression(whatNext.workflowId),
-        // );
-        // console.log(whatNext.workflowId);
-        // if (this.expression.isARunTimeExpression(whatNext.workflowId)) {
-        //   const value = this.expression.resolveExpression(whatNext.workflowId);
-        //   if (value) {
-        //   }
-        // } else {
-        //   console.log("goto workflow");
-        //   const workflowIndex = this.workflows.findIndex(
-        //     (workflow) => workflow.workflowId === whatNext.workflowId,
-        //   );
-
-        //   if (!workflowIndex) {
-        //     throw new Error(
-        //       `goto Workflow does not exist within current workflows`,
-        //     );
-        //   }
-        // }
-      }
+      //   // if (workflowIndex === -1) {
+      //   //   throw new Error(
+      //   //     `goto Workflow does not exist within current workflows`,
+      //   //   );
+      //   // }
+      //   const workflowIndex = this.findWorkflowIndexByWorkflowId(
+      //     whatNext.workflowId,
+      //   );
+      //   console.log("skipping to ", workflowIndex);
+      //   await this.runWorkflow(workflowIndex);
+      //   console.log("back at goto onSuccess");
+      // }
     }
   }
 
@@ -393,67 +372,77 @@ class Arazzo extends Document {
       this.abortWorkflowController.abort();
       throw new DOMException("Aborted", "AbortError");
       console.log("still here though");
-      // this.abortStep = new AbortController();
-      // this.abortSignal = this.abortStep.signal;
-
-      // this.startWorkflows(index);
-      // this.abortSignal.addEventListener("abort", () => {
-      //   console.log("in the listener");
-      // });
-      // console.log(this.abortSignal.aborted);
-      // console.log("back here");
     } else if (whatNext.goto) {
-      console.log("goto command");
-      if (whatNext.stepId) {
-        const stepIndex = this.workflow.steps.findIndex(
-          (step) => step.stepId === whatNext.stepId,
-        );
+      console.log("goto command onFailure");
+      await this.goto(whatNext);
+      console.log("onFailure");
+      // if (whatNext.stepId) {
+      //   // const stepIndex = this.workflow.steps.findIndex(
+      //   //   (step) => step.stepId === whatNext.stepId,
+      //   // );
 
-        if (stepIndex === -1) {
-          throw new Error(`goto Step does not exist within current workflow`);
-        }
+      //   // if (stepIndex === -1) {
+      //   //   throw new Error(`goto Step does not exist within current workflow`);
+      //   // }
+      //   //
+      //   const stepIndex = this.findStepIndexInWorkflowByStepId(whatNext.stepId);
 
-        await this.runSteps(stepIndex);
-      } else {
-        const workflowId = this.expression.resolveExpression(
-          whatNext.workflowId,
-        );
-
-        const workflowIndex = this.workflows.findIndex(
-          (workflow) => workflow.workflowId === workflowId,
-        );
-
-        if (workflowIndex === -1) {
-          throw new Error(
-            `goto Workflow does not exist within current workflows`,
-          );
-        }
-
-        // console.log(
-        //   "is a run time?",
-        //   this.expression.isARunTimeExpression(whatNext.workflowId),
-        // );
-        // console.log(whatNext.workflowId);
-        // if (this.expression.isARunTimeExpression(whatNext.workflowId)) {
-        //   const value = this.expression.resolveExpression(whatNext.workflowId);
-        //   if (value) {
-        //   }
-        // } else {
-        //   console.log("goto workflow");
-        //   const workflowIndex = this.workflows.findIndex(
-        //     (workflow) => workflow.workflowId === whatNext.workflowId,
-        //   );
-
-        //   if (!workflowIndex) {
-        //     throw new Error(
-        //       `goto Workflow does not exist within current workflows`,
-        //     );
-        //   }
-        // }
-      }
+      //   await this.runSteps(stepIndex);
+      // } else {
+      //   const workflowIndex = this.findWorkflowIndexByWorkflowId(
+      //     whatNext.workflowId,
+      //   );
+      //   console.log("skipping to ", workflowIndex);
+      //   await this.runWorkflow(workflowIndex);
+      //   console.log("back at goto onFailure");
+      // }
     } else {
       console.log("we retry");
       await this.retryProcessing(whatNext);
+    }
+  }
+
+  async goto(gotoRule) {
+    if (gotoRule.stepId) {
+      // const stepIndex = this.workflow.steps.findIndex(
+      //   (step) => step.stepId === whatNext.stepId,
+      // );
+
+      // if (stepIndex === -1) {
+      //   throw new Error(`goto Step does not exist within current workflow`);
+      // }
+      const stepIndex = this.findStepIndexInWorkflowByStepId(gotoRule.stepId);
+      console.log("skipping to step", stepIndex);
+      await this.runSteps(stepIndex);
+      // this.abortStepsController.abort();
+      // throw new DOMException("Aborted", "AbortError");
+      // this.abortStepsController.abort();
+      // throw new DOMException("Aborted", "AbortError");
+      console.log("back at goto step");
+    } else {
+      // const workflowId = this.expression.resolveExpression(
+      //   whatNext.workflowId,
+      // );
+
+      // const workflowIndex = this.workflows.findIndex(
+      //   (workflow) => workflow.workflowId === workflowId,
+      // );
+
+      // if (workflowIndex === -1) {
+      //   throw new Error(
+      //     `goto Workflow does not exist within current workflows`,
+      //   );
+      // }
+      const workflowIndex = this.findWorkflowIndexByWorkflowId(
+        gotoRule.workflowId,
+      );
+      console.log("skipping to workflow", workflowIndex);
+      await this.runWorkflow(workflowIndex);
+      // this.abortStepsController.abort();
+      // throw new DOMException("Aborted", "AbortError");
+      // this.abortWorkflowController.abort();
+      // throw new DOMException("Aborted", "AbortError");
+      console.log("back at goto workflow");
     }
   }
 
@@ -546,28 +535,6 @@ class Arazzo extends Document {
     this.expression.addToContext("steps", {
       [this.step.stepId]: { outputs: outputs },
     });
-  }
-
-  async dealWithFailedResponse() {
-    this.doNotProcessStep = false;
-    this.alreadyProcessingOnFailure = true;
-    for (const failureAction of this.step.onFailure) {
-      if (failureAction.type === "end") {
-        this.doNotProcessStep = true;
-        break;
-      } else if (failureAction.type === "retry") {
-        if (failureAction.retryLimit) {
-        }
-
-        if (failureAction.retryAfter) {
-        }
-
-        if (failureAction.stepId) {
-        } else if (failureAction.workflowId) {
-        } else {
-        }
-      }
-    }
   }
 
   mapInputs() {
