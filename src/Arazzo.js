@@ -42,20 +42,36 @@ class Arazzo extends Document {
   }
 
   async startWorkflows(index = 0) {
-    this.abortWorkflowController = new AbortController();
-
     this.workflowIndex = index;
     if (index <= this.workflows.length - 1) {
+      this.abortWorkflowController = new AbortController();
+
       console.log("Running workflow index", index);
-      await this.runWorkflow(index).catch((err) => {
-        console.log("caught", err);
+      try {
+        await this.runWorkflow(index);
+        await this.startWorkflows(index + 1);
+      } catch (err) {
+        console.log("Caught");
+        // console.error(err);
+
         if (err.name === "AbortError") {
+          if (err.goto) {
+            console.log("goto error");
+            await this.handleGotoRule(err.goto);
+          }
         } else {
           throw err;
         }
-      });
+      }
+      // await this.runWorkflow(index).catch((err) => {
+      //   console.log("caught", err);
+      //   if (err.name === "AbortError") {
+      //   } else {
+      //     throw err;
+      //   }
+      // });
 
-      await this.startWorkflows(index + 1);
+      // await this.startWorkflows(index + 1);
     } else {
       console.log("no more workflows");
     }
@@ -142,6 +158,10 @@ class Arazzo extends Document {
   }
 
   async runStep(index) {
+    if (this.abortWorkflowController.signal.aborted) {
+      throw new DOMException("Aborted", "AbortError");
+    }
+
     const step = this.workflow.steps[index];
 
     if (step) {
@@ -301,7 +321,7 @@ class Arazzo extends Document {
       // console.log("back here");
     } else if (whatNext.goto) {
       console.log("goto command onSuccess");
-      await this.goto(whatNext);
+      await this.gotoRule(whatNext);
       console.log("onSuccess");
       // if (whatNext.stepId) {
       //   // const stepIndex = this.workflow.steps.findIndex(
@@ -381,7 +401,7 @@ class Arazzo extends Document {
       console.log("still here though");
     } else if (whatNext.goto) {
       console.log("goto command onFailure");
-      await this.goto(whatNext);
+      await this.gotoRule(whatNext);
       console.log("onFailure");
       // if (whatNext.stepId) {
       //   // const stepIndex = this.workflow.steps.findIndex(
@@ -409,8 +429,16 @@ class Arazzo extends Document {
     }
   }
 
-  async goto(gotoRule) {
+  async gotoRule(gotoRule) {
     if (gotoRule.stepId) {
+      console.log("goto stepId");
+      this.abortWorkflowController.abort();
+
+      // Attach goto to the error so we can handle it
+      const abortError = new DOMException("Aborted", "AbortError");
+      abortError.goto = gotoRule;
+      throw abortError;
+
       // const stepIndex = this.workflow.steps.findIndex(
       //   (step) => step.stepId === whatNext.stepId,
       // );
@@ -418,15 +446,24 @@ class Arazzo extends Document {
       // if (stepIndex === -1) {
       //   throw new Error(`goto Step does not exist within current workflow`);
       // }
-      const stepIndex = this.findStepIndexInWorkflowByStepId(gotoRule.stepId);
-      console.log("skipping to step", stepIndex);
-      await this.runSteps(stepIndex);
+
+      // comment at 8:11am 12 Jan
+      // const stepIndex = this.findStepIndexInWorkflowByStepId(gotoRule.stepId);
+      // console.log("skipping to step", stepIndex);
+      // await this.runSteps(stepIndex);
+
       // this.abortStepsController.abort();
       // throw new DOMException("Aborted", "AbortError");
       // this.abortStepsController.abort();
       // throw new DOMException("Aborted", "AbortError");
-      console.log("back at goto step");
+
+      // comment at 8:11am 12 Jan
+      // console.log("back at goto step");
     } else {
+      const abortError = new DOMException("Aborted", "AbortError");
+      abortError.goto = gotoRule;
+      throw abortError;
+
       // const workflowId = this.expression.resolveExpression(
       //   whatNext.workflowId,
       // );
@@ -440,16 +477,62 @@ class Arazzo extends Document {
       //     `goto Workflow does not exist within current workflows`,
       //   );
       // }
-      const workflowIndex = this.findWorkflowIndexByWorkflowId(
-        gotoRule.workflowId,
-      );
-      console.log("skipping to workflow", workflowIndex);
-      await this.runWorkflow(workflowIndex);
+
+      // comment at 8:11am 12 Jan
+      // const workflowIndex = this.findWorkflowIndexByWorkflowId(
+      //   gotoRule.workflowId,
+      // );
+      // console.log("skipping to workflow", workflowIndex);
+      // await this.runWorkflow(workflowIndex);
+
       // this.abortStepsController.abort();
       // throw new DOMException("Aborted", "AbortError");
       // this.abortWorkflowController.abort();
       // throw new DOMException("Aborted", "AbortError");
-      console.log("back at goto workflow");
+
+      // comment at 8:11am 12 Jan
+      // console.log("back at goto workflow");
+    }
+  }
+
+  async handleGotoRule(gotoRule) {
+    if (gotoRule.stepId) {
+      const stepIndex = this.workflow.steps.findIndex(
+        (step) => step.stepId === gotoRule.stepId,
+      );
+
+      if (stepIndex === -1) {
+        throw new Error(`goto Step does not exist within current workflow`);
+      }
+
+      this.abortWorkflowController = new AbortController();
+      try {
+        await this.runSteps(stepIndex);
+        // After finishing this workflow, continue to next
+        await this.startWorkflows(this.workflowIndex + 1);
+      } catch (err) {
+        if (err.name === "AbortError") {
+          if (err.goto) {
+            await this.handleGotoRule(err.goto);
+          } else {
+            await this.startWorkflows(this.workflowIndex + 1);
+          }
+        } else {
+          throw err;
+        }
+      }
+    } else {
+      const workflowIndex = this.workflows.findIndex(
+        (workflow) => workflow.workflowId === gotoRule.workflowId,
+      );
+
+      if (workflowIndex === -1) {
+        throw new Error(
+          `goto Workflow does not exist within current workflows`,
+        );
+      }
+
+      await this.startWorkflows(workflowIndex);
     }
   }
 
