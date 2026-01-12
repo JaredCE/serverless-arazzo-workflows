@@ -34,17 +34,19 @@ class Arazzo extends Document {
     await this.getSourceDescriptions();
     await this.getWorkflows();
 
+    console.log("Starting Workflows");
+
     await this.startWorkflows();
 
-    console.log("all workflows run");
+    console.log("All Workflows run");
   }
 
   async startWorkflows(index = 0) {
     this.abortWorkflowController = new AbortController();
 
     this.workflowIndex = index;
-    console.log("running  workflow index", index);
     if (index <= this.workflows.length - 1) {
+      console.log("Running workflow index", index);
       await this.runWorkflow(index).catch((err) => {
         console.log("caught", err);
         if (err.name === "AbortError") {
@@ -74,12 +76,14 @@ class Arazzo extends Document {
     const workflow = await this.JSONPickerToIndex("workflows", index);
 
     if (workflow) {
+      console.log(`Running Workflow: ${workflow.workflowId}`);
       this.logger.notice(`Running Workflow: ${workflow.workflowId}`);
 
       this.inputs = await this.inputFile.getWorkflowInputs(
         workflow.workflowId,
         workflow.inputs,
       );
+
       this.expression.addToContext("inputs", this.inputs);
 
       this.workflow = workflow;
@@ -131,6 +135,7 @@ class Arazzo extends Document {
 
     this.stepIndex = index;
     if (index <= this.workflow?.steps?.length - 1) {
+      console.log("Running Step Index:", index);
       await this.runStep(index);
       await this.runSteps(index + 1);
     }
@@ -204,6 +209,7 @@ class Arazzo extends Document {
 
       if (this.retryAfter) await sleep(this.retryAfter * 1000);
 
+      console.log(`fetching: ${url}`);
       const response = await fetch(url, options);
 
       if (response.headers.has("retry-after")) {
@@ -238,7 +244,6 @@ class Arazzo extends Document {
           await this.dealWithPassedRule(response);
         } else {
           if (this.step.onFailure) {
-            console.log("step has onFailure");
             await this.dealWithFailedRule();
           } else {
             throw new Error(
@@ -274,6 +279,7 @@ class Arazzo extends Document {
       await this.dealWithStepOutputs(response);
     }
 
+    console.log("checking onSuccess rules");
     const whatNext = this.workflow.rules.runRules(true);
     console.log(whatNext);
     if (whatNext.endWorkflow) {
@@ -363,6 +369,7 @@ class Arazzo extends Document {
     //   await this.dealWithStepOutputs(response);
     // }
 
+    console.log("checking onFailed rules");
     const whatNext = this.workflow.rules.runRules();
     if (whatNext.endWorkflow) {
       this.workflowIndex += 1;
