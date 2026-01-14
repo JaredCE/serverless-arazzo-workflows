@@ -6,7 +6,6 @@ const yaml = require("js-yaml");
 const fs = require("fs/promises");
 
 const ArazzoGenerator = require("./ArazzoGenerator");
-const ArazzoRunner = require("./ArazzoRunner");
 const Logger = require("./Logger");
 
 const serverlessSchema = require("../resources/serverlessSchema.json");
@@ -91,15 +90,6 @@ class ArazzoPlugin {
 
     this.runArazzo = true;
     this.processCLIInput();
-
-    const runner = new ArazzoRunner(`./${this.config.source}`, {
-      logger: this.logger,
-      inputFile: this.config.input,
-    });
-
-    await runner.runArazzoWorkflows().catch((err) => {
-      throw new this.serverless.classes.Error(err);
-    });
 
     this.logger.success("Arazzo Specification Successfully Run");
   }
