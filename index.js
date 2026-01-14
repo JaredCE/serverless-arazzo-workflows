@@ -1,3 +1,3 @@
-const ArazzoPlugin = require('./src/ArazzoPlugin')
+const ArazzoPlugin = require("./src/ArazzoPlugin");
 
-module.exports = ArazzoPlugin
+module.exports = ArazzoPlugin;

@@ -11,7 +11,7 @@
 
 Document your Serverless Framework API workflows with the [OpenAPI Arazzo Workflow Spec](https://www.openapis.org/arazzo-specification).
 
-This will generate an OpenAPI Arazzo Specification (1.0.1) for your Serverless Framework APIs.  This requires the [Serverless OpenAPI Documenter](https://github.com/JaredCE/serverless-openapi-documenter) plugin to be installed and used, as the Arazzo Specification makes use of the generated OpenAPI Document.
+This will generate an OpenAPI Arazzo Specification (1.0.1) for your Serverless Framework APIs. This requires the [Serverless OpenAPI Documenter](https://github.com/JaredCE/serverless-openapi-documenter) plugin to be installed and used, as the Arazzo Specification makes use of the generated OpenAPI Document.
 
 ## Install
 
@@ -50,6 +50,7 @@ To run a specification, you should look at:
 ## Generating the Arazzo Specification file
 
 To generate an Arazzo Specification, you can call the plugin from the CLI like:
+
 ```bash
 serverless arazzo generate -f json
 ```
@@ -78,7 +79,7 @@ custom:
 
 See [Configuration via the custom property](#configuration-via-the-custom-property) on how to configure by this method.
 
-If you prefer, you might wish to add Configuration on each Handler.  You can also seperate the documentation out into a separate file:
+If you prefer, you might wish to add Configuration on each Handler. You can also seperate the documentation out into a separate file:
 
 ```yml
 custom:
@@ -121,11 +122,11 @@ custom:
 
 #### info
 
-Mostly everything is optional in the `info` object.  If you don't provide a `title`, it'll pull it from your service name, if you don't provide a `version`, it'll default to '1'.
+Mostly everything is optional in the `info` object. If you don't provide a `title`, it'll pull it from your service name, if you don't provide a `version`, it'll default to '1'.
 
 #### sourceDescriptions
 
-This section is optional.  It allows you to document any extra OpenAPI or Arazzo Specification files that your workflows and steps may require.  If you do not document this section, it will end up with a default of:
+This section is optional. It allows you to document any extra OpenAPI or Arazzo Specification files that your workflows and steps may require. If you do not document this section, it will end up with a default of:
 
 ```
 sourceDescriptions:
@@ -136,9 +137,9 @@ sourceDescriptions:
 
 That is, that it generates the `name` property from the `title` property of the `info` object (or the one that is generated for you if you omitted the `info` object).
 
-The `url` will be that of a local openapi.json file, this is what the [Serverless OpenAPI Documenter](https://github.com/JaredCE/serverless-openapi-documenter) generates by default.  This can be changed by the CLI by providing a source argument with the path to a different OpenAPI file.  To make this usable, this should really be an accessible URL, so you should switch the `--source` CLI input to be the final resting place of the specification (an S3 bucket perhaps), for running locally it will be fine to keep it as a local location.
+The `url` will be that of a local openapi.json file, this is what the [Serverless OpenAPI Documenter](https://github.com/JaredCE/serverless-openapi-documenter) generates by default. This can be changed by the CLI by providing a source argument with the path to a different OpenAPI file. To make this usable, this should really be an accessible URL, so you should switch the `--source` CLI input to be the final resting place of the specification (an S3 bucket perhaps), for running locally it will be fine to keep it as a local location.
 
-If you do provide this section, then any further additions will be added to that of the default `sourceDescription`.  This is useful if you need to incorporate a step or workflow that resides in a different API (perhaps a Login service).
+If you do provide this section, then any further additions will be added to that of the default `sourceDescription`. This is useful if you need to incorporate a step or workflow that resides in a different API (perhaps a Login service).
 
 #### workflows
 
@@ -158,9 +159,9 @@ workflows:
     steps:
 ```
 
-Workflows comprise of one or many workflow objects, one workflow might be for logging in, another might be for resetting a password.  They comprise of steps, where one step might be to call an endpoint to login and the next step would be to call an endpoint that allows a user to change their name.
+Workflows comprise of one or many workflow objects, one workflow might be for logging in, another might be for resetting a password. They comprise of steps, where one step might be to call an endpoint to login and the next step would be to call an endpoint that allows a user to change their name.
 
-Each workflow object requires a `workflowId` and a set of `steps`.  `workflowId` should conform to the Regex `[A-Za-z0-9_\-]+` and should be unique across the Arazzo Specification.
+Each workflow object requires a `workflowId` and a set of `steps`. `workflowId` should conform to the Regex `[A-Za-z0-9_\-]+` and should be unique across the Arazzo Specification.
 
 ##### inputs
 
@@ -179,7 +180,7 @@ Each workflow object requires a `workflowId` and a set of `steps`.  `workflowId`
         type: string
 ```
 
-The `inputs` here will be used in a login step and can be verified by this JSON Schema.  If you are to be usng the runner part of this plugin (see [Running](#running-the-arazzo-specification)), then the inputs should map to the input file (see [Input File](#input-file)).
+The `inputs` here will be used in a login step and can be verified by this JSON Schema. If you are to be usng the runner part of this plugin (see [Running](#running-the-arazzo-specification)), then the inputs should map to the input file (see [Input File](#input-file)).
 
 #### steps
 
@@ -201,7 +202,7 @@ steps:
       - condition:
 ```
 
-Each step object requires a `stepId` which conforms to the Regex `[A-Za-z0-9_\-]+`.  The `operationId` should point to an `operationId` within an OpenAPI document that is registered within the `sourceDescriptions` array.  If you are using multiple OpenAPI files within the `sourceDescriptions` array, then you will need to reference the `operationId` via: `$sourceDescriptions.<name>.<operationId>` e.g.
+Each step object requires a `stepId` which conforms to the Regex `[A-Za-z0-9_\-]+`. The `operationId` should point to an `operationId` within an OpenAPI document that is registered within the `sourceDescriptions` array. If you are using multiple OpenAPI files within the `sourceDescriptions` array, then you will need to reference the `operationId` via: `$sourceDescriptions.<name>.<operationId>` e.g.
 
 ```yml
 sourceDescriptions:
@@ -295,8 +296,8 @@ custom:
 
 This remains the same as what is discussed within [Configuration via the custom property](#configuration-via-the-custom-property).
 
-* See [info](#info) for how to document Info
-* See [sourceDescriptions](#sourcedescriptions)
+- See [info](#info) for how to document Info
+- See [sourceDescriptions](#sourcedescriptions)
 
 Workflows is where it starts to differ:
 
@@ -321,7 +322,7 @@ custom:
         parameters:
 ```
 
-This still matches up to [workflows](#workflows) (without `steps`).  How we document steps, now moves to the handlers:
+This still matches up to [workflows](#workflows) (without `steps`). How we document steps, now moves to the handlers:
 
 ```yml
 custom:
@@ -375,7 +376,7 @@ Much of this is unchanged from [Steps](#steps), however, we are adding a `stepNu
 
 `stepNumber` is the order of which the step should be run, steps start from 1, so the above example would be the first step in the **addPet** workflow.
 
-If you don't provide either a `operationId`, `operationPath` or a `workflowId` for the step, the `operationId` will be set to the name of your function.  In the above example, the `operationId` would become **addPet**.
+If you don't provide either a `operationId`, `operationPath` or a `workflowId` for the step, the `operationId` will be set to the name of your function. In the above example, the `operationId` would become **addPet**.
 
 ## Validator
 
