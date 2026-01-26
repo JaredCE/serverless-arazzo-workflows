@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@redocly/cli": "^2.14.0",
-    "@swaggerexpert/arazzo-runtime-expression": "^1.0.1",
+    "@swaggerexpert/arazzo-runtime-expression": "^2.0.1",
     "ajv": "^8.17.1",
     "chalk": "^4.1.2",
     "js-yaml": "^4.1.1",
